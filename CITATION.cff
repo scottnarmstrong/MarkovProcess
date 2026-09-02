@@ -1,0 +1,25 @@
+cff-version: 1.2.0
+message: "If you use this library, please cite it as below."
+title: "MarkovProcess: sub-Markov kernel semigroups and continuous-path Markov processes in Lean 4"
+abstract: >-
+  A machine-checked Lean 4 / mathlib library of sub-Markov transition semigroups, Feller
+  semigroups, and the continuous-path Markov processes they generate: existence and
+  uniqueness of the process for every starting point, the Markov and strong Markov
+  properties, generators and Dynkin's formula, optional stopping and exit times, the
+  killed process, equivariance, and processes in a measurable random environment. The
+  development contains no sorry and no custom axiom.
+type: software
+authors:
+  - family-names: Armstrong
+    given-names: Scott
+keywords:
+  - Lean
+  - mathlib
+  - formal verification
+  - Markov processes
+  - Feller semigroups
+  - strong Markov property
+  - stochastic processes
+license: Apache-2.0
+# Add a Zenodo DOI here once an archived release is minted.
+repository-code: "https://github.com/scottnarmstrong/MarkovProcess"

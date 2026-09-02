@@ -1,0 +1,13 @@
+{
+  "challenge_module": "Audit.ContinuousMarkovProcess.Challenge",
+  "solution_module": "Audit.ContinuousMarkovProcess.Solution",
+  "theorem_names": [
+    "MarkovProcessChallenge.existsUnique_continuousMarkovProcess"
+  ],
+  "permitted_axioms": [
+    "propext",
+    "Quot.sound",
+    "Classical.choice"
+  ],
+  "enable_nanoda": false
+}

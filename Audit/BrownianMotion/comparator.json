@@ -1,0 +1,13 @@
+{
+  "challenge_module": "Audit.BrownianMotion.Challenge",
+  "solution_module": "Audit.BrownianMotion.Solution",
+  "theorem_names": [
+    "BrownianMotionChallenge.brownianMotion"
+  ],
+  "permitted_axioms": [
+    "propext",
+    "Quot.sound",
+    "Classical.choice"
+  ],
+  "enable_nanoda": false
+}

@@ -1,0 +1,107 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+# Cancel superseded runs on the same ref.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  hygiene:
+    name: source hygiene
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+
+      - name: No file over 1500 lines, no sorry, no heartbeat override, no custom axiom
+        shell: bash
+        run: |
+          set -uo pipefail
+          status=0
+
+          echo "== file lengths (cap 1500 lines) =="
+          while IFS= read -r f; do
+            n=$(wc -l < "$f")
+            if [ "$n" -gt 1500 ]; then
+              echo "::error file=$f::$f has $n lines, over the 1500-line cap"
+              status=1
+            fi
+          done < <(git ls-files '*.lean')
+
+          echo "== sorry (the comparator challenge carries exactly one, by design) =="
+          if git grep -n -E '\bsorry\b|\bsorryAx\b' -- '*.lean' ':!Audit/*/Challenge.lean'; then
+            echo "::error::sorry found outside the comparator challenge"
+            status=1
+          fi
+          for c in Audit/*/Challenge.lean; do
+            n=$(grep -c -E '\bsorry\b' "$c" || true)
+            if [ "$n" -ne 1 ]; then
+              echo "::error file=$c::$c has $n sorry, expected exactly 1"
+              status=1
+            fi
+          done
+
+          echo "== heartbeat overrides =="
+          if git grep -n -E 'maxHeartbeats' -- '*.lean'; then
+            echo "::error::maxHeartbeats override found; refactor the proof instead"
+            status=1
+          fi
+
+          echo "== custom axioms =="
+          if git grep -n -E '^[[:space:]]*axiom[[:space:]]' -- '*.lean'; then
+            echo "::error::custom axiom declaration found"
+            status=1
+          fi
+
+          echo "== module index is current =="
+          if ! diff -q <(python3 scripts/gen_modules.py) MODULES.md >/dev/null; then
+            echo "::error::MODULES.md is stale; run: python3 scripts/gen_modules.py > MODULES.md"
+            status=1
+          fi
+
+          echo "== README Lean excerpts verbatim from the source =="
+          if ! python3 scripts/check_readme.py; then
+            status=1
+          fi
+
+          if [ "$status" -eq 0 ]; then echo "hygiene checks passed"; fi
+          exit "$status"
+
+  build:
+    name: lake build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+
+      # Install the toolchain from `lean-toolchain` and fetch the Mathlib cache.
+      # The build itself runs in the next step so its complete output can be
+      # checked for warnings.
+      - name: Set up Lean and Mathlib cache
+        uses: leanprover/lean-action@v1
+        with:
+          build: false
+          use-mathlib-cache: true
+
+      - name: Enforce warning-free build under the lakefile lint options
+        shell: bash
+        run: |
+          set -o pipefail
+          lake build 2>&1 | tee build.log
+          if grep -iE '^warning:|declaration uses .sorry' build.log; then
+            echo "Build emitted a warning."
+            exit 1
+          fi
+
+      - name: Consumer guide probe
+        shell: bash
+        run: scripts/check_docs.sh

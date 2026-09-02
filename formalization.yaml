@@ -1,0 +1,197 @@
+version: "v0.3"
+
+project:
+  name: "MarkovProcess"
+  authors:
+    - "Scott Armstrong"
+  license: "Apache-2.0"
+
+sources:
+  - title: "Markov Processes: Characterization and Convergence"
+    authors:
+      - "Stewart N. Ethier"
+      - "Thomas G. Kurtz"
+    id: "doi:10.1002/9780470316658"
+    type: "book"
+    license: ""
+    author_contacted: "n/a"     # standard textbook material
+    prior_work: ""
+  - title: "Continuous Martingales and Brownian Motion"
+    authors:
+      - "Daniel Revuz"
+      - "Marc Yor"
+    id: "doi:10.1007/978-3-662-06400-9"
+    type: "book"
+    license: ""
+    author_contacted: "n/a"
+    prior_work: ""
+  - title: "Diffusions, Markov Processes and Martingales, Volume 1: Foundations"
+    authors:
+      - "L. C. G. Rogers"
+      - "David Williams"
+    id: "isbn:9780521775946"
+    type: "book"
+    license: ""
+    author_contacted: "n/a"
+    prior_work: ""
+  - title: "Foundations of Modern Probability"
+    authors:
+      - "Olav Kallenberg"
+    id: "doi:10.1007/978-3-030-61871-1"
+    type: "book"
+    license: ""
+    author_contacted: "n/a"
+    prior_work: ""
+
+status:
+  scope: >-
+    A Lean 4 / Mathlib library of sub-Markov transition semigroups, Feller
+    semigroups, and the continuous-path Markov processes they generate, on a
+    locally compact Polish state space. The main theorem constructs, for a
+    conservative Feller semigroup satisfying a Kolmogorov moment criterion,
+    the unique Markov kernel from the state space to continuous-path space
+    with the prescribed finite-dimensional distributions, for every starting
+    point; the library then proves the Markov and strong Markov properties at
+    deterministic times, finite stopping times, and stopping times that may be
+    infinite, the generator of a strongly continuous contraction semigroup with
+    Dynkin's formula, the Dynkin martingale, a continuous-time optional
+    stopping theorem, Dynkin's formula at bounded stopping times and expected
+    exit time bounds, the process killed at the exit of an open set as a
+    sub-Markov semigroup, measurable and weakly continuous dependence on the
+    starting point, equivariance under state-space homeomorphisms and time
+    rescaling, and the measurably parameterized (quenched) process with its
+    annealed law. The main theorem is additionally checked by the Lean
+    comparator (Audit/) against a Mathlib-only statement.
+  sorry_count: 0
+  sorry_in_definitions: 0
+  axioms:
+    - "propext"
+    - "Classical.choice"
+    - "Quot.sound"
+  main_results:
+    - declaration: "MarkovProcess.SubMarkovKernelSemigroup.IsFellerKernelSemigroup.existsUnique_continuousProcess_of_hasKolmogorovMoments"
+      file: "MarkovProcess/Main.lean"
+      sorry_count: 0
+      axioms: ["propext", "Classical.choice", "Quot.sound"]
+      comparator_config: "Audit/ContinuousMarkovProcess/comparator.json"
+      literature_dependencies: []
+    - declaration: "MarkovProcessChallenge.existsUnique_continuousMarkovProcess"
+      file: "Audit/ContinuousMarkovProcess/Solution.lean"
+      sorry_count: 0
+      axioms: ["propext", "Classical.choice", "Quot.sound"]
+      comparator_config: "Audit/ContinuousMarkovProcess/comparator.json"
+      literature_dependencies: []
+    - declaration: "MarkovProcess.SubMarkovKernelSemigroup.IsFellerKernelSemigroup.continuousProcess_condExp_shift_stoppingTime"
+      file: "MarkovProcess/Main.lean"
+      sorry_count: 0
+      axioms: ["propext", "Classical.choice", "Quot.sound"]
+      comparator_config: ""
+      literature_dependencies: []
+    - declaration: "MarkovProcess.SubMarkovKernelSemigroup.IsFellerKernelSemigroup.martingale_dynkinProcess"
+      file: "MarkovProcess/Trajectory/DynkinMartingale.lean"
+      sorry_count: 0
+      axioms: ["propext", "Classical.choice", "Quot.sound"]
+      comparator_config: ""
+      literature_dependencies: []
+    - declaration: "MarkovProcess.SubMarkovKernelSemigroup.IsConservative.killedSemigroup"
+      file: "MarkovProcess/Killed/Semigroup.lean"
+      sorry_count: 0
+      axioms: ["propext", "Classical.choice", "Quot.sound"]
+      comparator_config: ""
+      literature_dependencies: []
+
+automation:
+  methods:
+    - method: "agent"
+      models:
+        - "claude-fable-5-1"
+        - "gpt-5.6-sol"
+      framework: "Claude Code (Anthropic) and Codex (OpenAI) agentic coding harnesses"
+      tool_setup: >-
+        Lake builds under leanprover/lean4:v4.26.0 with Mathlib v4.26.0. The
+        Lean comparator was run locally on the audit pair (comparator commit
+        575674928e239f5bc452aab72d1dd7b0f1326494, lean4export tag v4.26.0,
+        landrun 0.1.18); the .github/workflows/comparator.yml workflow
+        additionally enables the independent nanoda kernel on every push.
+        Read-only subagents were used for independent statement audits,
+        non-vacuity probes on the example semigroups, and documentation checks.
+      cost:
+        wall_time: "one week"
+        spend_usd: "< $100 (consumer Claude and ChatGPT subscriptions)"
+        hardware: "an 8-CPU / 32 GB RAM Ubuntu machine"
+      prompting_notes: >-
+        Human-directed agent work, closely supervised by the author.
+  spend_usd: "< $100 (consumer Claude and ChatGPT subscriptions)"
+  notes: >-
+    All Lean code in this repository was written by the listed models under the
+    close supervision of the author, within a single week and using only
+    consumer accounts; the development history predates this repository, which
+    was created on 2026-09-02 by extracting the library into a standalone project. Every proof is checked by the Lean kernel and Mathlib;
+    the library contains no sorry and no custom axiom. The Mathlib-only
+    comparator challenge file (Audit/ContinuousMarkovProcess/Challenge.lean)
+    contains exactly one intentional statement-level sorry (the theorem body),
+    which is filled by Audit/ContinuousMarkovProcess/Solution.lean and confirmed
+    by leanprover/comparator ("Your solution is okay!").
+
+fidelity:
+  divergences: >-
+    The library is not the formalization of a single text; it develops the
+    textbook theory under fixed conventions. Times are nonnegative reals
+    (NNReal); a finite stopping time is an NNReal-valued map whose coercion to
+    WithTop NNReal is a Mathlib stopping time, and the stopped sigma-algebra is
+    Mathlib's; the canonical filtration is the raw one (no augmentation); the
+    state space is a nonempty locally compact Polish space with its Borel
+    sigma-algebra. The existence theorem asks for a Kolmogorov moment criterion
+    on the transition kernels (a uniform p-th moment bound of order h^q, q > 1,
+    on the displacement over time h) and produces continuous paths; the
+    general Feller theory with cadlag paths and no continuity criterion is not
+    formalized. The killed process is a sub-Markov kernel semigroup on the open
+    set as a subtype; its identification with a process on lifetime paths is
+    not formalized. Weak continuity in the starting point is proved for
+    finite-dimensional cylinder expectations, not for the law on path space.
+
+review:
+  status: "author-verified"
+  reviewers:
+    - "Scott Armstrong"
+  notes: >-
+    Correctness of every proof is guaranteed by the Lean kernel and Mathlib (no
+    sorry, no custom axiom). The author reviewed that the public statements are
+    the intended theorems; the main theorem was independently checked by
+    leanprover/comparator against a Mathlib-only statement and by read-only
+    audit subagents. This is not external peer review.
+
+alignment:
+  namespace: "MarkovProcess"
+  statements:
+    - source: "Existence and uniqueness of the Markov process of a Feller semigroup (Ethier-Kurtz, Chapter 4, Section 2), with continuous paths under a Kolmogorov moment criterion (Revuz-Yor, Chapter I, Section 2)"
+      lean: "MarkovProcess.SubMarkovKernelSemigroup.IsFellerKernelSemigroup.existsUnique_continuousProcess_of_hasKolmogorovMoments"
+      module: "MarkovProcess.Main"
+      status: "proved"
+      note: "Every starting point; uniqueness among Markov kernels into continuous-path space with the prescribed finite-dimensional distributions."
+    - source: "Mathlib-only challenge for the main theorem"
+      lean: "MarkovProcessChallenge.existsUnique_continuousMarkovProcess"
+      module: "Audit.ContinuousMarkovProcess.Challenge / Audit.ContinuousMarkovProcess.Solution"
+      status: "comparator-checked"
+      note: "Challenge imports only Mathlib and contains one intentional theorem-body sorry."
+    - source: "Strong Markov property of a Feller process at a finite stopping time (Revuz-Yor, Chapter III, Section 3; Rogers-Williams, Chapter III)"
+      lean: "MarkovProcess.SubMarkovKernelSemigroup.IsFellerKernelSemigroup.continuousProcess_condExp_shift_stoppingTime"
+      module: "MarkovProcess.Main"
+      status: "proved"
+      note: "Raw canonical filtration, NNReal-valued stopping time; the version for a stopping time that may be infinite is in MarkovProcess.Trajectory.StoppingLtTop."
+    - source: "Generator of a strongly continuous contraction semigroup and Dynkin's formula (Ethier-Kurtz, Chapter 1, Section 1; Rogers-Williams, Chapter III, Section 10)"
+      lean: "MarkovProcess.SubMarkovKernelSemigroup.IsFellerKernelSemigroup.integral_eval_sub_eq_integral_integral_generator"
+      module: "MarkovProcess.Trajectory.Dynkin"
+      status: "proved"
+      note: "The Dynkin martingale, optional stopping and Dynkin's formula at bounded stopping times follow in MarkovProcess.Trajectory.DynkinMartingale, MarkovProcess.Path.OptionalStopping and MarkovProcess.Trajectory.DynkinStopping."
+    - source: "The process killed at the exit of an open set (Blumenthal-Getoor, Chapter III)"
+      lean: "MarkovProcess.SubMarkovKernelSemigroup.IsConservative.killedSemigroup"
+      module: "MarkovProcess.Killed.Semigroup"
+      status: "proved"
+      note: "A sub-Markov kernel semigroup on the open set; the cemetery-state process on lifetime paths is not identified."
+
+acknowledgements: >-
+  Scott Armstrong was supported by the European Research Council (ERC) under
+  the European Union's Horizon Europe research and innovation programme (grant
+  agreement No. 101200828). Built on Lean 4, Mathlib, Lake,
+  leanprover/comparator, lean4export, and landrun.
