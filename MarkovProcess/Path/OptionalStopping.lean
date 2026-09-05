@@ -5,7 +5,7 @@ Authors: Scott Armstrong
 -/
 import MarkovProcess.Path.StoppingTimeDyadicCeiling
 import Mathlib.MeasureTheory.Integral.DominatedConvergence
-import Mathlib.Probability.Martingale.Basic
+import Mathlib.Probability.Martingale.OptionalStopping
 
 /-!
 # Optional stopping in continuous time, at a bounded finite stopping time
@@ -20,17 +20,19 @@ and `T` is a finite stopping time bounded by a deterministic horizon `K`, then
 (`integral_stoppedValue_eq_of_locallyBounded`, with the uniformly bounded case
 `integral_stoppedValue_eq_of_le`).
 
-The route is elementary, and avoids reindexing through the `ℕ`-indexed theorem of Mathlib.  For a
-stopping time `S` with finite range the identity `∫ M (S omega) omega = ∫ M u` for a horizon `u`
-above the range is a finite sum over the values `v` of `S`: the event `{S = v}` lies in the
-sigma-algebra at time `v`, so `∫_{S = v} M u = ∫_{S = v} M v` by the defining property of the
-conditional expectation (`integral_apply_eq_of_finite_range`).  The dyadic ceilings `T_n` of a
-finite stopping time are stopping times with finite range that decrease to `T`
-(`Path/StoppingTimeDyadicCeiling.lean`), so the general case follows by dominated convergence,
-using right continuity for the pointwise limit.
+For a supermartingale the corresponding expectation is at most its initial expectation
+(`integral_stoppedValue_le_of_locallyBounded` and `integral_stoppedValue_le_of_le`).
+
+The proof samples a supermartingale on the dyadic grid and applies Mathlib's
+`Submartingale.expected_stoppedValue_mono` after negation.  The dyadic ceilings `T_n` of a finite
+stopping time are stopping times with finite range that decrease to `T`
+(`Path/StoppingTimeDyadicCeiling.lean`), so dominated convergence and right continuity give the
+supermartingale inequality.  Applying that inequality to a martingale and its negation gives the
+martingale equality.
 
 Nothing here is specific to path space: the statements are for an arbitrary measurable space with
-a filtration indexed by `ℝ≥0`.
+a filtration indexed by `ℝ≥0`.  No optional-stopping result for unbounded stopping times is
+asserted.
 -/
 
 open Filter MeasureTheory Topology
@@ -127,6 +129,35 @@ end FiniteRange
 
 section DyadicApproximation
 
+/-- Sampling an `NNReal` filtration on a dyadic grid gives a discrete filtration. -/
+private def dyadicFiltration (n : ℕ) (ℱ : Filtration NNReal m) : Filtration ℕ m where
+  seq k := ℱ (dyadicGrid n k)
+  mono' _ _ hkl := ℱ.mono (monotone_dyadicGrid n hkl)
+  le' k := ℱ.le (dyadicGrid n k)
+
+/-- The dyadic ceiling index is a stopping time for the sampled filtration. -/
+private theorem isStoppingTime_dyadicCeilingIndex {T : Omega → NNReal}
+    (hT : IsStoppingTime ℱ fun omega ↦ ((T omega : NNReal) : WithTop NNReal)) (n : ℕ) :
+    IsStoppingTime (dyadicFiltration n ℱ)
+      (fun omega ↦ (dyadicCeilingIndex n (T omega) : ℕ∞)) := by
+  intro k
+  have hstop := isStoppingTime_dyadicCeiling hT n (dyadicGrid n k)
+  change MeasurableSet[ℱ (dyadicGrid n k)]
+    {omega | (dyadicCeilingIndex n (T omega) : ℕ∞) ≤ k}
+  convert hstop using 1
+  ext omega
+  simp only [Set.mem_setOf_eq, ENat.coe_le_coe]
+  rw [← dyadicGrid_ceilingIndex]
+  rw [WithTop.coe_le_coe]
+  exact (strictMono_dyadicGrid n).le_iff_le.symm
+
+/-- Sampling a supermartingale at dyadic grid points gives a discrete supermartingale. -/
+private theorem dyadicSample_supermartingale (hM : Supermartingale M ℱ mu) (n : ℕ) :
+    Supermartingale (fun k ↦ M (dyadicGrid n k)) (dyadicFiltration n ℱ) mu := by
+  refine ⟨fun k ↦ hM.1 (dyadicGrid n k), ?_, fun k ↦ hM.2.2 (dyadicGrid n k)⟩
+  intro k l hkl
+  exact hM.2.1 _ _ (monotone_dyadicGrid n hkl)
+
 /-- One dyadic grid step is at most one. -/
 private theorem inv_two_pow_le_one (n : ℕ) : ((2 : NNReal) ^ n)⁻¹ ≤ 1 := by
   rw [← NNReal.coe_le_coe, NNReal.coe_inv, NNReal.coe_pow, NNReal.coe_ofNat, NNReal.coe_one]
@@ -142,7 +173,7 @@ private theorem finite_range_dyadicCeiling (n : ℕ) {S : Omega → NNReal} {K :
     (hSK : ∀ omega, S omega ≤ K) :
     (Set.range fun omega ↦ dyadicCeiling n (S omega)).Finite := by
   refine Set.Finite.subset ((Set.finite_Iic (⌈(2 ^ n : ℝ) * (K : ℝ)⌉₊)).image
-    (fun k : ℕ ↦ (⟨(k : ℝ) / 2 ^ n, by positivity⟩ : NNReal))) ?_
+    (dyadicGrid n)) ?_
   rintro _ ⟨omega, rfl⟩
   refine ⟨⌈(2 ^ n : ℝ) * (S omega : ℝ)⌉₊, Set.mem_Iic.mpr (Nat.ceil_le_ceil ?_), rfl⟩
   exact mul_le_mul_of_nonneg_left (NNReal.coe_le_coe.mpr (hSK omega))
@@ -154,41 +185,55 @@ section OptionalStopping
 
 variable [IsFiniteMeasure mu]
 
-/-- **Optional stopping at a bounded finite stopping time**, for a martingale that is bounded on
-bounded time intervals and right continuous in time.
-
-Hypotheses: `M` is a martingale for the filtration `ℱ` under the finite measure `mu`; `hbound`
-says that on every bounded time interval `[0, v]` the process is bounded by a constant depending
-only on `v`; `hright` says that at every time `v` the orbit `t ↦ M t omega` is right continuous;
-`T` is a stopping time bounded by the deterministic horizon `K`.  The conclusion is that the
-expectation of `M` at time `T` is its expectation at time `0`.
-
-The value of the process at the stopping time is Mathlib's `stoppedValue M T`, written out. -/
-theorem integral_stoppedValue_eq_of_locallyBounded (hM : Martingale M ℱ mu)
+/-- **Optional stopping inequality at a bounded finite stopping time.**  For a supermartingale
+which is bounded on bounded time intervals and has right-continuous orbits, the expectation at a
+bounded stopping time is at most its initial expectation. -/
+theorem integral_stoppedValue_le_of_locallyBounded (hM : Supermartingale M ℱ mu)
     (hbound : ∀ v : NNReal, ∃ C : ℝ, ∀ t ≤ v, ∀ omega, ‖M t omega‖ ≤ C)
     (hright : ∀ (omega : Omega) (v : NNReal),
       ContinuousWithinAt (fun t : NNReal ↦ M t omega) (Set.Ici v) v)
     {T : Omega → NNReal}
     (hT : IsStoppingTime ℱ fun omega ↦ ((T omega : NNReal) : WithTop NNReal))
     {K : NNReal} (hTK : ∀ omega, T omega ≤ K) :
-    ∫ omega, M (T omega) omega ∂mu = ∫ omega, M 0 omega ∂mu := by
-  have hMint : ∀ t : NNReal, Integrable (M t) mu := by
-    intro t
-    obtain ⟨C, hC⟩ := hbound t
-    exact Integrable.of_bound ((hM.1 t).mono (ℱ.le t)).aestronglyMeasurable C
-      (Eventually.of_forall (hC t le_rfl))
-  have hzero : ∀ u : NNReal, ∫ omega, M u omega ∂mu = ∫ omega, M 0 omega ∂mu := by
-    intro u
-    rw [← integral_condExp (ℱ.le 0) (f := M u) (μ := mu)]
-    exact integral_congr_ae (hM.2 0 u (zero_le u))
+    ∫ omega, M (T omega) omega ∂mu ≤ ∫ omega, M 0 omega ∂mu := by
   have hstopfin : ∀ n : ℕ, (Set.range fun omega ↦ dyadicCeiling n (T omega)).Finite := fun n ↦
     finite_range_dyadicCeiling n hTK
   have hstep : ∀ n : ℕ,
-      ∫ omega, M (dyadicCeiling n (T omega)) omega ∂mu = ∫ omega, M 0 omega ∂mu := by
+      ∫ omega, M (dyadicCeiling n (T omega)) omega ∂mu ≤ ∫ omega, M 0 omega ∂mu := by
     intro n
-    rw [integral_apply_eq_of_finite_range hM hMint (isStoppingTime_dyadicCeiling hT n)
-      (hstopfin n) (u := K + 1) fun omega ↦ dyadicCeiling_le_add_one n (hTK omega)]
-    exact hzero _
+    let G := dyadicFiltration n ℱ
+    let X : ℕ → Omega → ℝ := fun k ↦ -M (dyadicGrid n k)
+    let S : Omega → ℕ∞ := fun omega ↦ dyadicCeilingIndex n (T omega)
+    have hsub : Submartingale X G mu := by
+      change Submartingale (-(fun k ↦ M (dyadicGrid n k))) G mu
+      exact (dyadicSample_supermartingale hM n).neg
+    have hS : IsStoppingTime G S := isStoppingTime_dyadicCeilingIndex hT n
+    have hSK : ∀ omega, S omega ≤
+        (dyadicCeilingIndex n K : ℕ) := by
+      intro omega
+      change (dyadicCeilingIndex n (T omega) : ℕ∞) ≤
+        (dyadicCeilingIndex n K : ℕ∞)
+      exact WithTop.coe_le_coe.mpr (Nat.ceil_le_ceil (mul_le_mul_of_nonneg_left
+        (NNReal.coe_le_coe.mpr (hTK omega)) (by positivity : (0 : ℝ) ≤ 2 ^ n)))
+    have hoptional := hsub.expected_stoppedValue_mono
+      (isStoppingTime_const G 0) hS (fun _ ↦ bot_le) hSK
+    change (∫ omega, -M (dyadicGrid n 0) omega ∂mu) ≤
+      ∫ omega, -M (dyadicGrid n (dyadicCeilingIndex n (T omega))) omega ∂mu at hoptional
+    rw [show dyadicGrid n 0 = 0 by
+      apply NNReal.eq
+      simp only [dyadicGrid, NNReal.coe_mk, Nat.cast_zero, zero_div, NNReal.coe_zero]] at hoptional
+    have hgrid :
+        (∫ omega, M (dyadicGrid n (dyadicCeilingIndex n (T omega))) omega ∂mu) ≤
+          ∫ omega, M 0 omega ∂mu := by
+      simpa only [integral_neg, neg_le_neg_iff] using hoptional
+    calc
+      ∫ omega, M (dyadicCeiling n (T omega)) omega ∂mu =
+          ∫ omega, M (dyadicGrid n (dyadicCeilingIndex n (T omega))) omega ∂mu := by
+        refine integral_congr_ae (Eventually.of_forall fun omega ↦ ?_)
+        change M (dyadicCeiling n (T omega)) omega =
+          M (dyadicGrid n (dyadicCeilingIndex n (T omega))) omega
+        rw [dyadicGrid_ceilingIndex]
+      _ ≤ ∫ omega, M 0 omega ∂mu := hgrid
   obtain ⟨C, hC⟩ := hbound (K + 1)
   have hptw : ∀ᵐ omega ∂mu, Tendsto (fun n ↦ M (dyadicCeiling n (T omega)) omega) atTop
       (𝓝 (M (T omega) omega)) := by
@@ -207,11 +252,42 @@ theorem integral_stoppedValue_eq_of_locallyBounded (hM : Martingale M ℱ mu)
     (fun n ↦ Eventually.of_forall fun omega ↦
       hC _ (dyadicCeiling_le_add_one n (hTK omega)) omega)
     hptw
-  have hconst : Tendsto (fun n : ℕ ↦ ∫ omega, M (dyadicCeiling n (T omega)) omega ∂mu) atTop
-      (𝓝 (∫ omega, M 0 omega ∂mu)) := by
-    simp only [hstep]
-    exact tendsto_const_nhds
-  exact tendsto_nhds_unique hlim hconst
+  exact le_of_tendsto hlim (Eventually.of_forall hstep)
+
+/-- Uniformly bounded specialization of
+`integral_stoppedValue_le_of_locallyBounded`. -/
+theorem integral_stoppedValue_le_of_le (hM : Supermartingale M ℱ mu) {C : ℝ}
+    (hC : ∀ (t : NNReal) (omega : Omega), ‖M t omega‖ ≤ C)
+    (hright : ∀ (omega : Omega) (v : NNReal),
+      ContinuousWithinAt (fun t : NNReal ↦ M t omega) (Set.Ici v) v)
+    {T : Omega → NNReal}
+    (hT : IsStoppingTime ℱ fun omega ↦ ((T omega : NNReal) : WithTop NNReal))
+    {K : NNReal} (hTK : ∀ omega, T omega ≤ K) :
+    ∫ omega, M (T omega) omega ∂mu ≤ ∫ omega, M 0 omega ∂mu :=
+  integral_stoppedValue_le_of_locallyBounded hM
+    (fun _ ↦ ⟨C, fun t _ omega ↦ hC t omega⟩) hright hT hTK
+
+/-- **Optional stopping at a bounded finite stopping time**, for a martingale that is bounded on
+bounded time intervals and right continuous in time.
+
+This is obtained by applying the supermartingale inequality to `M` and `-M`. -/
+theorem integral_stoppedValue_eq_of_locallyBounded (hM : Martingale M ℱ mu)
+    (hbound : ∀ v : NNReal, ∃ C : ℝ, ∀ t ≤ v, ∀ omega, ‖M t omega‖ ≤ C)
+    (hright : ∀ (omega : Omega) (v : NNReal),
+      ContinuousWithinAt (fun t : NNReal ↦ M t omega) (Set.Ici v) v)
+    {T : Omega → NNReal}
+    (hT : IsStoppingTime ℱ fun omega ↦ ((T omega : NNReal) : WithTop NNReal))
+    {K : NNReal} (hTK : ∀ omega, T omega ≤ K) :
+    ∫ omega, M (T omega) omega ∂mu = ∫ omega, M 0 omega ∂mu := by
+  apply le_antisymm
+  · exact integral_stoppedValue_le_of_locallyBounded hM.supermartingale hbound hright hT hTK
+  · have hnegBound : ∀ v : NNReal, ∃ C : ℝ, ∀ t ≤ v, ∀ omega, ‖-M t omega‖ ≤ C := by
+      intro v
+      obtain ⟨C, hC⟩ := hbound v
+      exact ⟨C, fun t ht omega ↦ by simpa only [norm_neg] using hC t ht omega⟩
+    have hneg := integral_stoppedValue_le_of_locallyBounded hM.neg.supermartingale
+      hnegBound (fun omega v ↦ (hright omega v).neg) hT hTK
+    simpa only [Pi.neg_apply, integral_neg, neg_le_neg_iff] using hneg
 
 /-- **Optional stopping at a bounded finite stopping time**, for a uniformly bounded martingale
 with right continuous orbits: the expectation of `M` at a stopping time bounded by a

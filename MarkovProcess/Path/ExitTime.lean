@@ -12,11 +12,13 @@ import Mathlib.Probability.Process.Stopping
 
 For an open set `U` this file studies `ContinuousPath.exitTime U`, the first time a continuous
 path leaves `U`, in the `WithTop`-valued form `ContinuousPath.exitTimeTop U` demanded by
-Mathlib's stopping-time convention.  The three consumer facts are: the exit time is a stopping
-time for the canonical filtration; it is finite exactly when the path leaves `U` at some time,
-and at a finite exit time the path sits on the frontier of `U` when it started inside; and its
+Mathlib's stopping-time convention.  The main consumer facts are: the exit time is a stopping
+time for the canonical filtration; it is finite exactly when the path leaves `U` at some time;
+at a finite exit time the path sits on the frontier of `U` when it started inside; and its
 truncation `exitTimeTrunc U K` at a deterministic horizon is an `NNReal`-valued stopping time,
-which is the form the finite-stopping-time API of this library consumes.
+which is the form the finite-stopping-time API of this library consumes.  The generic time-set
+identities `survivalSet_top`, `survivalSet_ne_top`, and `survivalSet` identify the positive real
+times below an extended nonnegative horizon.
 
 The route is the closed-set detection of `Path/ClosedSetDetection.lean`: the event
 `{exitTime ≤ t}` is the event of hitting the closed set `Uᶜ` by time `t`, because a path that
@@ -34,6 +36,45 @@ namespace MarkovProcess
 namespace ContinuousPath
 
 noncomputable section
+
+section SurvivalSets
+
+/-- The survival set below an infinite extended horizon is the positive half-line. -/
+theorem survivalSet_top :
+    {t : ℝ | ((Real.toNNReal t : NNReal) : ℝ≥0∞) < ⊤} ∩ Set.Ioi 0 = Set.Ioi 0 := by
+  ext t
+  simp only [Set.mem_inter_iff, Set.mem_setOf_eq, Set.mem_Ioi]
+  exact and_iff_right ENNReal.coe_lt_top
+
+/-- The survival set below a finite extended horizon is an ordinary open interval. -/
+theorem survivalSet_ne_top (tau : ℝ≥0∞) (htau : tau ≠ ⊤) :
+    {t : ℝ | ((Real.toNNReal t : NNReal) : ℝ≥0∞) < tau} ∩ Set.Ioi 0 =
+      Set.Ioo 0 tau.toReal := by
+  ext t
+  simp only [Set.mem_inter_iff, Set.mem_setOf_eq, Set.mem_Ioi, Set.mem_Ioo]
+  constructor
+  · rintro ⟨httau, ht⟩
+    refine ⟨ht, ?_⟩
+    have hcoe : ((Real.toNNReal t : NNReal) : ℝ≥0∞) = ENNReal.ofReal t := rfl
+    rw [hcoe] at httau
+    exact (ENNReal.ofReal_lt_iff_lt_toReal ht.le htau).mp httau
+  · rintro ⟨ht, httau⟩
+    refine ⟨?_, ht⟩
+    have hcoe : ((Real.toNNReal t : NNReal) : ℝ≥0∞) = ENNReal.ofReal t := rfl
+    rw [hcoe]
+    exact (ENNReal.ofReal_lt_iff_lt_toReal ht.le htau).mpr httau
+
+/-- The time set on which the nonnegative-time coordinate remains below an extended horizon. -/
+theorem survivalSet (tau : ℝ≥0∞) :
+    {t : ℝ | ((Real.toNNReal t : NNReal) : ℝ≥0∞) < tau} ∩ Set.Ioi 0 =
+      if tau = ⊤ then Set.Ioi 0 else Set.Ioo 0 tau.toReal := by
+  by_cases htau : tau = ⊤
+  · rw [if_pos htau, htau]
+    exact survivalSet_top
+  · rw [if_neg htau]
+    exact survivalSet_ne_top tau htau
+
+end SurvivalSets
 
 variable {alpha : Type*} [PseudoMetricSpace alpha]
 
@@ -159,6 +200,13 @@ theorem exitTimeTrunc_le (U : Set alpha) (K : NNReal) (omega : ContinuousPath al
 end WithTopValue
 
 section Frontier
+
+/-- The exit position is read at the time `(exitTime U omega).toNNReal`.  The `WithTop.untopD`
+spelling of that time, which the `WithTop`-valued stopping-time API produces, is the same
+value. -/
+@[simp]
+theorem untopD_exitTime (U : Set alpha) (omega : ContinuousPath alpha) :
+    (exitTime U omega).untopD 0 = (exitTime U omega).toNNReal := rfl
 
 /-- At a finite exit time, a path that started inside the open set `U` sits on the frontier of
 `U`: it is outside `U`, and it is a limit of points of `U` visited strictly earlier. -/

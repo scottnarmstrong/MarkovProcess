@@ -31,9 +31,11 @@ def dyadicCeiling (n : ℕ) (t : NNReal) : NNReal :=
 def dyadicFloor (n : ℕ) (t : NNReal) : NNReal :=
   ⟨(⌊(2 ^ n : ℝ) * (t : ℝ)⌋₊ : ℝ) / 2 ^ n, by positivity⟩
 
+/-- The real coercion of a dyadic ceiling is its defining quotient. -/
 private theorem coe_dyadicCeiling (n : ℕ) (t : NNReal) :
     ((dyadicCeiling n t : NNReal) : ℝ) = (⌈(2 ^ n : ℝ) * (t : ℝ)⌉₊ : ℝ) / 2 ^ n := rfl
 
+/-- The real coercion of a dyadic floor is its defining quotient. -/
 private theorem coe_dyadicFloor (n : ℕ) (t : NNReal) :
     ((dyadicFloor n t : NNReal) : ℝ) = (⌊(2 ^ n : ℝ) * (t : ℝ)⌋₊ : ℝ) / 2 ^ n := rfl
 
@@ -60,6 +62,7 @@ theorem dyadicCeiling_le_add (n : ℕ) (t : NNReal) :
         (Nat.ceil_lt_add_one (by positivity)).le
     _ = ((t : ℝ) + ((2 : ℝ) ^ n)⁻¹) * 2 ^ n := by rw [add_mul, hinv]; ring
 
+/-- The ceiling comparison rewritten as an inequality between natural indices. -/
 private theorem dyadicCeiling_le_iff_nat (n : ℕ) (t i : NNReal) :
     dyadicCeiling n t ≤ i ↔ ⌈(2 ^ n : ℝ) * (t : ℝ)⌉₊ ≤ ⌊(2 ^ n : ℝ) * (i : ℝ)⌋₊ := by
   have h2 : (0 : ℝ) < 2 ^ n := by positivity
@@ -69,6 +72,7 @@ private theorem dyadicCeiling_le_iff_nat (n : ℕ) (t i : NNReal) :
   rw [← NNReal.coe_le_coe, coe_dyadicCeiling, div_le_iff₀ h2, hfloor,
     mul_comm ((2 : ℝ) ^ n) (i : ℝ)]
 
+/-- The floor comparison rewritten as the same inequality between natural indices. -/
 private theorem le_dyadicFloor_iff_nat (n : ℕ) (t i : NNReal) :
     t ≤ dyadicFloor n i ↔ ⌈(2 ^ n : ℝ) * (t : ℝ)⌉₊ ≤ ⌊(2 ^ n : ℝ) * (i : ℝ)⌋₊ := by
   have h2 : (0 : ℝ) < 2 ^ n := by positivity
@@ -111,7 +115,28 @@ theorem tendsto_dyadicCeiling (t : NNReal) :
     (fun n ↦ le_dyadicCeiling n t) (fun n ↦ dyadicCeiling_le_add n t)
 
 /-- The level-`n` dyadic grid point with index `k`. -/
-private def dyadicGrid (n k : ℕ) : NNReal := ⟨(k : ℝ) / 2 ^ n, by positivity⟩
+def dyadicGrid (n k : ℕ) : NNReal := ⟨(k : ℝ) / 2 ^ n, by positivity⟩
+
+/-- The grid index of the level-`n` dyadic ceiling. -/
+def dyadicCeilingIndex (n : ℕ) (t : NNReal) : ℕ :=
+  ⌈(2 ^ n : ℝ) * (t : ℝ)⌉₊
+
+/-- A dyadic ceiling is the grid point at its ceiling index. -/
+theorem dyadicGrid_ceilingIndex (n : ℕ) (t : NNReal) :
+    dyadicGrid n (dyadicCeilingIndex n t) = dyadicCeiling n t :=
+  rfl
+
+/-- The dyadic grid is monotone in its index. -/
+theorem monotone_dyadicGrid (n : ℕ) : Monotone (dyadicGrid n) := by
+  intro k l hkl
+  rw [← NNReal.coe_le_coe]
+  exact div_le_div_of_nonneg_right (Nat.cast_le.mpr hkl) (by positivity)
+
+/-- The dyadic grid is strictly monotone in its index. -/
+theorem strictMono_dyadicGrid (n : ℕ) : StrictMono (dyadicGrid n) := by
+  intro k l hkl
+  rw [← NNReal.coe_lt_coe]
+  exact div_lt_div_of_pos_right (Nat.cast_lt.mpr hkl) (by positivity)
 
 /-- Each dyadic level has only countably many ceiling values. -/
 theorem countable_range_dyadicCeiling (n : ℕ) : (Set.range (dyadicCeiling n)).Countable := by

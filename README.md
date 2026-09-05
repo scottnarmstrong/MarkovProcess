@@ -13,12 +13,14 @@ This repository constructs, from a transition semigroup on a locally compact Pol
 continuous-path Markov process with those transition probabilities, and proves that it is
 unique and strong Markov. Everything is stated for every starting point: the process is a
 measurable kernel from the state space to path space, and no statement holds only outside an
-exceptional set. The library was written to be consumed by formalizations in stochastic
-homogenization, where the process is a diffusion in a random environment and the transition
-semigroup is supplied by an elliptic operator, but it contains no PDE and no model-specific
-assumption. Its only dependency is Mathlib.
+exceptional set. On that construction the library builds the process killed on leaving an open
+set and the gluing of the local resolvents of an exhaustion into a minimal resolvent, the
+one-point compactification of a locally compact live space and the process it carries, exit
+times and exit laws, Dynkin's formula and optional stopping, and the Feynman-Kac semigroup of a
+bounded potential. It contains no PDE and no model-specific assumption, and its only dependency
+is Mathlib.
 
-- **215 Lean modules plus the root module `MarkovProcess.lean`, about 34,400 lines** (`MODULES.md`
+- **249 Lean modules plus the root module `MarkovProcess.lean`, about 45,700 lines** (`MODULES.md`
   lists every module with a one-line description).
 - **No `sorry`** anywhere in the library. (The Mathlib-only comparator challenge in `Audit/`
   contains its single intentional statement-level `sorry`, filled by the solution file.)
@@ -567,9 +569,13 @@ The construction runs through the following layers, each a reusable library in i
   **Dynkin's formula** `E_x f(ω_t) - f x = E_x ∫₀ᵗ (L f)(ω_s) ds` for `f` in the
   generator domain of the `C₀` semigroup, the **Dynkin martingale**, a continuous-time
   **optional stopping theorem** in the form `E[M_T] = E[M_0]` for locally bounded right-continuous
-  martingales at bounded finite stopping times, Dynkin's formula at such stopping times, the
-  **expected exit time bound** (`Trajectory/Dynkin*.lean`, `Trajectory/ExpectedExitTime.lean`,
-  `Path/OptionalStopping.lean`), the **harmonic and Poisson representations** of solutions of
+  martingales at bounded finite stopping times (`Path/OptionalStopping.lean`), Dynkin's formula at
+  such stopping times, the **expected exit time bound** (`Trajectory/Dynkin*.lean`,
+  `Trajectory/ExpectedExitTime.lean`), excessive-function supermartingales and their discounted
+  finite-exit inequality (`Trajectory/ExcessiveStopping.lean`), the **Feynman–Kac semigroup** for
+  bounded nonnegative measurable potentials, including its resolvent perturbation formula and
+  comparison with killed resolvents (`Trajectory/FeynmanKac.lean`), the **harmonic and Poisson
+  representations** of solutions of
   `L f = 0` and `L f = −g` on an open set, at the exit time truncated at any horizon, and the
   localized Dynkin formula (`Trajectory/HarmonicRepresentation.lean`), the stopped law and the
   **exit distribution** of an open set as kernels (`Trajectory/ExitLaw.lean`), and the **weak
@@ -660,7 +666,7 @@ càdlàg processes for Feller semigroups without a continuity criterion (jump pr
 scope by design), does not augment the filtration (statements are for the raw canonical
 filtration), and contains no Dirichlet-form theory, potential theory, generators of specific
 operators, or PDE. The Kolmogorov moment criterion is a hypothesis; the library proves nothing
-about which semigroups satisfy it beyond the identity and deterministic-drift examples in
+about which semigroups satisfy it beyond the identity, deterministic-drift and heat examples in
 `Examples/`.
 
 ## Relation to the literature

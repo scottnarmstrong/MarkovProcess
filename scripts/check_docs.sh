@@ -3,5 +3,5 @@
 # Run from the repository root after `lake build`.
 set -euo pipefail
 cd "$(dirname "$0")/.."
-lake env lean docs/ConsumerGuide.lean
+lake build MarkovProcessDocs
 echo "consumer guide probe compiled"

@@ -5,7 +5,7 @@ Authors: Scott Armstrong
 -/
 import MarkovProcess.Path.ExitTime
 import MarkovProcess.Path.OptionalStopping
-import MarkovProcess.Trajectory.DynkinMartingale
+import MarkovProcess.Trajectory.DiscountedDynkin
 
 /-!
 # Dynkin's formula at a bounded stopping time, and the expected exit time
@@ -31,6 +31,9 @@ still inside `U`, so the integrand of Dynkin's formula is at most `-1` there.
 The truncation at `K` is what keeps the stopping time finite; the bound is uniform in `K`, and
 `Trajectory/ExpectedExitTime.lean` removes the truncation by monotone convergence
 (`lintegral_exitTime_le`, `ae_exitTime_lt_top`).
+
+The progressive-measurability and optional-stopping statements below are the zero-discount
+specializations of the corresponding results in `Trajectory/DiscountedDynkin.lean`.
 -/
 
 open Filter MeasureTheory ProbabilityTheory
@@ -53,9 +56,9 @@ variable [SecondCountableTopology alpha]
 theorem IsFellerKernelSemigroup.progMeasurable_dynkinProcess (hFeller : P.IsFellerKernelSemigroup)
     (f : hFeller.c0Semigroup.generatorDomain) :
     ProgMeasurable (ContinuousPath.canonicalFiltration (alpha := alpha))
-      (hFeller.dynkinProcess f) :=
-  (hFeller.adapted_dynkinProcess f).progMeasurable_of_continuous fun omega ↦
-    hFeller.continuous_dynkinProcess f omega
+      (hFeller.dynkinProcess f) := by
+  simpa only [hFeller.discountedDynkinProcess_zero f] using
+    hFeller.progMeasurable_discountedDynkinProcess f 0
 
 /-- The Dynkin process evaluated at a finite stopping time is Borel measurable. -/
 theorem IsFellerKernelSemigroup.measurable_dynkinProcess_stoppingTime
@@ -64,9 +67,8 @@ theorem IsFellerKernelSemigroup.measurable_dynkinProcess_stoppingTime
     (hT : IsStoppingTime (ContinuousPath.canonicalFiltration (alpha := alpha))
       (fun omega ↦ (T omega : WithTop NNReal))) :
     Measurable fun omega ↦ hFeller.dynkinProcess f (T omega) omega := by
-  have h := (measurable_stoppedValue (hFeller.progMeasurable_dynkinProcess f) hT).mono
-    hT.measurableSpace_le le_rfl
-  simpa only [stoppedValue] using h
+  simpa only [hFeller.discountedDynkinProcess_zero f] using
+    hFeller.measurable_discountedDynkinProcess_stoppingTime f 0 T hT
 
 end ProgressiveMeasurability
 
@@ -88,22 +90,8 @@ theorem IsFellerKernelSemigroup.integral_dynkinProcess_stoppingTime
     ∫ omega, hFeller.dynkinProcess f (T omega) omega
         ∂(IsConservative.continuousProcess P hP x) =
       (f : C₀(alpha, ℝ)) x := by
-  have hbound : ∀ v : NNReal, ∃ C : ℝ, ∀ t ≤ v, ∀ omega : ContinuousPath alpha,
-      ‖hFeller.dynkinProcess f t omega‖ ≤ C := by
-    intro v
-    refine ⟨‖(f : C₀(alpha, ℝ))‖ + (v : ℝ) * ‖hFeller.c0Semigroup.generator f‖,
-      fun t ht omega ↦ (hFeller.norm_dynkinProcess_le f t omega).trans ?_⟩
-    have hmul : (t : ℝ) * ‖hFeller.c0Semigroup.generator f‖ ≤
-        (v : ℝ) * ‖hFeller.c0Semigroup.generator f‖ :=
-      mul_le_mul_of_nonneg_right (NNReal.coe_le_coe.mpr ht)
-        (norm_nonneg (hFeller.c0Semigroup.generator f))
-    linarith only [hmul]
-  have hright : ∀ (omega : ContinuousPath alpha) (v : NNReal),
-      ContinuousWithinAt (fun t : NNReal ↦ hFeller.dynkinProcess f t omega) (Set.Ici v) v :=
-    fun omega _ ↦ (hFeller.continuous_dynkinProcess f omega).continuousWithinAt
-  rw [MarkovProcess.integral_stoppedValue_eq_of_locallyBounded
-    (hFeller.martingale_dynkinProcess hP hK f x) hbound hright hT hTK]
-  exact hFeller.integral_dynkinProcess hP hK f 0 x
+  simpa only [hFeller.discountedDynkinProcess_zero f] using
+    hFeller.integral_discountedDynkinProcess_stoppingTime hP hK f 0 T hT hTK x
 
 /-- The position at a finite stopping time is integrable: it is Borel measurable and bounded by
 the `C₀` norm of `f`. -/

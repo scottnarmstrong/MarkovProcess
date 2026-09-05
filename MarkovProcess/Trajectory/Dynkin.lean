@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Scott Armstrong
 -/
 import MarkovProcess.Main
+import MarkovProcess.Kernel.PositiveC0OperatorMeasure
 import MarkovProcess.Semigroup.Generator
 import MarkovProcess.Trajectory.AllTimeMarginals
 import Mathlib.MeasureTheory.Integral.Prod
@@ -20,8 +21,9 @@ at every real time).  Combining this with the fundamental identity of the genera
 
   `E_x f(ω_t) - f x = E_x ∫₀ᵗ (L f)(ω_s) ds`.
 
-The evaluation functional `evalC0CLM x : C₀(α, ℝ) →L[ℝ] ℝ` is the tool that moves the Bochner
-integral in `C₀` to a pointwise integral.
+The evaluation functional `c0EvalCLM x : C₀(α, ℝ) →L[ℝ] ℝ` is the tool that moves the Bochner
+integral in `C₀` to a pointwise integral; `evalC0CLM` is the same functional under its original
+name, kept for consumers.
 -/
 
 open MeasureTheory ProbabilityTheory Filter
@@ -74,6 +76,26 @@ theorem IsFellerKernelSemigroup.integral_eval_continuousProcess
     (f := fun y ↦ f y) f.continuous.aestronglyMeasurable
   rw [← h, ← Kernel.map_apply _ hmeas, hFeller.continuousProcess_map_eval_nnreal P hP hK t]
 
+/-- A measurable real-valued observable evaluated at a deterministic time has the corresponding
+transition-kernel integral. -/
+theorem IsFellerKernelSemigroup.integral_eval_continuousProcess_of_measurable
+    (hFeller : P.IsFellerKernelSemigroup) (hK : P.KolmogorovRegular hP)
+    (t : NNReal) (x : alpha) {f : alpha → ℝ} (hf : Measurable f) :
+    ∫ omega, f (omega t) ∂(IsConservative.continuousProcess P hP x) =
+      ∫ y, f y ∂(P t x) := by
+  have heval := ContinuousPath.measurable_coordinateProcess (alpha := alpha) t
+  calc
+    (∫ omega, f (omega t) ∂(IsConservative.continuousProcess P hP x)) =
+        ∫ y, f y ∂Measure.map (fun omega : ContinuousPath alpha ↦ omega t)
+          (IsConservative.continuousProcess P hP x) :=
+      (integral_map heval.aemeasurable hf.stronglyMeasurable.aestronglyMeasurable).symm
+    _ = ∫ y, f y ∂(P t x) := by
+      change ∫ y, f y ∂Measure.map (ContinuousPath.coordinateProcess (alpha := alpha) t)
+        (IsConservative.continuousProcess P hP x) = _
+      rw [← Kernel.map_apply _ heval]
+      exact congrArg (fun K : Kernel alpha alpha ↦ ∫ y, f y ∂K x)
+        (hFeller.continuousProcess_map_eval_nnreal P hP hK t)
+
 /-- The `C₀` semigroup of a Feller semigroup is the expectation semigroup of its continuous-path
 process: `(S t f) x = E_x f(ω_t)`. -/
 theorem IsFellerKernelSemigroup.c0Semigroup_apply_eq_integral
@@ -105,19 +127,19 @@ theorem IsFellerKernelSemigroup.integral_eval_sub_eq_integral_integral_generator
         ∂(IsConservative.continuousProcess P hP x) := by
     calc ∫ omega, (f : C₀(alpha, ℝ)) (omega t) ∂(IsConservative.continuousProcess P hP x) -
           (f : C₀(alpha, ℝ)) x
-        = evalC0CLM x (hFeller.c0Semigroup t (f : C₀(alpha, ℝ)) - (f : C₀(alpha, ℝ))) := by
-          rw [map_sub, evalC0CLM_apply, evalC0CLM_apply,
+        = c0EvalCLM x (hFeller.c0Semigroup t (f : C₀(alpha, ℝ)) - (f : C₀(alpha, ℝ))) := by
+          rw [map_sub, c0EvalCLM_apply, c0EvalCLM_apply,
             hFeller.c0Semigroup_apply_eq_integral P hP hK t x]
-      _ = evalC0CLM x (∫ s in (0 : ℝ)..t,
+      _ = c0EvalCLM x (∫ s in (0 : ℝ)..t,
             hFeller.c0Semigroup (Real.toNNReal s) (hFeller.c0Semigroup.generator f)) := by
           rw [hFeller.c0Semigroup.operator_sub_eq_integral f t]
       _ = ∫ s in (0 : ℝ)..t,
-            evalC0CLM x (hFeller.c0Semigroup (Real.toNNReal s) (hFeller.c0Semigroup.generator f)) :=
-          ((evalC0CLM x).intervalIntegral_comp_comm hint).symm
+            c0EvalCLM x (hFeller.c0Semigroup (Real.toNNReal s) (hFeller.c0Semigroup.generator f)) :=
+          ((c0EvalCLM x).intervalIntegral_comp_comm hint).symm
       _ = ∫ s in (0 : ℝ)..t, ∫ omega, (hFeller.c0Semigroup.generator f) (omega (Real.toNNReal s))
             ∂(IsConservative.continuousProcess P hP x) := by
           refine intervalIntegral.integral_congr fun s _ ↦ ?_
-          rw [evalC0CLM_apply, hFeller.c0Semigroup_apply_eq_integral P hP hK]
+          rw [c0EvalCLM_apply, hFeller.c0Semigroup_apply_eq_integral P hP hK]
   rw [hstep]
   have hcont : Continuous fun p : ℝ × ContinuousPath alpha ↦
       (hFeller.c0Semigroup.generator f) (p.2 (Real.toNNReal p.1)) :=

@@ -1,14 +1,17 @@
 #!/usr/bin/env python3
 """Regenerate MODULES.md from module docstrings.
 
-Each module contributes one line: its title (the `# ...` heading of the module docstring) and the
-first sentence of the docstring body.  Run from the repository root:
+The index lists the *tracked* modules of the repository, enumerated with `git ls-files`, so a
+module that is only present in the working directory is never indexed.  Each module contributes
+one line: its title (the `# ...` heading of the module docstring) and the first sentence of the
+docstring body.  Run from the repository root:
 
     python3 scripts/gen_modules.py > MODULES.md
 """
 from __future__ import annotations
 
 import re
+import subprocess
 import sys
 from pathlib import Path
 
@@ -44,8 +47,15 @@ def describe(path: Path) -> str:
     return title or first or "(empty module docstring)"
 
 
+def tracked_modules() -> list[Path]:
+    """The tracked `MarkovProcess/**/*.lean` files, as absolute paths."""
+    out = subprocess.run(["git", "ls-files", "MarkovProcess/*.lean"], cwd=ROOT,
+                         capture_output=True, text=True, check=True).stdout.split()
+    return sorted(ROOT / name for name in out)
+
+
 def main() -> None:
-    modules = sorted(LIB.rglob("*.lean"))
+    modules = tracked_modules()
     by_dir: dict[str, list[tuple[str, str]]] = {}
     for p in modules:
         rel = p.relative_to(LIB).with_suffix("")

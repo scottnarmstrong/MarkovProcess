@@ -5,6 +5,8 @@ Authors: Scott Armstrong
 -/
 import MarkovProcess.Semigroup.Basic
 import MarkovProcess.Semigroup.StrongOperatorLimit
+import Mathlib.Analysis.Calculus.Deriv.Mul
+import Mathlib.Analysis.SpecialFunctions.ExpDeriv
 import Mathlib.MeasureTheory.Integral.IntervalIntegral.FundThmCalculus
 
 /-!
@@ -22,8 +24,8 @@ For `S : StronglyContinuousContractionSemigroup E` this file defines the generat
   differentiable at every time, with derivative `S t (S.generator f)`; its real-variable forms are
   `hasDerivWithinAt_Ioi` and `hasDerivWithinAt_Ici`, and at positive times the derivative is
   two-sided, `hasDerivAt_operator_toNNReal`;
-* `operator_sub_eq_integral`: the fundamental identity
-  `S t f - f = ∫ s in (0 : ℝ)..t, S (Real.toNNReal s) (S.generator f)`;
+* `operator_sub_eq_integral` and `exp_smul_operator_sub_eq_integral`: the fundamental identity
+  and its exponentially weighted form;
 * `orbitIntegral_mem_generatorDomain` and `generator_orbitIntegral`: for every vector `f`, the
   orbit integral `∫₀ᵗ S s f ds` lies in the domain with generator `S t f - f`; hence
   `dense_generatorDomain`, the domain is dense.
@@ -320,6 +322,43 @@ theorem operator_sub_eq_integral (f : S.generatorDomain) (t : NNReal) :
   have hftc := intervalIntegral.integral_eq_sub_of_hasDeriv_right_of_le t.coe_nonneg hcont
     hderiv hint
   rw [hftc, Real.toNNReal_coe, Real.toNNReal_zero, S.zero_apply]
+
+/-- The exponentially weighted fundamental identity for a strongly continuous contraction
+semigroup. -/
+theorem exp_smul_operator_sub_eq_integral (f : S.generatorDomain) (lam : ℝ) (t : NNReal) :
+    Real.exp (-lam * (t : ℝ)) • S t (f : E) - f =
+      ∫ s in (0 : ℝ)..t, Real.exp (-lam * s) •
+        S (Real.toNNReal s) (S.generator f - lam • (f : E)) := by
+  let F : ℝ → E := fun s ↦ Real.exp (-lam * s) • S (Real.toNNReal s) (f : E)
+  let F' : ℝ → E := fun s ↦
+    Real.exp (-lam * s) • S (Real.toNNReal s) (S.generator f - lam • (f : E))
+  have hcont : ContinuousOn F (Set.Icc 0 (t : ℝ)) := by
+    exact ((Real.continuous_exp.comp (continuous_const.mul continuous_id)).smul
+      (S.continuous_operator_toNNReal f)).continuousOn
+  have hderiv : ∀ x ∈ Set.Ioo (0 : ℝ) t,
+      HasDerivWithinAt F (F' x) (Set.Ioi x) x := by
+    intro x hx
+    have hexp : HasDerivAt (fun s : ℝ ↦ Real.exp (-lam * s))
+        ((-lam) * Real.exp (-lam * x)) x := by
+      convert ((hasDerivAt_id x).const_mul (-lam)).exp using 1
+      simp only [id_eq, mul_one]
+      exact mul_comm _ _
+    have horbit := S.hasDerivWithinAt_Ioi f (Real.toNNReal x)
+    rw [Real.coe_toNNReal x hx.1.le] at horbit
+    have hprod := hexp.hasDerivWithinAt.smul horbit
+    refine hprod.congr_deriv ?_
+    dsimp only [F']
+    rw [map_sub, map_smul]
+    module
+  have hint : IntervalIntegrable F' MeasureTheory.volume 0 t := by
+    have hc : Continuous F' :=
+      (Real.continuous_exp.comp (continuous_const.mul continuous_id)).smul
+        (S.continuous_operator_toNNReal _)
+    exact hc.intervalIntegrable _ _
+  have hftc := intervalIntegral.integral_eq_sub_of_hasDeriv_right_of_le t.coe_nonneg hcont
+    hderiv hint
+  simpa only [F, F', Real.toNNReal_coe, Real.toNNReal_zero, S.zero_apply, mul_zero,
+    Real.exp_zero, one_smul] using hftc.symm
 
 end RealVariable
 

@@ -21,6 +21,20 @@ lean_lib «Audit» where
     ⟨`linter.deprecated, true⟩
   ]
 
+/-- The compiled consumer-guide examples (`docs/ConsumerGuide.lean`). Not a default target:
+build on demand with `lake build MarkovProcessDocs`. -/
+lean_lib «MarkovProcessDocs» where
+  roots := #[`docs.ConsumerGuide]
+  leanOptions := #[
+    ⟨`autoImplicit, false⟩,
+    ⟨`relaxedAutoImplicit, false⟩,
+    ⟨`linter.unusedVariables, true⟩,
+    ⟨`linter.unusedSectionVars, true⟩,
+    ⟨`linter.unusedSimpArgs, true⟩,
+    ⟨`linter.unnecessarySimpa, true⟩,
+    ⟨`linter.deprecated, true⟩
+  ]
+
 @[default_target]
 lean_lib «MarkovProcess» where
   globs := #[.andSubmodules `MarkovProcess]

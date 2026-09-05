@@ -22,13 +22,39 @@ semigroup or stochastic-process law.
 open CompactlySupported MeasureTheory
 open scoped ZeroAtInfty
 
-namespace MarkovProcess.PositiveC0OperatorMeasure
+namespace MarkovProcess
 
 variable {α : Type*} [TopologicalSpace α]
+
+/-- Evaluation at a point, as a bounded linear functional on `C₀(α, ℝ)`. -/
+noncomputable def c0EvalCLM (x : α) : C₀(α, ℝ) →L[ℝ] ℝ :=
+  LinearMap.mkContinuous
+    { toFun := fun f ↦ f x
+      map_add' := fun _ _ ↦ rfl
+      map_smul' := fun _ _ ↦ rfl } 1 fun f ↦ by
+    rw [one_mul, ← ZeroAtInftyContinuousMap.norm_toBCF_eq_norm]
+    exact BoundedContinuousFunction.norm_coe_le_norm f.toBCF x
+
+/-- Evaluation, unfolded. -/
+@[simp]
+theorem c0EvalCLM_apply (x : α) (f : C₀(α, ℝ)) : c0EvalCLM x f = f x :=
+  rfl
+
+namespace PositiveC0OperatorMeasure
 
 /-- Pointwise preservation of nonnegative functions by an operator on `C₀(α, ℝ)`. -/
 def IsPositive (T : C₀(α, ℝ) →L[ℝ] C₀(α, ℝ)) : Prop :=
   ∀ f : C₀(α, ℝ), (∀ x, 0 ≤ f x) → ∀ x, 0 ≤ T f x
+
+/-- A positive operator on `C₀` is monotone for the pointwise order. -/
+theorem apply_le_apply_of_isPositive
+    (T : C₀(α, ℝ) →L[ℝ] C₀(α, ℝ)) (hT : IsPositive T)
+    {f g : C₀(α, ℝ)} (hfg : ∀ x, f x ≤ g x) (x : α) :
+    T f x ≤ T g x := by
+  have hnonneg : ∀ y, 0 ≤ (g - f) y := fun y ↦ sub_nonneg.mpr (hfg y)
+  have h := hT (g - f) hnonneg x
+  rw [map_sub] at h
+  exact sub_nonneg.mp h
 
 /-- The canonical real-linear inclusion of compactly supported continuous functions into `C₀`. -/
 noncomputable def compactlySupportedToC0LinearMap : C_c(α, ℝ) →ₗ[ℝ] C₀(α, ℝ) where
@@ -88,4 +114,6 @@ theorem integral_measure (x : α) (f : C_c(α, ℝ)) :
   rw [measure, RealRMK.integral_rieszMeasure]
   rfl
 
-end MarkovProcess.PositiveC0OperatorMeasure
+end PositiveC0OperatorMeasure
+
+end MarkovProcess

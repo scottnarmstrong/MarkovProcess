@@ -24,7 +24,9 @@ a consumer working with real-valued bounded `f` splits it into its positive and 
 
 This is the probabilistic side of the Dirichlet resolvent `(λ − L)⁻¹` on `U` with zero boundary
 values: the identification with the analytic resolvent of a given operator is the consumer's
-statement about that operator.
+statement about that operator.  One order fact is recorded alongside: the killed resolvent is
+antitone in the shift (`IsConservative.killedResolvent_antitone`), because a larger shift
+discounts the future more.
 -/
 
 open MeasureTheory ProbabilityTheory Filter
@@ -113,5 +115,16 @@ theorem IsConservative.killedResolvent_eq_lintegral (lam : ℝ) {f : alpha → �
   refine setLIntegral_congr_fun measurableSet_Ioi ?_
   intro t _
   simp only [Set.indicator_apply, Set.mem_setOf_eq]
+
+/-- **The killed resolvent is antitone in the shift.**  A larger shift discounts the future more,
+so it produces a smaller resolvent. -/
+theorem IsConservative.killedResolvent_antitone (f : alpha → ℝ≥0∞) (x : alpha) {lam mu : ℝ}
+    (hle : lam ≤ mu) :
+    IsConservative.killedResolvent P hP U hU mu f x ≤
+      IsConservative.killedResolvent P hP U hU lam f x := by
+  unfold IsConservative.killedResolvent
+  refine lintegral_mono_ae (ae_restrict_of_forall_mem measurableSet_Ioi fun t ht ↦ ?_)
+  refine mul_le_mul_left (ENNReal.ofReal_le_ofReal (Real.exp_le_exp.mpr ?_)) _
+  exact mul_le_mul_of_nonneg_right (neg_le_neg hle) (le_of_lt ht)
 
 end MarkovProcess.SubMarkovKernelSemigroup

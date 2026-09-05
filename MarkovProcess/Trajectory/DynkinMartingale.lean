@@ -3,7 +3,7 @@ Copyright (c) 2026 Scott Armstrong. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Scott Armstrong
 -/
-import MarkovProcess.Path.StoppedValueMeasurability
+import MarkovProcess.Trajectory.ClampedCoordinate
 import MarkovProcess.Trajectory.Dynkin
 import Mathlib.Probability.Martingale.Basic
 
@@ -36,6 +36,9 @@ The auxiliary facts proved on the way are of independent use: the Dynkin process
 (`continuous_dynkinProcess`).  Adaptedness of the time-integral term comes from progressive
 measurability of the coordinate process together with measurability of Bochner integrals in a
 parameter.
+
+The exponentially discounted extension is developed in `Trajectory/DiscountedDynkin.lean`;
+its zero-discount process is identified with this one by `discountedDynkinProcess_zero`.
 -/
 
 open MeasureTheory ProbabilityTheory Filter
@@ -50,7 +53,7 @@ section C0Bound
 variable {alpha : Type*} [TopologicalSpace alpha]
 
 /-- The `C₀` norm bounds the values of a `C₀` function. -/
-private theorem norm_c0_apply_le (g : C₀(alpha, ℝ)) (y : alpha) : ‖g y‖ ≤ ‖g‖ := by
+theorem norm_c0_apply_le (g : C₀(alpha, ℝ)) (y : alpha) : ‖g y‖ ≤ ‖g‖ := by
   rw [← ZeroAtInftyContinuousMap.norm_toBCF_eq_norm]
   exact BoundedContinuousFunction.norm_coe_le_norm g.toBCF y
 
@@ -134,20 +137,12 @@ private theorem stronglyMeasurable_generator_min (hFeller : P.IsFellerKernelSemi
     StronglyMeasurable[(borel ℝ).prod (ContinuousPath.canonicalFiltration (alpha := alpha) t)]
       (fun p : ℝ × ContinuousPath alpha ↦
         (hFeller.c0Semigroup.generator f) (p.2 (min (Real.toNNReal p.1) t))) := by
-  have hclamp : Measurable[(borel ℝ).prod
-        (ContinuousPath.canonicalFiltration (alpha := alpha) t),
-      Subtype.instMeasurableSpace.prod (ContinuousPath.canonicalFiltration (alpha := alpha) t)]
-      (fun p : ℝ × ContinuousPath alpha ↦
-        ((⟨min (Real.toNNReal p.1) t, Set.mem_Iic.mpr (min_le_right _ _)⟩ : Set.Iic t), p.2)) := by
-    refine Measurable.prodMk (Measurable.subtype_mk ?_) measurable_snd
-    exact (measurable_real_toNNReal.min measurable_const).comp measurable_fst
-  have hcoord :=
-    (ContinuousPath.progMeasurable_coordinateProcess (alpha := alpha) t).comp_measurable hclamp
-  exact (hFeller.c0Semigroup.generator f).continuous.comp_stronglyMeasurable hcoord
+  exact (hFeller.c0Semigroup.generator f).continuous.comp_stronglyMeasurable
+    (ContinuousPath.measurable_clampedCoordinate (alpha := alpha) t).stronglyMeasurable
 
 /-- Measurability of a Bochner integral in a parameter, with the parameter sigma-algebra given by
 a variable so that it can be instantiated at a filtration. -/
-private theorem stronglyMeasurable_integral_prod {Omega : Type*} {mOmega : MeasurableSpace Omega}
+theorem stronglyMeasurable_integral_prod {Omega : Type*} {mOmega : MeasurableSpace Omega}
     (mu : Measure ℝ) [SFinite mu] {phi : ℝ × Omega → ℝ}
     (hphi : StronglyMeasurable[(borel ℝ).prod mOmega] phi) :
     StronglyMeasurable[mOmega] fun omega : Omega ↦ ∫ s, phi (s, omega) ∂mu :=

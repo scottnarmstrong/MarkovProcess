@@ -20,6 +20,8 @@ that restriction on the event `{tau < ⊤}` where the time is finite, writing th
 * `IsFellerKernelSemigroup.continuousProcess_condExp_shift_stoppingTime_lt_top`: the same fact
   in conditional-expectation form, for a bounded strongly measurable functional of the shifted
   path, with the indicator of `{tau < ⊤}` on both sides.
+* `StoppingTime.lintegral_mul_indicator_of_restrict_map`: integration of a restricted restart
+  identity against a nonnegative weight measurable at the conditioning sigma-algebra.
 
 The route is truncation: `truncTime tau K` is the finite stopping time `min tau K`, and the
 slices `stoppingTimeSlice A tau K` partition `A ∩ {tau < ⊤}` into countably many events on which
@@ -33,7 +35,7 @@ neither statement constrains it.  No Hunt-process property is claimed.
 -/
 
 open MeasureTheory ProbabilityTheory
-open scoped NNReal Function
+open scoped ENNReal NNReal Function
 
 namespace MarkovProcess
 
@@ -42,6 +44,96 @@ of the event where a `WithTop`-valued stopping time is finite, and the reassembl
 identities over the slices.  Nothing here is specific to path space. -/
 
 namespace StoppingTime
+
+section RestrictedRestartIntegral
+
+variable {Omega beta : Type*} {m mOmega : MeasurableSpace Omega}
+  {mBeta : MeasurableSpace beta}
+
+/-- A restricted restart identity may be integrated against an arbitrary nonnegative weight
+measurable at the conditioning sigma-algebra. -/
+theorem lintegral_mul_indicator_of_restrict_map
+    (mu : @Measure Omega mOmega) (kappa : @Kernel Omega beta mOmega mBeta)
+    (Y : Omega → beta) (hY : @Measurable Omega beta mOmega mBeta Y)
+    (hm : m ≤ mOmega) (S : Set Omega) (hS : MeasurableSet[m] S)
+    (hJoint : ∀ A : Set Omega, MeasurableSet[m] A →
+      (mu.restrict (A ∩ S)).map Y = kappa ∘ₘ (mu.restrict (A ∩ S)))
+    (F : beta → ℝ≥0∞) (hF : Measurable F)
+    (W : Omega → ℝ≥0∞) (hW : Measurable[m] W) :
+    ∫⁻ omega, W omega * S.indicator (fun omega ↦ F (Y omega)) omega ∂mu =
+      ∫⁻ omega, W omega * S.indicator
+        (fun omega ↦ ∫⁻ y, F y ∂kappa omega) omega ∂mu := by
+  have hSm : MeasurableSet S := hm S hS
+  have hSet : ∀ A : Set Omega, MeasurableSet[m] A →
+      ∫⁻ omega in A ∩ S, F (Y omega) ∂mu =
+        ∫⁻ omega in A ∩ S, (∫⁻ y, F y ∂kappa omega) ∂mu := by
+    intro A hA
+    calc
+      ∫⁻ omega in A ∩ S, F (Y omega) ∂mu =
+          ∫⁻ y, F y ∂((mu.restrict (A ∩ S)).map Y) := by
+            rw [lintegral_map hF hY]
+      _ = ∫⁻ y, F y ∂(kappa ∘ₘ (mu.restrict (A ∩ S))) := by rw [hJoint A hA]
+      _ = ∫⁻ omega in A ∩ S, (∫⁻ y, F y ∂kappa omega) ∂mu := by
+        rw [Measure.comp_eq_comp_const_apply]
+        exact Measure.lintegral_bind kappa.aemeasurable hF.aemeasurable
+  refine @Measurable.ennreal_induction Omega m
+    (fun W ↦ ∫⁻ omega, W omega * S.indicator (fun omega ↦ F (Y omega)) omega ∂mu =
+      ∫⁻ omega, W omega * S.indicator
+        (fun omega ↦ ∫⁻ y, F y ∂kappa omega) omega ∂mu) ?_ ?_ ?_ W hW
+  · intro c A hA
+    have hA' : MeasurableSet A := hm A hA
+    have hAS : MeasurableSet (A ∩ S) := hA'.inter hSm
+    have hleft : (fun omega ↦ A.indicator (fun _ ↦ c) omega *
+          S.indicator (fun omega ↦ F (Y omega)) omega) =
+        (A ∩ S).indicator (fun omega ↦ c * F (Y omega)) := by
+      funext omega
+      by_cases ha : omega ∈ A <;> by_cases hs : omega ∈ S <;>
+        simp [Set.indicator_of_mem, Set.indicator_of_notMem, ha, hs]
+    have hright : (fun omega ↦ A.indicator (fun _ ↦ c) omega *
+          S.indicator (fun omega ↦ ∫⁻ y, F y ∂kappa omega) omega) =
+        (A ∩ S).indicator (fun omega ↦ c * ∫⁻ y, F y ∂kappa omega) := by
+      funext omega
+      by_cases ha : omega ∈ A <;> by_cases hs : omega ∈ S <;>
+        simp [Set.indicator_of_mem, Set.indicator_of_notMem, ha, hs]
+    rw [hleft, hright, lintegral_indicator hAS, lintegral_indicator hAS]
+    calc
+      ∫⁻ omega in A ∩ S, c * F (Y omega) ∂mu =
+          c * ∫⁻ omega in A ∩ S, F (Y omega) ∂mu :=
+        lintegral_const_mul c (hF.comp hY)
+      _ = c * ∫⁻ omega in A ∩ S, (∫⁻ y, F y ∂kappa omega) ∂mu := by
+        rw [hSet A hA]
+      _ = ∫⁻ omega in A ∩ S, c * (∫⁻ y, F y ∂kappa omega) ∂mu :=
+        (lintegral_const_mul c hF.lintegral_kernel).symm
+  · intro W Z _hdisj hWm hZm hWi hZi
+    simp_rw [Pi.add_apply, add_mul]
+    rw [lintegral_add_left]
+    · rw [lintegral_add_left]
+      · exact congrArg₂ (· + ·) hWi hZi
+      · exact (hWm.mono hm le_rfl).mul (hF.lintegral_kernel.indicator hSm)
+    · exact (hWm.mono hm le_rfl).mul ((hF.comp hY).indicator hSm)
+  · intro W hWm hmono hWi
+    change (∫⁻ omega, (⨆ n, W n omega) *
+      S.indicator (fun omega ↦ F (Y omega)) omega ∂mu) = _
+    rw [show (fun omega ↦ (⨆ n, W n omega) *
+        S.indicator (fun omega ↦ F (Y omega)) omega) =
+      fun omega ↦ ⨆ n, W n omega * S.indicator (fun omega ↦ F (Y omega)) omega by
+        funext omega; exact ENNReal.iSup_mul (fun n ↦ W n omega) _]
+    rw [show (fun omega ↦ (⨆ n, W n omega) * S.indicator
+        (fun omega ↦ ∫⁻ y, F y ∂kappa omega) omega) =
+      fun omega ↦ ⨆ n, W n omega * S.indicator
+        (fun omega ↦ ∫⁻ y, F y ∂kappa omega) omega by
+        funext omega; exact ENNReal.iSup_mul (fun n ↦ W n omega) _]
+    rw [lintegral_iSup]
+    · rw [lintegral_iSup]
+      · exact iSup_congr fun n ↦ hWi n
+      · exact fun n ↦ (hWm n).mono hm le_rfl |>.mul
+          (hF.lintegral_kernel.indicator hSm)
+      · exact fun i j hij omega ↦ mul_le_mul_left (hmono hij omega) _
+    · exact fun n ↦ (hWm n).mono hm le_rfl |>.mul
+        ((hF.comp hY).indicator hSm)
+    · exact fun i j hij omega ↦ mul_le_mul_left (hmono hij omega) _
+
+end RestrictedRestartIntegral
 
 section Trunc
 
