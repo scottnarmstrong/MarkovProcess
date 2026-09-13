@@ -26,7 +26,7 @@ is Mathlib.
   contains its single intentional statement-level `sorry`, filled by the solution file.)
 - **No custom `axiom`.** Every public theorem reduces to Mathlib's three standard foundational
   axioms `propext`, `Classical.choice`, `Quot.sound`.
-- Pinned to Lean `v4.33.1` and `mathlib` `v4.33.1`. Builds warning-free under the Lean core
+- Pinned to Lean `v4.33.0` and `mathlib` `v4.33.0`. Builds warning-free under the Lean core
   linters enabled in the lakefile (unused variables and section variables, unused simp arguments,
   unnecessary `simpa`, deprecations); no heartbeat overrides anywhere.
 
@@ -459,9 +459,9 @@ moment criterion, so the main theorem produces its process, `brownianMotion`. Un
 are continuous. Mathlib defines Brownian motion (`IsBrownianReal`, from the formalization of
 Degenne, Ledvinka, Marion and Pfaffelhuber) by its Gaussian finite-dimensional laws and
 continuous paths, and proves that definition equivalent to the three conditions above
-(`HasIndepIncrements.isPreBrownianReal_of_hasLaw` and its converse lemmas); the pinned Mathlib
-revision predates these, so the library states the predicate in the equivalent form, with
-`HasIndepIncrements` copied verbatim. The generator of the heat semigroup on `C₀(ℝ)` is half the
+(`HasIndepIncrements.isPreBrownianReal_of_hasLaw` and its converse lemmas). The library uses
+its own predicate in this characterized form, with `HasIndepIncrements` copied verbatim;
+its theorem does not directly apply Mathlib's `IsBrownianReal`. The generator of the heat semigroup on `C₀(ℝ)` is half the
 second derivative on twice continuously differentiable `C₀` functions with `C₀` second
 derivative. The existence and uniqueness, the Brownian identification and the uniform limit of
 the difference quotients are comparator-verified against a Mathlib-only restatement
@@ -671,7 +671,8 @@ about which semigroups satisfy it beyond the identity, deterministic-drift and h
 
 ## Relation to the literature
 
-The main theorem combines three classical ingredients:
+The existence and uniqueness theorem uses the first two classical ingredients below;
+the library separately proves the strong Markov property using the third:
 
 - **Existence of a process with prescribed finite-dimensional distributions**: Kolmogorov's
   extension theorem, here in the Markov form due to Ionescu Tulcea (1949).
@@ -714,12 +715,13 @@ Formalizations this library builds on or is comparable to:
   uses directly.
 - The Kolmogorov–Chentsov theorem and the construction of Brownian motion in Lean (Degenne,
   Ledvinka, Marion, Pfaffelhuber, *Formalization of Brownian motion in Lean*,
-  [arXiv:2511.20118](https://arxiv.org/abs/2511.20118), being migrated to Mathlib); at the
-  pinned Mathlib revision only the `IsKolmogorovProcess` predicate is upstreamed, which this
-  library uses, proving its own dyadic chaining argument for the dense-time process of a
-  semigroup. The process of the heat semigroup built here is a Brownian motion in the sense of
-  that formalization's definition, now Mathlib's `IsBrownianReal`, through the characterization
-  by Gaussian marginals and independent increments (`Examples/BrownianMotion.lean`).
+  [arXiv:2511.20118](https://arxiv.org/abs/2511.20118)). This library uses Mathlib's
+  `IsKolmogorovProcess` predicate and proves its own dyadic chaining argument for the
+  dense-time process of a semigroup. The pinned Mathlib also contains Brownian-motion
+  definitions in `Probability/BrownianMotion/Basic.lean`. The heat example uses a
+  project-defined `IsBrownianReal` predicate stated through Gaussian marginals,
+  independent increments, and continuous paths (`Examples/BrownianMotion.lean`);
+  it is not an application of Mathlib's predicate of the same name.
 - The Isabelle/HOL formalization of the Kolmogorov–Chentsov theorem (Pardillo-Laursen and
   Foster, [Archive of Formal Proofs, 2025](https://isa-afp.org/entries/Kolmogorov_Chentsov.html)),
   and Hölzl's Markov chains, Markov decision processes and Markov processes in Isabelle/HOL
@@ -727,14 +729,12 @@ Formalizations this library builds on or is comparable to:
   trajectory measures via the Giry monad and Ionescu-Tulcea and derive the strong Markov
   property of discrete-time Markov processes.
 
-To the author's knowledge, the existence and uniqueness of a continuous-path strong Markov
-process from a Feller transition semigroup, with the strong Markov property at arbitrary finite
-stopping times of the raw filtration, had not previously been formalized in a proof assistant.
-The closest prior results are Hölzl's strong Markov property for discrete-time Markov processes
-in Isabelle/HOL (CPP 2017) and the Markov property of Brownian motion in Lean
-(arXiv:2511.20118, where the strong Markov property is listed as future work); the present
-library obtains the strong Markov property of Brownian motion as the instance of its general
-theorem for the heat semigroup.
+The contribution is a formal development of the classical construction for general
+conservative Feller semigroups satisfying the stated moment criterion, with all starting-point
+laws assembled into one measurable kernel. This provides an interface for probabilists and
+researchers formalizing diffusion and potential theory to obtain a continuous-path law from
+transition kernels. The library also proves the strong Markov property for its raw filtration
+and applies it to the heat semigroup.
 
 ## Verified against a Mathlib-only statement
 
@@ -762,8 +762,8 @@ The second is `BrownianMotionChallenge.brownianMotion`
 ([`Audit/BrownianMotion/Challenge.lean`](Audit/BrownianMotion/Challenge.lean)): there is exactly
 one Markov kernel from `ℝ` to `C([0, ∞), ℝ)` with the finite-dimensional distributions of the
 Gaussian heat kernels `x ↦ N(x, t)`; under it, from every starting point, the centred canonical
-process has Gaussian marginals `N(0, t)`, independent increments and continuous paths, which is
-Mathlib's definition of Brownian motion through its characterization theorem; and for every
+process has Gaussian marginals `N(0, t)`, independent increments and continuous paths, expressed
+by the challenge's own Brownian predicate; and for every
 twice continuously differentiable `f` with `f` and `f''` vanishing at infinity,
 `t⁻¹ (P_t f − f) → ½ f''` uniformly as `t → 0⁺`. The solution proves it from
 `Examples/HeatSemigroup.lean`, `Examples/BrownianMotion.lean` and `Examples/HeatGenerator.lean`.

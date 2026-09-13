@@ -1,10 +1,26 @@
-version: "v0.3"
+version: "v0.4"
 
 project:
   name: "MarkovProcess"
+  description: >-
+    A Lean formalization of continuous-path Markov processes associated with
+    conservative Feller transition semigroups on nonempty locally compact
+    Polish spaces. A uniform Kolmogorov displacement-moment bound yields a
+    unique measurable kernel from each starting point to continuous-path
+    space, with the prescribed finite-dimensional distributions. The library
+    also develops strong Markov properties, generators and resolvents,
+    stopping and killing, and Brownian motion as an example. The existence
+    and uniqueness theorem is independently checked using
+    Audit/ContinuousMarkovProcess/comparator.json.
   authors:
     - "Scott Armstrong"
+  responsible_maintainers:
+    - "Scott Armstrong"
   license: "Apache-2.0"
+
+classification:
+  arxiv: ["math.PR"]
+  msc2020: ["60J25", "60J35", "60G17"]
 
 sources:
   - title: "Markov Processes: Characterization and Convergence"
@@ -13,6 +29,14 @@ sources:
       - "Thomas G. Kurtz"
     id: "doi:10.1002/9780470316658"
     type: "book"
+    relationship: "adapts"
+    note: >-
+      Chapter 4, Sections 1-2: transition functions and Feller processes.
+      The selected result combines this classical theory with an explicit
+      uniform Kolmogorov moment hypothesis to obtain continuous paths and
+      packages the laws as one measurable kernel in the starting point.
+      This is a synthesis under stated conventions, not a transcription of
+      a single numbered theorem or a claim of a new mathematical result.
     license: ""
     author_contacted: "n/a"     # standard textbook material
     prior_work: ""
@@ -22,6 +46,12 @@ sources:
       - "Marc Yor"
     id: "doi:10.1007/978-3-662-06400-9"
     type: "book"
+    relationship: "adapts"
+    note: >-
+      Third edition (1999), Chapter I, Section 2: continuity from moment
+      bounds; Chapter III: Markov and Feller processes. The submitted moment
+      hypothesis is uniform in the starting point and holds at every
+      nonnegative time increment.
     license: ""
     author_contacted: "n/a"
     prior_work: ""
@@ -31,6 +61,8 @@ sources:
       - "David Williams"
     id: "isbn:9780521775946"
     type: "book"
+    relationship: "background"
+    note: "Second edition, Volume 1 (2000), Chapter III: general Markov-process theory."
     license: ""
     author_contacted: "n/a"
     prior_work: ""
@@ -39,9 +71,40 @@ sources:
       - "Olav Kallenberg"
     id: "doi:10.1007/978-3-030-61871-1"
     type: "book"
+    relationship: "background"
+    note: "Third edition (2021): probability kernels, process construction, and continuity criteria."
     license: ""
     author_contacted: "n/a"
     prior_work: ""
+
+related_formalizations:
+  - id: "arxiv:2510.04070v2"
+    relationship: "builds-on"
+    note: >-
+      Rémy Degenne, Markov kernels in Mathlib's probability library.
+      The library uses Mathlib's kernels, composition, and disintegration.
+  - id: "arxiv:2506.18616v5"
+    relationship: "builds-on"
+    note: >-
+      Etienne Marion, A Formalization of the Ionescu-Tulcea Theorem in Mathlib.
+      DenseTime/Trajectory.lean uses Mathlib's Kernel.traj to construct the
+      countable dense-time trajectory as a kernel in the starting point.
+  - id: "arxiv:2511.20118v1"
+    relationship: "other"
+    note: >-
+      Rémy Degenne, David Ledvinka, Etienne Marion, and Peter Pfaffelhuber,
+      Formalization of Brownian motion in Lean. Related work on process
+      construction and Kolmogorov-Chentsov continuity. This library uses
+      Mathlib's IsKolmogorovProcess predicate and supplies its own dyadic
+      continuity proof for general semigroup trajectories. The selected
+      theorem concerns general conservative Feller semigroups, not just
+      Gaussian increments. No priority claim is made for this submission.
+  - id: "https://isa-afp.org/entries/Kolmogorov_Chentsov.html"
+    relationship: "independent"
+    note: >-
+      Christian Pardillo Laursen and Simon Foster, The Kolmogorov-Chentsov
+      theorem (2025), Isabelle/HOL. A related formalization of the path
+      continuity criterion in another proof assistant; not a dependency.
 
 status:
   scope: >-
@@ -108,11 +171,11 @@ automation:
         - "gpt-5.6-sol"
       framework: "Claude Code (Anthropic) and Codex (OpenAI) agentic coding harnesses"
       tool_setup: >-
-        Lake builds under leanprover/lean4:v4.33.1 with Mathlib v4.33.1 (commit
-        0df444a360eaa60ab8c11dca51a86af692955474). The Lean comparator was run
+        Lake builds under leanprover/lean4:v4.33.0 with Mathlib v4.33.0 (commit
+        db584cd6d46c92f209a44c0f1c829460d327499d). The Lean comparator was run
         locally on the audit pair (comparator commit
         575674928e239f5bc452aab72d1dd7b0f1326494, lean4export tag v4.33.0 built
-        under the v4.33.1 toolchain, landrun 0.1.18); the .github/workflows/comparator.yml workflow
+        under the v4.33.0 toolchain, landrun 0.1.18); the .github/workflows/comparator.yml workflow
         additionally enables the independent nanoda kernel on every push.
         Read-only subagents were used for independent statement audits,
         non-vacuity probes on the example semigroups, and documentation checks.
@@ -132,7 +195,8 @@ automation:
     comparator challenge file (Audit/ContinuousMarkovProcess/Challenge.lean)
     contains exactly one intentional statement-level sorry (the theorem body),
     which is filled by Audit/ContinuousMarkovProcess/Solution.lean and confirmed
-    by leanprover/comparator ("Your solution is okay!").
+    by leanprover/comparator ("Your solution is okay!"). Metadata and
+    documentation were subsequently reviewed and updated with Codex.
 
 fidelity:
   divergences: >-
@@ -146,10 +210,13 @@ fidelity:
     on the transition kernels (a uniform p-th moment bound of order h^q, q > 1,
     on the displacement over time h) and produces continuous paths; the
     general Feller theory with cadlag paths and no continuity criterion is not
-    formalized. The killed process is a sub-Markov kernel semigroup on the open
-    set as a subtype; its identification with a process on lifetime paths is
-    not formalized. Weak continuity in the starting point is proved for
-    finite-dimensional cylinder expectations, not for the law on path space.
+    formalized. The selected Comparator theorem asserts existence and
+    uniqueness with prescribed finite-dimensional distributions; it does not
+    separately select the strong Markov, stopping, killing, or Brownian
+    theorems. Elsewhere in the library, killing is also realized on lifetime
+    paths (Killed/Process.lean and Killed/Marginals.lean), and weak continuity
+    of the path law is proved under the additional proper-space hypothesis
+    (Trajectory/WeakContinuity.lean).
 
 review:
   status: "author-verified"
@@ -189,7 +256,7 @@ alignment:
       lean: "MarkovProcess.SubMarkovKernelSemigroup.IsConservative.killedSemigroup"
       module: "MarkovProcess.Killed.Semigroup"
       status: "proved"
-      note: "A sub-Markov kernel semigroup on the open set; the cemetery-state process on lifetime paths is not identified."
+      note: "A sub-Markov kernel semigroup on the open set; its lifetime-path realization and finite-dimensional distributions are in Killed/Process.lean and Killed/Marginals.lean."
 
 acknowledgements: >-
   Scott Armstrong was supported by the European Research Council (ERC) under
