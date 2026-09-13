@@ -74,7 +74,8 @@ jobs:
         uses: actions/cache@v4
         with:
           path: ~/tools
-          key: cmp-tools-${{ env.COMPARATOR_REV }}-${{ env.LEAN4EXPORT_REV }}-${{ env.NANODA_REV }}-${{ env.LANDRUN_REV }}
+          # lean4export is built with the project compiler, so its cache must vary with it.
+          key: cmp-tools-${{ hashFiles('lean-toolchain') }}-${{ env.COMPARATOR_REV }}-${{ env.LEAN4EXPORT_REV }}-${{ env.NANODA_REV }}-${{ env.LANDRUN_REV }}
 
       - name: Build comparator
         if: steps.tools-cache.outputs.cache-hit != 'true'
@@ -113,6 +114,9 @@ jobs:
           git clone https://github.com/ammkrn/nanoda_lib ~/tools/nanoda_lib
           git -C ~/tools/nanoda_lib checkout "$NANODA_REV"
           cd ~/tools/nanoda_lib && cargo +stable build --release
+
+      - name: Verify exporter toolchain
+        run: cmp lean-toolchain ~/tools/lean4export/lean-toolchain
 
       - name: Enable the nanoda kernel check (CI-only, on the workspace copy)
         # The committed config sets enable_nanoda: false so that local reproduction
