@@ -49,7 +49,7 @@ theorem IsFellerKernelSemigroup.tendsto_integral_coordinateProductTerm_finiteTim
         Finset.card_empty, Finset.prod_fin_eq_prod_range, Finset.prod_range_zero, mul_one]
     have hIntegral (u : FiniteOrderedTimes n) :
         ∫ path, term.toContinuousMap path ∂finiteTimeKernel P u x = term.coefficient := by
-      letI : IsProbabilityMeasure (finiteTimeKernel P u x) :=
+      let : IsProbabilityMeasure (finiteTimeKernel P u x) :=
         hP.isProbabilityMeasure_finiteTimeLaw P u x
       rw [integral_congr_ae (ae_of_all _ hTerm)]
       simp only [integral_const, probReal_univ, one_smul]

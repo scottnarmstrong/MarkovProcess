@@ -326,7 +326,7 @@ theorem IsConservative.feynmanKac_zero (hK : P.KolmogorovRegular hP)
       rw [← Kernel.map_apply _ heval]
       have hmap : (IsConservative.continuousProcess P hP).map
           (ContinuousPath.coordinateProcess (alpha := alpha) 0) = Kernel.id := by
-        simpa only [ContinuousPath.coordinateProcess] using
+        simpa only [ContinuousPath.coordinateProcess] using!
           IsConservative.continuousProcess_map_eval_zero P hP hK
       rw [hmap]
     _ = f x := by

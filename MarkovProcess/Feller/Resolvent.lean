@@ -103,7 +103,7 @@ theorem IsFellerKernelSemigroup.kernelResolvent_ofReal_eq_resolvent
     simpa only [Function.comp_apply,
       Semigroup.StronglyContinuousContractionSemigroup.laplaceIntegrand_apply,
       map_smul, c0EvalCLM_apply, smul_eq_mul,
-      IsFellerKernelSemigroup.c0Semigroup_apply_apply] using hint
+      IsFellerKernelSemigroup.c0Semigroup_apply_apply] using! hint
   rw [hP.resolvent_apply_apply μ f x,
     ofReal_integral_eq_lintegral_ofReal houter
       (Eventually.of_forall fun t ↦ mul_nonneg (Real.exp_pos _).le
@@ -113,7 +113,7 @@ theorem IsFellerKernelSemigroup.kernelResolvent_ofReal_eq_resolvent
   intro t
   rw [ENNReal.ofReal_mul (Real.exp_pos _).le]
   congr 1
-  letI : IsFiniteKernel (P (Real.toNNReal t)) :=
+  let : IsFiniteKernel (P (Real.toNNReal t)) :=
     (P.isSubMarkovKernel (Real.toNNReal t)).isFiniteKernel
   have hfint : Integrable (fun y ↦ f y) (P (Real.toNNReal t) x) :=
     f.toBCF.integrable (P (Real.toNNReal t) x)
@@ -127,9 +127,9 @@ theorem IsFellerKernelSemigroup.kernelSemigroup_positiveC0ContractiveResolvent
     hP.positiveC0ContractiveResolvent.kernelSemigroup = P := by
   refine SubMarkovKernelSemigroup.ext fun t ↦ ?_
   refine Kernel.ext fun x ↦ ?_
-  haveI : IsFiniteMeasure (P t x) :=
+  have : IsFiniteMeasure (P t x) :=
     ⟨lt_of_le_of_lt (P.measure_univ_le_one t x) ENNReal.one_lt_top⟩
-  haveI : IsFiniteMeasure (hP.positiveC0ContractiveResolvent.kernelSemigroup t x) :=
+  have : IsFiniteMeasure (hP.positiveC0ContractiveResolvent.kernelSemigroup t x) :=
     ⟨lt_of_le_of_lt
       (hP.positiveC0ContractiveResolvent.kernelSemigroup.measure_univ_le_one t x)
       ENNReal.one_lt_top⟩

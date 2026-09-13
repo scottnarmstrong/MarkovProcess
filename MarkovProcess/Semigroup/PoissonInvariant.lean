@@ -24,8 +24,8 @@ variable {E : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E]
 /-- The exponential of a scalar multiple of the identity is scalar
 multiplication by the real exponential. -/
 theorem exp_smul_id_apply (a : ℝ) (x : E) :
-    exp ℝ (a • ContinuousLinearMap.id ℝ E) x = Real.exp a • x := by
-  have hmap := NormedSpace.map_exp ℝ
+    exp (a • ContinuousLinearMap.id ℝ E) x = Real.exp a • x := by
+  have hmap := NormedSpace.map_exp
     (algebraMap ℝ (E →L[ℝ] E))
     (continuous_algebraMap ℝ (E →L[ℝ] E)) a
   rw [← Real.exp_eq_exp_ℝ] at hmap
@@ -33,51 +33,51 @@ theorem exp_smul_id_apply (a : ℝ) (x : E) :
       a • ContinuousLinearMap.id ℝ E := by
     ext y
     simp only [ContinuousLinearMap.algebraMap_apply,
-      ContinuousLinearMap.smul_apply, ContinuousLinearMap.id_apply]
+      smul_apply, ContinuousLinearMap.id_apply]
   rw [halg] at hmap
   rw [← hmap]
   exact ContinuousLinearMap.algebraMap_apply _ _
 
 /-- The operator exponential applied to a vector is its power-series sum. -/
 theorem exp_apply_eq_tsum [CompleteSpace E] (A : E →L[ℝ] E) (x : E) :
-    exp ℝ A x = ∑' n : ℕ, ((n.factorial : ℝ)⁻¹) • (A ^ n) x := by
+    exp A x = ∑' n : ℕ, ((n.factorial : ℝ)⁻¹) • (A ^ n) x := by
   have hop : Summable fun n : ℕ ↦ ((n.factorial : ℝ)⁻¹) • A ^ n := by
     simpa [NormedSpace.expSeries,
       ContinuousMultilinearMap.mkPiAlgebraFin_apply] using
       (NormedSpace.expSeries_summable (𝕂 := ℝ) (𝔸 := E →L[ℝ] E) A)
-  rw [NormedSpace.exp_eq_tsum]
+  rw [NormedSpace.exp_eq_tsum ℝ]
   change (∑' n : ℕ, ((n.factorial : ℝ)⁻¹) • A ^ n) x = _
   exact (ContinuousLinearMap.apply ℝ E x).map_tsum hop
 
 private theorem smul_pow_apply (c : ℝ) (Q : E →L[ℝ] E) (n : ℕ) (x : E) :
     ((c • Q) ^ n) x = c ^ n • (Q ^ n) x := by
   induction n generalizing x with
-  | zero => simp only [pow_zero, ContinuousLinearMap.one_apply, one_smul]
+  | zero => simp only [pow_zero, one_apply_eq_self, one_smul]
   | succ n ih =>
-      rw [pow_succ, pow_succ, ContinuousLinearMap.mul_apply, ih,
-        ContinuousLinearMap.smul_apply, map_smul, smul_smul]
+      rw [pow_succ, pow_succ, mul_apply_eq_comp, ih,
+        smul_apply, map_smul, smul_smul]
       rw [mul_comm (c ^ n) c]
-      rw [pow_succ, ContinuousLinearMap.mul_apply]
+      rw [pow_succ, mul_apply_eq_comp]
 
 /-- Poisson-series representation of a bounded uniformization exponential. -/
 theorem exp_smul_sub_id_apply_eq_tsum [CompleteSpace E]
     (Q : E →L[ℝ] E) (c : ℝ) (x : E) :
-    exp ℝ (c • (Q - ContinuousLinearMap.id ℝ E)) x =
+    exp (c • (Q - ContinuousLinearMap.id ℝ E)) x =
       ∑' n : ℕ, (Real.exp (-c) * (c ^ n / n.factorial)) • (Q ^ n) x := by
   have hcomm : Commute
       ((-c) • ContinuousLinearMap.id ℝ E) (c • Q) := by
     ext y
-    simp only [ContinuousLinearMap.mul_apply, ContinuousLinearMap.smul_apply,
+    simp only [mul_apply_eq_comp, smul_apply,
       ContinuousLinearMap.id_apply, map_smul, smul_smul]
     rw [mul_comm (-c) c]
   have hsplit : c • (Q - ContinuousLinearMap.id ℝ E) =
       (-c) • ContinuousLinearMap.id ℝ E + c • Q := by
     ext y
-    simp only [ContinuousLinearMap.smul_apply, ContinuousLinearMap.add_apply,
+    simp only [smul_apply, add_apply,
       sub_eq_add_neg, smul_add, smul_neg, neg_smul]
     exact add_comm _ _
   rw [hsplit, NormedSpace.exp_add_of_commute hcomm,
-    ContinuousLinearMap.mul_apply, exp_smul_id_apply]
+    mul_apply_eq_comp, exp_smul_id_apply]
   rw [exp_apply_eq_tsum]
   have hsum : Summable fun n : ℕ ↦
       ((n.factorial : ℝ)⁻¹) • ((c • Q) ^ n) x := by
@@ -88,7 +88,7 @@ theorem exp_smul_sub_id_apply_eq_tsum [CompleteSpace E]
           ContinuousMultilinearMap.mkPiAlgebraFin_apply] using
           (NormedSpace.expSeries_summable (𝕂 := ℝ)
             (𝔸 := E →L[ℝ] E) (c • Q))
-    simpa only [Function.comp_apply, ContinuousLinearMap.smul_apply] using
+    simpa only [Function.comp_apply, smul_apply] using!
       hop.map (ContinuousLinearMap.apply ℝ E x)
         (ContinuousLinearMap.continuous _)
   change ((Real.exp (-c)) • ContinuousLinearMap.id ℝ E)
@@ -96,7 +96,7 @@ theorem exp_smul_sub_id_apply_eq_tsum [CompleteSpace E]
   rw [((Real.exp (-c)) • ContinuousLinearMap.id ℝ E).map_tsum hsum]
   · apply tsum_congr
     intro n
-    simp only [ContinuousLinearMap.smul_apply, ContinuousLinearMap.id_apply, smul_smul]
+    simp only [smul_apply, ContinuousLinearMap.id_apply, smul_smul]
     rw [smul_pow_apply]
     simp only [div_eq_mul_inv, smul_smul]
     congr 1
@@ -117,7 +117,7 @@ theorem summable_poissonWeight (c : ℝ) : Summable (poissonWeight c) := by
 
 theorem tsum_poissonWeight (c : ℝ) : ∑' n, poissonWeight c n = 1 := by
   have hseries : ∑' n : ℕ, c ^ n / n.factorial = Real.exp c := by
-    rw [Real.exp_eq_exp_ℝ, NormedSpace.exp_eq_tsum]
+    rw [Real.exp_eq_exp_ℝ, NormedSpace.exp_eq_tsum ℝ]
     apply tsum_congr
     intro n
     simp only [div_eq_mul_inv, smul_eq_mul]
@@ -137,7 +137,7 @@ theorem summable_poissonWeight_smul_pow_apply
         (𝔸 := E →L[ℝ] E) (c • Q))
   have happ : Summable fun n : ℕ ↦
       ((n.factorial : ℝ)⁻¹) • ((c • Q) ^ n) x := by
-    simpa only [Function.comp_apply, ContinuousLinearMap.smul_apply] using
+    simpa only [Function.comp_apply, smul_apply] using!
       hop.map (ContinuousLinearMap.apply ℝ E x)
         (ContinuousLinearMap.continuous _)
   have hscaled := happ.map
@@ -145,7 +145,7 @@ theorem summable_poissonWeight_smul_pow_apply
     (ContinuousLinearMap.continuous _)
   apply hscaled.congr
   intro n
-  simp only [Function.comp_apply, ContinuousLinearMap.smul_apply,
+  simp only [Function.comp_apply, smul_apply,
     ContinuousLinearMap.id_apply, smul_smul, poissonWeight, div_eq_mul_inv,
     smul_pow_apply]
   congr 1
@@ -174,7 +174,7 @@ theorem preservesSet_yosidaOperator_of_scaledOperator
     (by rw [tsum_poissonWeight]) hpowers
     (summable_poissonWeight_smul_pow_apply (R.scaledOperator α) c x)
   rw [yosidaOperator, yosidaGenerator, smul_smul]
-  change exp ℝ (c • (R.scaledOperator α - ContinuousLinearMap.id ℝ E)) x ∈ C
+  change exp (c • (R.scaledOperator α - ContinuousLinearMap.id ℝ E)) x ∈ C
   rw [exp_smul_sub_id_apply_eq_tsum]
   exact hmem
 

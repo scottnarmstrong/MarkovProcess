@@ -64,7 +64,7 @@ private theorem integrable_coordinateProductTerm
             exact mul_nonneg (norm_nonneg _) ih_nonneg
       have hnonneg : 0 ≤
           ((factors.map fun p ↦ p.2 (path p.1)).map norm).prod := by
-        simpa only [List.map_map, Function.comp_apply] using all_nonneg factors
+        simpa only [List.map_map, Function.comp_apply] using! all_nonneg factors
       exact mul_le_mul (p.2.toBCF.norm_coe_le_norm (path p.1)) ih
         hnonneg (norm_nonneg _)
 
@@ -158,7 +158,7 @@ theorem IsFellerKernelSemigroup.tendsto_integral_compactlySupported_finiteTimeKe
   have hApprox (u : FiniteOrderedTimes n) :
       dist (∫ path, polynomial path ∂finiteTimeKernel P u x)
           (∫ path, f path ∂finiteTimeKernel P u x) ≤ epsilon / 3 := by
-    letI : IsProbabilityMeasure (finiteTimeKernel P u x) :=
+    let : IsProbabilityMeasure (finiteTimeKernel P u x) :=
       hP.isProbabilityMeasure_finiteTimeLaw P u x
     have hdiff : Integrable (fun path ↦ polynomial path - f path)
         (finiteTimeKernel P u x) := by

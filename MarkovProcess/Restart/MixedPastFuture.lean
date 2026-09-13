@@ -463,11 +463,14 @@ theorem cutOrderedPhysicalTimes_initialSegment (S : DenseTime)
       (pastPhysical_lt_positiveFutureAbsolutePhysical S I)
   rw [Finset.orderEmbOfFin_apply, Finset.orderEmbOfFin_apply]
   simp only [hsort]
-  change
-    ((pastPhysicalFinsetWithTerminal S I).sort ++
-      (positiveFutureAbsolutePhysicalFinset S I).sort)[i.val]'_ =
-        (pastPhysicalFinsetWithTerminal S I).sort[i.val]'_
-  rw [List.getElem_append_left]
+  have hcardPast : (pastPhysicalFinsetWithTerminal S I).card = pastPredecessorCard S I + 1 := by
+    rw [pastPhysicalFinsetWithTerminal,
+      SubMarkovKernelSemigroup.denseTimePhysicalSet, Finset.card_map,
+      card_pastWithTerminalFinset]
+  have hb : i.val < (pastPhysicalFinsetWithTerminal S I).sort.length := by
+    rw [Finset.length_sort, hcardPast]
+    exact i.isLt
+  exact List.getElem_append_left hb
 
 theorem cutPastOrderedPhysicalTimes_last (S : DenseTime)
     (I : Finset (Set.Iic S ⊕ DenseTime)) :
@@ -620,7 +623,7 @@ theorem cutPastOrderedPhysicalTimes_pastCutOrderIndex
   have hx := congrArg Subtype.val ((A.orderIsoOfFin rfl).apply_symm_apply
     (DenseTime.physicalSetEquiv (pastWithTerminalFinset S I) r))
   simpa only [Finset.coe_orderIsoOfFin_apply,
-    DenseTime.physicalSetEquiv_apply] using hx
+    DenseTime.physicalSetEquiv_apply] using! hx
 
 @[simp]
 theorem positiveFutureOrderedPhysicalTimes_positiveFutureOrderIndex
@@ -637,7 +640,7 @@ theorem positiveFutureOrderedPhysicalTimes_positiveFutureOrderIndex
   have hx := congrArg Subtype.val ((F.orderIsoOfFin rfl).apply_symm_apply
     (DenseTime.physicalSetEquiv (positiveFutureFinset S I) t))
   simpa only [Finset.coe_orderIsoOfFin_apply,
-    DenseTime.physicalSetEquiv_apply] using hx
+    DenseTime.physicalSetEquiv_apply] using! hx
 
 /-- Reindex a split ordered path by augmented-past and positive-future dense labels. -/
 def orderedSplitToCutCoordinates {alpha : Type*} (S : DenseTime)
@@ -715,10 +718,10 @@ theorem measurable_pullbackCutCoordinates (S : DenseTime)
   intro i
   cases h : cutCoordinateIndex S I i with
   | inl r =>
-      simpa only [pullbackCutCoordinates, h] using
+      simpa only [pullbackCutCoordinates, h, Sum.elim_inl] using!
         ((measurable_pi_apply r).comp measurable_fst)
   | inr t =>
-      simpa only [pullbackCutCoordinates, h] using
+      simpa only [pullbackCutCoordinates, h, Sum.elim_inr] using!
         ((measurable_pi_apply t).comp measurable_snd)
 
 /-- Include an original absolute physical coordinate into the cut-augmented set. -/

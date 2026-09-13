@@ -82,8 +82,8 @@ theorem cauchySeq_yosidaOperator_naturalShift_apply_operator
       (eps / (t : ℝ)) (div_pos heps htpos)
     refine ⟨N, fun m hm n hn ↦ ?_⟩
     have hcontract (k : ℕ) (s : ℝ) (hs : s ∈ Icc (0 : ℝ) (t : ℝ)) :
-        ‖exp ℝ (s • R.yosidaGenerator (naturalShift k))‖ ≤ 1 := by
-      simpa only [yosidaOperator] using
+        ‖exp (s • R.yosidaGenerator (naturalShift k))‖ ≤ 1 := by
+      simpa only [yosidaOperator] using!
         R.norm_yosidaOperator_le_one (naturalShift k) ⟨s, hs.1⟩
     have hestimate := norm_exp_sub_exp_apply_le
       (R.yosidaGenerator (naturalShift n))
@@ -92,10 +92,10 @@ theorem cauchySeq_yosidaOperator_naturalShift_apply_operator
       (NNReal.coe_nonneg t) (hcontract n) (hcontract m) (R.operator mu y)
     rw [dist_eq_norm]
     change
-      ‖exp ℝ ((t : ℝ) • R.yosidaGenerator (naturalShift m)) (R.operator mu y) -
-          exp ℝ ((t : ℝ) • R.yosidaGenerator (naturalShift n)) (R.operator mu y)‖ < eps
+      ‖exp ((t : ℝ) • R.yosidaGenerator (naturalShift m)) (R.operator mu y) -
+          exp ((t : ℝ) • R.yosidaGenerator (naturalShift n)) (R.operator mu y)‖ < eps
     refine lt_of_le_of_lt hestimate ?_
-    rw [ContinuousLinearMap.sub_apply, ← dist_eq_norm]
+    rw [sub_apply, ← dist_eq_norm]
     calc
       (t : ℝ) * dist
           (R.yosidaGenerator (naturalShift m) (R.operator mu y))

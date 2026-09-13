@@ -34,10 +34,10 @@ private theorem measurable_finCons_snd {n : ℕ} :
   rw [measurable_pi_iff]
   intro i
   refine Fin.cases ?_ (fun j ↦ ?_) i
-  · simpa only [Fin.cons_zero] using
+  · simpa only [Fin.cons_zero] using!
       (measurable_snd.comp measurable_fst :
         Measurable (fun z : (Theta × alpha) × (Fin n → alpha) ↦ z.1.2))
-  · simpa only [Fin.cons_succ] using
+  · simpa only [Fin.cons_succ] using!
       (measurable_pi_apply j).comp
         (measurable_snd : Measurable (Prod.snd :
           (Theta × alpha) × (Fin n → alpha) → Fin n → alpha))
@@ -86,9 +86,9 @@ theorem isMarkovKernel_parameterizedFiniteTimeKernel
       rw [parameterizedFiniteTimeKernel_zero]
       infer_instance
   | succ n ih =>
-      letI : IsMarkovKernel (P.augmentedKernel (times 0)) :=
+      let : IsMarkovKernel (P.augmentedKernel (times 0)) :=
         P.isMarkovKernel_augmentedKernel hP (times 0)
-      letI : IsMarkovKernel (P.parameterizedFiniteTimeKernel times.relativeTail) :=
+      let : IsMarkovKernel (P.parameterizedFiniteTimeKernel times.relativeTail) :=
         ih times.relativeTail
       rw [parameterizedFiniteTimeKernel_succ, Kernel.mapOfMeasurable_eq_map]
       exact Kernel.IsMarkovKernel.map _ measurable_finCons_snd
@@ -106,12 +106,12 @@ private theorem isFiniteKernel_parameterizedFiniteTimeKernel
         fun q ↦ by
           rw [parameterStateKernel_apply]
           exact P.isSubMarkovKernel q.1 (times 0) q.2
-      letI : IsFiniteKernel (P.parameterStateKernel (times 0)) :=
+      let : IsFiniteKernel (P.parameterStateKernel (times 0)) :=
         hParameterState.isFiniteKernel
-      letI : IsFiniteKernel (P.augmentedKernel (times 0)) := by
+      let : IsFiniteKernel (P.augmentedKernel (times 0)) := by
         rw [augmentedKernel]
         infer_instance
-      letI : IsFiniteKernel (P.parameterizedFiniteTimeKernel times.relativeTail) :=
+      let : IsFiniteKernel (P.parameterizedFiniteTimeKernel times.relativeTail) :=
         ih times.relativeTail
       rw [parameterizedFiniteTimeKernel_succ, Kernel.mapOfMeasurable_eq_map]
       infer_instance
@@ -125,9 +125,9 @@ private theorem isFiniteKernel_finiteTimeKernel
       rw [SubMarkovKernelSemigroup.finiteTimeKernel_zero]
       infer_instance
   | succ n ih =>
-      letI : IsFiniteKernel (Q (times 0)) :=
+      let : IsFiniteKernel (Q (times 0)) :=
         (Q.isSubMarkovKernel (times 0)).isFiniteKernel
-      letI : IsFiniteKernel (Q.finiteTimeKernel times.relativeTail) :=
+      let : IsFiniteKernel (Q.finiteTimeKernel times.relativeTail) :=
         ih times.relativeTail
       rw [SubMarkovKernelSemigroup.finiteTimeKernel_succ,
         Kernel.mapOfMeasurable_eq_map]
@@ -140,8 +140,8 @@ private theorem augmentedKernel_apply_eq_map
   have hParameterState : IsSubMarkovKernel (P.parameterStateKernel t) := fun q ↦ by
     rw [parameterStateKernel_apply]
     exact P.isSubMarkovKernel q.1 t q.2
-  letI : IsFiniteKernel (P.parameterStateKernel t) := hParameterState.isFiniteKernel
-  letI : IsFiniteKernel (P theta t) := (P.isSubMarkovKernel theta t).isFiniteKernel
+  let : IsFiniteKernel (P.parameterStateKernel t) := hParameterState.isFiniteKernel
+  let : IsFiniteKernel (P theta t) := (P.isSubMarkovKernel theta t).isFiniteKernel
   rw [augmentedKernel, Kernel.prod_apply, Kernel.deterministic_apply,
     parameterStateKernel_apply, Measure.dirac_prod]
 
@@ -159,19 +159,19 @@ theorem parameterizedFiniteTimeKernel_apply
         Kernel.const_apply, Kernel.const_apply]
   | succ n ih =>
       let Q := P.toSubMarkovKernelSemigroup theta
-      letI : IsFiniteKernel (P.augmentedKernel (times 0)) := by
+      let : IsFiniteKernel (P.augmentedKernel (times 0)) := by
         have hParameterState : IsSubMarkovKernel (P.parameterStateKernel (times 0)) :=
           fun q ↦ by
             rw [parameterStateKernel_apply]
             exact P.isSubMarkovKernel q.1 (times 0) q.2
-        letI : IsFiniteKernel (P.parameterStateKernel (times 0)) :=
+        let : IsFiniteKernel (P.parameterStateKernel (times 0)) :=
           hParameterState.isFiniteKernel
         rw [augmentedKernel]
         infer_instance
-      letI : IsFiniteKernel (P.parameterizedFiniteTimeKernel times.relativeTail) :=
+      let : IsFiniteKernel (P.parameterizedFiniteTimeKernel times.relativeTail) :=
         isFiniteKernel_parameterizedFiniteTimeKernel P times.relativeTail
-      letI : IsFiniteKernel (Q (times 0)) := Q.isSubMarkovKernel (times 0) |>.isFiniteKernel
-      letI : IsFiniteKernel
+      let : IsFiniteKernel (Q (times 0)) := Q.isSubMarkovKernel (times 0) |>.isFiniteKernel
+      let : IsFiniteKernel
           (SubMarkovKernelSemigroup.finiteTimeKernel Q times.relativeTail) :=
         isFiniteKernel_finiteTimeKernel Q times.relativeTail
       ext s hs

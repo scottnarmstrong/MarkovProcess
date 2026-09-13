@@ -80,7 +80,7 @@ theorem IsFellerKernelSemigroup.tendsto_kernelIntegral_c0
   have heval : Continuous fun g : C₀(alpha, ℝ) ↦ g x :=
     (ZeroAtInftyContinuousMap.isometry_toBCF (α := alpha) (β := ℝ)).continuous.eval
       continuous_const
-  simpa only [IsFellerKernelSemigroup.c0Semigroup_apply_apply] using
+  simpa only [IsFellerKernelSemigroup.c0Semigroup_apply_apply] using!
     heval.continuousAt.tendsto.comp haction
 
 /-- The two-transition backward recursion is continuous for product `C₀` tests.  The inner

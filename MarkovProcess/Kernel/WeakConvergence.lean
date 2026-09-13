@@ -41,7 +41,7 @@ theorem exists_compactlySupported_one_sub_lt_integral [PseudoEMetricSpace X]
     [T2Space X] (mu : Measure X) [IsProbabilityMeasure mu] {eps : ℝ} (heps : 0 < eps) :
     ∃ g : C_c(X, ℝ), (∀ y, g y ∈ Set.Icc (0 : ℝ) 1) ∧ 1 - eps < ∫ y, g y ∂mu := by
   have htight : IsTightMeasureSet ({mu} : Set (Measure X)) := isTightMeasureSet_singleton
-  rw [IsTightMeasureSet_iff_exists_isCompact_measure_compl_le] at htight
+  rw [isTightMeasureSet_iff_exists_isCompact_measure_compl_le] at htight
   obtain ⟨K, hK, hKmu⟩ := htight (ENNReal.ofReal (eps / 2)) (by positivity)
   simp only [Set.mem_singleton_iff, forall_eq] at hKmu
   obtain ⟨g, hgK, -, hgsupp, hg01⟩ :=

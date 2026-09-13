@@ -129,7 +129,7 @@ theorem isClosed_moduliFunSet {K0 : Set alpha} (hK0 : IsClosed K0) (delta rho : 
       ⋂ s : ℝ≥0, ⋂ t : ℝ≥0, ⋂ _ : s ≤ (n : ℝ≥0), ⋂ _ : t ≤ (n : ℝ≥0),
         ⋂ _ : edist s t ≤ delta n, {f : ℝ≥0 → alpha | edist (f s) (f t) ≤ rho n} := by
     ext f
-    simp only [Set.mem_setOf_eq, Set.mem_iInter]
+    simp only [Set.mem_ofPred_eq, Set.mem_iInter]
   rw [hrewrite]
   refine isClosed_iInter fun s ↦ isClosed_iInter fun t ↦ isClosed_iInter fun _ ↦
     isClosed_iInter fun _ ↦ isClosed_iInter fun _ ↦ ?_
@@ -301,7 +301,7 @@ theorem isTightMeasureSet_of_measure_compl_modulusSet_le [ProperSpace alpha]
     (hmod : ∀ (T : ℝ≥0) (r : ℝ≥0∞), 0 < r → ∀ eps : ℝ≥0∞, 0 < eps →
       ∃ delta : ℝ≥0∞, 0 < delta ∧ ∀ mu ∈ S, mu (modulusSet T delta r)ᶜ ≤ eps) :
     IsTightMeasureSet S := by
-  rw [IsTightMeasureSet_iff_exists_isCompact_measure_compl_le]
+  rw [isTightMeasureSet_iff_exists_isCompact_measure_compl_le]
   intro eps heps
   set rho : ℕ → ℝ≥0∞ := fun n ↦ ((n : ℝ≥0∞))⁻¹ with hrho
   have hrhopos : ∀ n : ℕ, 0 < rho n := fun n ↦ ENNReal.inv_pos.mpr (ENNReal.natCast_ne_top n)
@@ -315,7 +315,7 @@ theorem isTightMeasureSet_of_measure_compl_modulusSet_le [ProperSpace alpha]
       {omega : ContinuousPath alpha | omega 0 ∉ K0} ∪
         ⋃ n : ℕ, (modulusSet ((n : ℝ≥0)) (delta n) (rho n))ᶜ := by
     ext omega
-    simp only [moduliSet, Set.mem_compl_iff, Set.mem_inter_iff, Set.mem_iInter, Set.mem_setOf_eq,
+    simp only [moduliSet, Set.mem_compl_iff, Set.mem_inter_iff, Set.mem_iInter, Set.mem_ofPred_eq,
       Set.mem_union, Set.mem_iUnion, not_and_or, not_forall]
   rw [hcompl]
   calc mu ({omega : ContinuousPath alpha | omega 0 ∉ K0} ∪

@@ -43,7 +43,7 @@ section SurvivalSets
 theorem survivalSet_top :
     {t : ℝ | ((Real.toNNReal t : NNReal) : ℝ≥0∞) < ⊤} ∩ Set.Ioi 0 = Set.Ioi 0 := by
   ext t
-  simp only [Set.mem_inter_iff, Set.mem_setOf_eq, Set.mem_Ioi]
+  simp only [Set.mem_inter_iff, Set.mem_ofPred_eq, Set.mem_Ioi]
   exact and_iff_right ENNReal.coe_lt_top
 
 /-- The survival set below a finite extended horizon is an ordinary open interval. -/
@@ -51,7 +51,7 @@ theorem survivalSet_ne_top (tau : ℝ≥0∞) (htau : tau ≠ ⊤) :
     {t : ℝ | ((Real.toNNReal t : NNReal) : ℝ≥0∞) < tau} ∩ Set.Ioi 0 =
       Set.Ioo 0 tau.toReal := by
   ext t
-  simp only [Set.mem_inter_iff, Set.mem_setOf_eq, Set.mem_Ioi, Set.mem_Ioo]
+  simp only [Set.mem_inter_iff, Set.mem_ofPred_eq, Set.mem_Ioi, Set.mem_Ioo]
   constructor
   · rintro ⟨httau, ht⟩
     refine ⟨ht, ?_⟩
@@ -104,7 +104,7 @@ theorem exitTime_eq_top_iff (U : Set alpha) (omega : ContinuousPath alpha) :
   · intro hmem
     have hempty : {s : ℝ≥0∞ | ∃ t : NNReal, s = (t : ℝ≥0∞) ∧ omega t ∉ U} = ∅ := by
       ext s
-      simp only [Set.mem_setOf_eq, Set.mem_empty_iff_false, iff_false, not_exists, not_and]
+      simp only [Set.mem_ofPred_eq, Set.mem_empty_iff_false, iff_false, not_exists, not_and]
       intro u _
       exact fun hu ↦ hu (hmem u)
     rw [exitTime, hempty, sInf_empty]
@@ -234,8 +234,8 @@ theorem coordinate_exitTime_mem_frontier (U : Set alpha) (hU : IsOpen U)
     rw [h] at hnot
     exact hnot h0
   have hclosure : omega tau ∈ closure U := by
-    haveI hnebot : (nhdsWithin tau (Set.Iio tau)).NeBot :=
-      nhdsWithin_Iio_self_neBot' ⟨0, lt_of_le_of_ne (zero_le _) (Ne.symm htau0)⟩
+    have hnebot : (nhdsWithin tau (Set.Iio tau)).NeBot :=
+      nhdsLT_neBot_of_exists_lt ⟨0, lt_of_le_of_ne (zero_le : (0 : NNReal) ≤ tau) (Ne.symm htau0)⟩
     have htend : Filter.Tendsto (omega : NNReal → alpha) (nhdsWithin tau (Set.Iio tau))
         (nhds (omega tau)) := (omega.continuous.tendsto tau).mono_left nhdsWithin_le_nhds
     refine mem_closure_of_tendsto htend ?_
@@ -259,7 +259,7 @@ theorem isStoppingTime_exitTime (U : Set alpha) (hU : IsOpen U) :
   have hevent : {omega : ContinuousPath alpha | exitTimeTop U omega ≤ (t : WithTop NNReal)} =
       hitsSetBy t Uᶜ := by
     ext omega
-    simp only [Set.mem_setOf_eq]
+    simp only [Set.mem_ofPred_eq]
     exact exitTime_le_iff_mem_hitsSetBy U hU t omega
   show MeasurableSet[canonicalFiltration (alpha := alpha) t]
     {omega : ContinuousPath alpha | exitTimeTop U omega ≤ (t : WithTop NNReal)}

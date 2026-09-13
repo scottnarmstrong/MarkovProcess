@@ -282,8 +282,7 @@ theorem resolvent_sub_resolvent (α β : PositiveShift) :
     rw [S.generator_resolvent β y] at h
     exact h
   rw [map_sub, map_smul, map_sub, map_smul] at hz
-  simp only [ContinuousLinearMap.sub_apply, ContinuousLinearMap.smul_apply,
-    ContinuousLinearMap.comp_apply]
+  simp only [sub_apply, smul_apply, ContinuousLinearMap.comp_apply]
   calc S.resolvent α y - S.resolvent β y
       = S.resolvent α y - ((α : ℝ) • S.resolvent α (S.resolvent β y) -
           ((β : ℝ) • S.resolvent α (S.resolvent β y) - S.resolvent α y)) := by rw [hz]

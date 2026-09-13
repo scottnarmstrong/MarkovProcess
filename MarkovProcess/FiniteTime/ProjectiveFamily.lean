@@ -86,7 +86,7 @@ namespace IsConservative
 theorem isMarkovKernel_finiteSetKernel (P : SubMarkovKernelSemigroup α)
     (hP : P.IsConservative) (I : Finset NNReal) : IsMarkovKernel (finiteSetKernel P I) := by
   rw [finiteSetKernel_eq_map]
-  letI : IsMarkovKernel (finiteTimeKernel P (finiteSetTimes I)) :=
+  let : IsMarkovKernel (finiteTimeKernel P (finiteSetTimes I)) :=
     hP.isMarkovKernel_finiteTimeKernel P (finiteSetTimes I)
   exact Kernel.IsMarkovKernel.map _ (measurable_orderedPathToFiniteSet I)
 
@@ -94,7 +94,7 @@ theorem isMarkovKernel_finiteSetKernel (P : SubMarkovKernelSemigroup α)
 theorem isProbabilityMeasure_finiteSetLaw (P : SubMarkovKernelSemigroup α)
     (hP : P.IsConservative) (I : Finset NNReal) (x : α) :
     IsProbabilityMeasure (finiteSetLaw P I x) := by
-  letI : IsMarkovKernel (finiteSetKernel P I) := hP.isMarkovKernel_finiteSetKernel P I
+  let : IsMarkovKernel (finiteSetKernel P I) := hP.isMarkovKernel_finiteSetKernel P I
   exact IsMarkovKernel.isProbabilityMeasure x
 
 /-- A finite-set kernel restricted along an inclusion is the kernel on the smaller set. -/

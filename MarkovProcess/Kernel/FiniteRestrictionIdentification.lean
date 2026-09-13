@@ -40,7 +40,7 @@ theorem eq_of_map_finiteRestriction_eq
     intro I
     have hx := congrArg (fun z : Kernel beta (I → alpha) ↦ z x) (h I)
     simpa only [Kernel.map_apply _ (Finset.measurable_restrict I) x] using hx.symm
-  letI (I : Finset index) : IsFiniteMeasure (family I) := by
+  let (I : Finset index) : IsFiniteMeasure (family I) := by
     dsimp only [family]
     infer_instance
   exact hkappa.unique heta

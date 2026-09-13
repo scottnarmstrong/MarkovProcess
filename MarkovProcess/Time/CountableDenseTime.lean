@@ -122,9 +122,12 @@ theorem exists_cast_btwn {a b : NNReal} (hab : a < b) :
     apply NNReal.eq
     rw [Real.coe_toNNReal _ (Rat.cast_nonneg.mpr hq)]
     norm_cast
-  exact ⟨⟨q, hq⟩, by simpa only [castOrderEmbedding, NNRat.castOrderEmbedding_apply,
-      hcast] using haq, by simpa only [castOrderEmbedding, NNRat.castOrderEmbedding_apply,
-      hcast] using hqb⟩
+  have hcoe : castOrderEmbedding ⟨q, hq⟩ = NNRat.cast (K := NNReal) ⟨q, hq⟩ := rfl
+  refine ⟨⟨q, hq⟩, ?_, ?_⟩
+  · rw [hcoe, hcast]
+    exact haq
+  · rw [hcoe, hcast]
+    exact hqb
 
 private instance : Infinite DenseTime :=
   Infinite.of_injective (fun n : ℕ ↦ (n : DenseTime)) Nat.cast_injective

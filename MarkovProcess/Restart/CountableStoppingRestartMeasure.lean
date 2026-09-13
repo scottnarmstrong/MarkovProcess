@@ -46,7 +46,7 @@ theorem restrict_map_shift_stoppingTime_eq_pathKernel_comp_of_restart_on_range
             (measurable_eval_stoppingTime_borel tau htau) ∘ₘ ((Q x).restrict A) := by
   classical
   intro A hA
-  haveI : Countable (Set.range tau) := htauRange.to_subtype
+  have : Countable (Set.range tau) := htauRange.to_subtype
   have hcoercedRange : (Set.range fun omega ↦ (tau omega : WithTop NNReal)).Countable := by
     refine (htauRange.image (fun t : NNReal ↦ (t : WithTop NNReal))).mono ?_
     rintro i ⟨omega, rfl⟩
@@ -66,7 +66,7 @@ theorem restrict_map_shift_stoppingTime_eq_pathKernel_comp_of_restart_on_range
         (A ∩ {omega | (tau omega : WithTop NNReal) ≤ ((S : NNReal) : WithTop NNReal)}) ∩
           {omega | (tau omega : WithTop NNReal) = ((S : NNReal) : WithTop NNReal)} := by
       ext omega
-      simp only [hlev, Set.mem_inter_iff, Set.mem_setOf_eq, WithTop.coe_eq_coe,
+      simp only [hlev, Set.mem_inter_iff, Set.mem_ofPred_eq, WithTop.coe_eq_coe,
         WithTop.coe_le_coe]
       exact ⟨fun h ↦ ⟨⟨h.1, h.2.le⟩, h.2⟩, fun h ↦ ⟨h.1.1, h.2⟩⟩
     rw [hset]
@@ -76,11 +76,11 @@ theorem restrict_map_shift_stoppingTime_eq_pathKernel_comp_of_restart_on_range
   have hdisj : Pairwise (Function.onFun Disjoint lev) := by
     intro S S' hSS'
     refine Set.disjoint_left.mpr fun omega homega homega' ↦ hSS' ?_
-    simp only [hlev, Set.mem_inter_iff, Set.mem_setOf_eq] at homega homega'
+    simp only [hlev, Set.mem_inter_iff, Set.mem_ofPred_eq] at homega homega'
     exact Subtype.ext (by rw [← homega.2, ← homega'.2])
   have hunion : ⋃ S : Set.range tau, lev S = A := by
     ext omega
-    simp only [hlev, Set.mem_iUnion, Set.mem_inter_iff, Set.mem_setOf_eq]
+    simp only [hlev, Set.mem_iUnion, Set.mem_inter_iff, Set.mem_ofPred_eq]
     exact ⟨fun ⟨_, h, _⟩ ↦ h, fun h ↦ ⟨⟨tau omega, ⟨omega, rfl⟩⟩, h, rfl⟩⟩
   ext B hB
   rw [Measure.map_apply hYmeas hB,
@@ -90,7 +90,7 @@ theorem restrict_map_shift_stoppingTime_eq_pathKernel_comp_of_restart_on_range
       ⋃ S : Set.range tau, (((shift (S : NNReal)) ⁻¹' B) ∩ lev S) := by
     rw [← hunion]
     ext omega
-    simp only [Set.mem_inter_iff, Set.mem_iUnion, Set.mem_preimage, hlev, Set.mem_setOf_eq]
+    simp only [Set.mem_inter_iff, Set.mem_iUnion, Set.mem_preimage, hlev, Set.mem_ofPred_eq]
     constructor
     · rintro ⟨hB', S, hA', hS⟩
       exact ⟨S, by rw [← hS]; exact hB', hA', hS⟩
@@ -115,7 +115,7 @@ theorem restrict_map_shift_stoppingTime_eq_pathKernel_comp_of_restart_on_range
     coordinateProcess_apply] at hres
   rw [hres]
   refine setLIntegral_congr_fun (hlevAmb S) fun omega homega ↦ ?_
-  simp only [hlev, Set.mem_inter_iff, Set.mem_setOf_eq] at homega
+  simp only [hlev, Set.mem_inter_iff, Set.mem_ofPred_eq] at homega
   rw [homega.2]
 
 end ContinuousPath

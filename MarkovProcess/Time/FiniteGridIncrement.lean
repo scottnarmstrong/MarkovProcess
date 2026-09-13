@@ -74,7 +74,7 @@ theorem unitDyadicGrid_edist_adjacent_le (n : ℕ) (i : Fin (2 ^ n)) :
     simp only [unitDyadicGrid]
     push_cast
     rw [div_sub_div_same]
-    simp only [Fin.coe_castSucc, Fin.val_succ]
+    simp only [Fin.val_castSucc, Fin.val_succ]
     push_cast
     norm_num [abs_div, abs_of_nonneg]
   · simp

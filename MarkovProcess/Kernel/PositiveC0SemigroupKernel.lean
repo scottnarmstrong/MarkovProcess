@@ -32,7 +32,7 @@ variable (S : StronglyContinuousContractionSemigroup C₀(α, ℝ))
 /-- The pointwise Riesz kernels are jointly measurable in time and starting state. -/
 theorem measurable_kernel : Measurable fun p : NNReal × α ↦
     PositiveC0OperatorKernel.kernel (S p.1) (hS p.1) (S.norm_operator_le_one p.1) p.2 := by
-  letI : ∀ p : NNReal × α,
+  let : ∀ p : NNReal × α,
       IsFiniteMeasure (PositiveC0OperatorMeasure.measure (S p.1) (hS p.1) p.2) :=
     fun p ↦ PositiveC0OperatorMeasure.isFiniteMeasure_measure
       (S p.1) (hS p.1) (S.norm_operator_le_one p.1) p.2
@@ -53,8 +53,8 @@ theorem kernel_zero :
   apply Kernel.ext
   intro x
   rw [PositiveC0OperatorKernel.kernel_apply, Kernel.id_apply]
-  letI : IsFiniteMeasure (Measure.dirac x) := inferInstance
-  letI : (Measure.dirac x).Regular := inferInstance
+  let : IsFiniteMeasure (Measure.dirac x) := inferInstance
+  let : (Measure.dirac x).Regular := inferInstance
   apply Measure.ext_of_integral_eq_on_compactlySupported
   intro f
   rw [PositiveC0OperatorMeasure.integral_measure]
@@ -78,9 +78,9 @@ theorem kernel_add (s t : NNReal) :
     PositiveC0OperatorKernel.isSubMarkovKernel_kernel _ _ _
   have hKt : IsSubMarkovKernel Kt :=
     PositiveC0OperatorKernel.isSubMarkovKernel_kernel _ _ _
-  letI : IsFiniteKernel (Kt.comp Ks) := (hKt.comp hKs).isFiniteKernel
-  letI : IsFiniteMeasure ((Kt.comp Ks) x) := inferInstance
-  letI : ((Kt.comp Ks) x).Regular := inferInstance
+  let : IsFiniteKernel (Kt.comp Ks) := (hKt.comp hKs).isFiniteKernel
+  let : IsFiniteMeasure ((Kt.comp Ks) x) := inferInstance
+  let : ((Kt.comp Ks) x).Regular := inferInstance
   apply Measure.ext_of_integral_eq_on_compactlySupported
   intro f
   let f₀ : C₀(α, ℝ) := PositiveC0OperatorMeasure.compactlySupportedToC0LinearMap f

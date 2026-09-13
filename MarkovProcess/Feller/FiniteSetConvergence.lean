@@ -71,12 +71,12 @@ theorem tendsto_integral_boundedContinuous_finiteSetKernel
     (I : Finset NNReal) (f : (I → alpha) →ᵇ ℝ) (x : alpha) :
     Tendsto (fun i ↦ ∫ path, f path ∂finiteSetKernel (P i) I x) l
       (nhds (∫ path, f path ∂finiteSetKernel Q I x)) := by
-  letI : ∀ i, IsMarkovKernel (finiteSetKernel (P i) I) := fun i ↦
+  let : ∀ i, IsMarkovKernel (finiteSetKernel (P i) I) := fun i ↦
     (hPc i).isMarkovKernel_finiteSetKernel (P i) I
-  letI : IsMarkovKernel (finiteSetKernel Q I) := hQc.isMarkovKernel_finiteSetKernel Q I
-  letI : ∀ i, IsProbabilityMeasure (finiteSetKernel (P i) I x) := fun i ↦
+  let : IsMarkovKernel (finiteSetKernel Q I) := hQc.isMarkovKernel_finiteSetKernel Q I
+  let : ∀ i, IsProbabilityMeasure (finiteSetKernel (P i) I x) := fun i ↦
     IsMarkovKernel.isProbabilityMeasure x
-  letI : IsProbabilityMeasure (finiteSetKernel Q I x) := IsMarkovKernel.isProbabilityMeasure x
+  let : IsProbabilityMeasure (finiteSetKernel Q I x) := IsMarkovKernel.isProbabilityMeasure x
   refine tendsto_integral_boundedContinuous_of_tendsto_compactlySupported
     (fun i ↦ finiteSetKernel (P i) I x) (finiteSetKernel Q I x) (fun g ↦ ?_) f
   exact (tendstoUniformly_integral_compactlySupported_finiteSetKernel hP hPc hQ hQc hconv

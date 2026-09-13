@@ -42,7 +42,7 @@ def pathResolvent (lam : ℝ) (f : alpha → ℝ≥0∞)
   ∫⁻ t in Set.Ioi (0 : ℝ), ENNReal.ofReal (Real.exp (-lam * t)) *
     f (omega (Real.toNNReal t))
 
-omit [CompleteSpace alpha] [Nonempty alpha] in
+omit [CompleteSpace alpha] [Nonempty alpha] [LocallyCompactSpace alpha] in
 /-- The path resolvent is measurable when its observable is measurable. -/
 theorem measurable_pathResolvent (lam : ℝ) {f : alpha → ℝ≥0∞}
     (hf : Measurable f) : Measurable (pathResolvent lam f) := by

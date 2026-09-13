@@ -137,11 +137,11 @@ theorem augmentedPrefixKernel_step (P : SubMarkovKernelSemigroup α)
   let r : (α × ((Fin n → α) × α)) → DenseTimeHistory α (n + 1) :=
     fun z ↦ (DenseTimeHistory.historyEquiv (n + 1)).symm
       (z.1, (DenseTimeHistory.splitLast n).symm z.2)
-  letI : IsMarkovKernel (denseTimePrefixKernel P e ι n) :=
+  let : IsMarkovKernel (denseTimePrefixKernel P e ι n) :=
     hP.isMarkovKernel_denseTimePrefixKernel P e ι n
-  letI : IsMarkovKernel (denseTimePrefixKernel P e ι (n + 1)) :=
+  let : IsMarkovKernel (denseTimePrefixKernel P e ι (n + 1)) :=
     hP.isMarkovKernel_denseTimePrefixKernel P e ι (n + 1)
-  letI : IsMarkovKernel (observationCondKernel P hP e ι n) :=
+  let : IsMarkovKernel (observationCondKernel P hP e ι n) :=
     isMarkovKernel_observationCondKernel P hP e ι n
   have hcompat : DenseTimeHistory.append n ∘
       Prod.map (DenseTimeHistory.historyEquiv n).symm id = q := by

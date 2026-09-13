@@ -201,7 +201,7 @@ theorem IsConservative.isMarkovKernel_of_map_finiteEvaluation_empty
     (hQ : Q.map (ContinuousPath.finsetEvaluation (alpha := alpha) (∅ : Finset NNReal)) =
       finiteSetKernel P ∅) :
     IsMarkovKernel Q := by
-  letI : IsMarkovKernel (finiteSetKernel P (∅ : Finset NNReal)) :=
+  let : IsMarkovKernel (finiteSetKernel P (∅ : Finset NNReal)) :=
     hP.isMarkovKernel_finiteSetKernel P ∅
   have hmeas : Measurable
       (ContinuousPath.finsetEvaluation (alpha := alpha) (∅ : Finset NNReal)) := by
@@ -210,7 +210,6 @@ theorem IsConservative.isMarkovKernel_of_map_finiteEvaluation_empty
     exact ContinuousPath.measurable_coordinateProcess (alpha := alpha) (t : NNReal)
   refine ⟨fun x ↦ ⟨?_⟩⟩
   have hx := congrArg (fun k : Kernel alpha ((∅ : Finset NNReal) → alpha) ↦ k x Set.univ) hQ
-  dsimp only at hx
   rw [Kernel.map_apply' Q hmeas x MeasurableSet.univ, Set.preimage_univ] at hx
   rw [hx]
   exact measure_univ
@@ -349,7 +348,7 @@ theorem IsConservative.existsUnique_continuousProcess_denseTime (hK : P.Kolmogor
   refine ⟨continuousProcess P hP,
     ⟨inferInstance, continuousProcess_map_finiteEvaluation_denseTime P hP hK⟩, ?_⟩
   rintro Q ⟨hQ, hmarg⟩
-  letI : IsMarkovKernel Q := hQ
+  let : IsMarkovKernel Q := hQ
   exact IsConservative.eq_continuousProcess_of_map_finiteEvaluation_denseTime P hP hK Q hmarg
 
 /-- **Existence and uniqueness of the continuous-path Markov process.**  Let `P` be a sub-Markov
@@ -372,7 +371,7 @@ theorem IsFellerKernelSemigroup.existsUnique_continuousProcess
   refine ⟨continuousProcess P hP,
     ⟨inferInstance, hFeller.continuousProcess_map_finiteEvaluation P hP hK⟩, ?_⟩
   rintro Q ⟨hQ, hmarg⟩
-  letI : IsMarkovKernel Q := hQ
+  let : IsMarkovKernel Q := hQ
   exact IsConservative.eq_continuousProcess_of_map_finiteEvaluation P hP hK Q hmarg
 
 

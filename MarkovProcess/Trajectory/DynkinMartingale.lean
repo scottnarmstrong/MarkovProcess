@@ -190,7 +190,8 @@ theorem IsFellerKernelSemigroup.stronglyMeasurable_dynkinProcess
 /-- **The Dynkin process is adapted** to the canonical filtration. -/
 theorem IsFellerKernelSemigroup.adapted_dynkinProcess (hFeller : P.IsFellerKernelSemigroup)
     (f : hFeller.c0Semigroup.generatorDomain) :
-    Adapted (ContinuousPath.canonicalFiltration (alpha := alpha)) (hFeller.dynkinProcess f) :=
+    StronglyAdapted (ContinuousPath.canonicalFiltration (alpha := alpha))
+      (hFeller.dynkinProcess f) :=
   fun t ↦ hFeller.stronglyMeasurable_dynkinProcess_canonicalFiltration f t
 
 end Adapted

@@ -145,7 +145,7 @@ theorem minimalResolvent_comm (hemb : ∀ m, MeasurableEmbedding (emb m))
 theorem minimalResolvent_zero (hemb : ∀ m, MeasurableEmbedding (emb m)) {lam : ℝ}
     (hlam : 0 < lam) (x : alpha) :
     minimalResolvent R emb lam (fun _ ↦ 0) x = 0 := by
-  refine le_antisymm ?_ (zero_le _)
+  refine le_antisymm ?_ zero_le
   simpa using minimalResolvent_le_of_le_const R emb hemb hlam
     (f := fun _ : alpha ↦ (0 : ℝ≥0∞)) (c := 0) (fun _ ↦ le_rfl) x
 

@@ -65,7 +65,7 @@ theorem isMarkovKernel_parameterizedDenseTimePrefixKernel
     (e : ℕ ≃ D) (ι : D ↪ NNReal) (n : ℕ) :
     IsMarkovKernel (P.parameterizedDenseTimePrefixKernel e ι n) := by
   rw [parameterizedDenseTimePrefixKernel_eq_map]
-  letI : IsMarkovKernel
+  let : IsMarkovKernel
       (P.parameterizedFiniteSetKernel
         (SubMarkovKernelSemigroup.denseTimePhysicalPrefix e ι n)) :=
     P.isMarkovKernel_parameterizedFiniteSetKernel hP _

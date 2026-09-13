@@ -50,12 +50,12 @@ variable [BorelSpace α]
 
 private theorem integrable_fiber (t : NNReal) (f : C₀(α, ℝ)) (x : α) :
     Integrable f (P t x) := by
-  letI : IsFiniteKernel (P t) := (P.isSubMarkovKernel t).isFiniteKernel
+  let : IsFiniteKernel (P t) := (P.isSubMarkovKernel t).isFiniteKernel
   exact f.toBCF.integrable (P t x)
 
 private theorem norm_c0KernelIntegral_le (t : NNReal) (f : C₀(α, ℝ)) :
     ‖P.c0KernelIntegral hC0 t f‖ ≤ ‖f‖ := by
-  letI : IsFiniteKernel (P t) := (P.isSubMarkovKernel t).isFiniteKernel
+  let : IsFiniteKernel (P t) := (P.isSubMarkovKernel t).isFiniteKernel
   rw [← ZeroAtInftyContinuousMap.norm_toBCF_eq_norm]
   apply (BoundedContinuousFunction.norm_le (norm_nonneg f)).2
   intro x
@@ -126,7 +126,7 @@ theorem c0Operator_add (s t : NNReal) :
 theorem norm_c0Operator_le (t : NNReal) : ‖P.c0Operator hC0 t‖ ≤ 1 := by
   apply ContinuousLinearMap.opNorm_le_bound _ zero_le_one
   intro f
-  simpa only [one_mul] using P.norm_c0KernelIntegral_le hC0 t f
+  simpa only [one_mul] using! P.norm_c0KernelIntegral_le hC0 t f
 
 /-- The `C₀` kernel operator preserves pointwise nonnegativity. -/
 theorem c0Operator_apply_nonneg (t : NNReal) {f : C₀(α, ℝ)}

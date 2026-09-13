@@ -129,6 +129,7 @@ theorem measurable_restrictPath {m n : ℕ} (e : Fin m ↪o Fin n)
 def emptyPath (α : Type*) : Fin 0 → α :=
   Fin.elim0
 
+set_option warning.simp.varHead false in
 /-- Every path on the empty finite index type is the canonical empty path. -/
 @[simp]
 theorem eq_emptyPath {α : Type*} (path : Fin 0 → α) : path = emptyPath α :=

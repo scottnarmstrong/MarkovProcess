@@ -59,7 +59,7 @@ theorem isMarkovKernel_parameterizedFiniteSetKernel
     (hP : ∀ theta, (P.toSubMarkovKernelSemigroup theta).IsConservative)
     (I : Finset NNReal) : IsMarkovKernel (P.parameterizedFiniteSetKernel I) := by
   rw [parameterizedFiniteSetKernel_eq_map]
-  letI : IsMarkovKernel
+  let : IsMarkovKernel
       (P.parameterizedFiniteTimeKernel (SubMarkovKernelSemigroup.finiteSetTimes I)) :=
     P.isMarkovKernel_parameterizedFiniteTimeKernel hP
       (SubMarkovKernelSemigroup.finiteSetTimes I)

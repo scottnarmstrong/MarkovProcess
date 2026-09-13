@@ -65,7 +65,7 @@ theorem IsOpenExhaustion.exists_lt_exitTime {U : ℕ → Set alpha} (hU : IsOpen
   by_contra hle
   rw [not_lt, exitTime_le_iff_mem_hitsSetBy (U n) (hU.isOpen n) T omega] at hle
   obtain ⟨t, ht⟩ := hle
-  exact ht (hsub ⟨t, Set.mem_Icc.mpr ⟨zero_le _, t.2⟩, rfl⟩)
+  exact ht (hsub ⟨t, Set.mem_Icc.mpr ⟨zero_le, t.2⟩, rfl⟩)
 
 /-- Along an open exhaustion the exit times of a continuous path tend to infinity. -/
 theorem IsOpenExhaustion.tendsto_exitTime_atTop {U : ℕ → Set alpha} (hU : IsOpenExhaustion U)

@@ -67,10 +67,40 @@ namespace OnePointRegular
 
 variable {R : PositiveC0ContractiveResolvent X}
 
+set_option warn.classDefReducibility false in
 /-- The metric on the compactification determined by the exhaustion function. -/
 noncomputable def metricSpace (h : R.OnePointRegular) : MetricSpace (OnePoint X) :=
   OnePoint.exhaustionMetricSpace h.rho h.continuous_rho h.rho_pos h.lipschitz_rho
     h.isCompact_superlevel
+
+/-- Typeclass-search cache: lets `letI := h.metricSpace` discharge an ambient
+`CompactSpace (OnePoint X)` obligation without re-deriving compactness at each call site (the
+exhaustion metric's topology coincides with the canonical one-point topology, which is always
+compact). -/
+private instance instCompactSpaceMetricSpace (h : R.OnePointRegular) :
+    @CompactSpace (OnePoint X) h.metricSpace.toPseudoMetricSpace.toUniformSpace.toTopologicalSpace := by
+  unfold OnePointRegular.metricSpace
+  rw [OnePoint.exhaustionMetricSpace_toTopologicalSpace]
+  infer_instance
+
+/-- Typeclass-search cache, in the same spirit as `instCompactSpaceMetricSpace`: lets
+`letI := h.metricSpace` discharge an ambient `BorelSpace (OnePoint X)` obligation. -/
+private instance instBorelSpaceMetricSpace (h : R.OnePointRegular) :
+    @BorelSpace (OnePoint X) h.metricSpace.toPseudoMetricSpace.toUniformSpace.toTopologicalSpace
+      OnePoint.instMeasurableSpace := by
+  unfold OnePointRegular.metricSpace
+  rw [OnePoint.exhaustionMetricSpace_toTopologicalSpace]
+  exact OnePoint.instBorelSpace
+
+/-- Typeclass-search cache, in the same spirit as `instCompactSpaceMetricSpace`: lets
+`letI := h.metricSpace` discharge an ambient `SecondCountableTopology (OnePoint X)`
+obligation. -/
+private instance instSecondCountableTopologyMetricSpace (h : R.OnePointRegular) :
+    @SecondCountableTopology (OnePoint X)
+      h.metricSpace.toPseudoMetricSpace.toUniformSpace.toTopologicalSpace := by
+  unfold OnePointRegular.metricSpace
+  rw [OnePoint.exhaustionMetricSpace_toTopologicalSpace]
+  exact OnePoint.instSecondCountableTopology
 
 /-- The compactification is complete in the exhaustion metric. -/
 theorem completeSpace (h : R.OnePointRegular) :
@@ -140,7 +170,7 @@ theorem extend_compactifiedEmbedding_le (iota : X₀ → X₁) (hiota : Function
     rw [(injective_compactifiedEmbedding hiota).extend_apply]
     exact le_of_eq rfl
   · rw [Function.extend_apply' _ _ _ fun hmem ↦ hw hmem]
-    exact zero_le _
+    exact zero_le
 
 end Embedding
 
@@ -198,18 +228,18 @@ theorem kernelResolvent_le_of_partProcess (R₀ : PositiveC0ContractiveResolvent
     {lam : ℝ} (hlam : 0 < lam) {g : X₁ → ℝ≥0∞} (hg : Measurable g) (y : X₀) :
     R₀.kernelSemigroup.kernelResolvent lam (fun z ↦ g (iota z)) y ≤
       R₁.kernelSemigroup.kernelResolvent lam g (iota y) := by
-  letI := h₁.metricSpace
-  letI := h₁.completeSpace
+  let := h₁.metricSpace
+  let := h₁.completeSpace
   have hj : IsOpenEmbedding (compactifiedEmbedding iota) :=
     isOpenEmbedding_compactifiedEmbedding hiota
   have hjm : MeasurableEmbedding (compactifiedEmbedding iota) := hj.measurableEmbedding
   have hjopen : IsOpen (Set.range (compactifiedEmbedding iota)) :=
     isOpen_range_compactifiedEmbedding hiota
   have hgi : Measurable fun z : X₀ ↦ g (iota z) := hg.comp hiota.continuous.measurable
-  haveI := IsConservative.isFiniteMeasure_killedPotential R₁.onePointKernelSemigroup
+  have := IsConservative.isFiniteMeasure_killedPotential R₁.onePointKernelSemigroup
     R₁.isConservative_onePointKernelSemigroup (Set.range (compactifiedEmbedding iota))
     hjopen hlam (compactifiedEmbedding iota y)
-  haveI := R₀.kernelSemigroup.isFiniteMeasure_resolventPotential hlam y
+  have := R₀.kernelSemigroup.isFiniteMeasure_resolventPotential hlam y
   have hc0 : ∀ f : C₀(X₀, ℝ), (∀ z, 0 ≤ f z) →
       ∫⁻ w, Function.extend (compactifiedEmbedding iota)
           (fun z ↦ ENNReal.ofReal (f z)) 0 w

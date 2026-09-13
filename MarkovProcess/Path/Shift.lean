@@ -87,7 +87,7 @@ theorem measurable_shift_canonicalFiltration [MeasurableSpace alpha] [BorelSpace
     exact shift_apply S u omega
   rw [hfun]
   exact le_iSup_of_le
-    (⟨S + u.1, by simpa only [add_comm] using add_le_add_left u.2 S⟩ :
+    (⟨S + u.1, by simpa only [add_comm] using! add_le_add_left u.2 S⟩ :
       Set.Iic (S + t)) le_rfl
 
 end ContinuousPath

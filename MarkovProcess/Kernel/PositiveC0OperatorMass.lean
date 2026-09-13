@@ -58,7 +58,7 @@ theorem measure_compact_le_one (hT_norm : ‖T‖ ≤ 1) (x : α) {K : Set α} (
 /-- The Riesz measure of a positive contraction has total mass at most one. -/
 theorem measure_univ_le_one (hT_norm : ‖T‖ ≤ 1) (x : α) :
     measure T hT x Set.univ ≤ 1 := by
-  letI := regular_measure T hT x
+  let := regular_measure T hT x
   rw [isOpen_univ.measure_eq_iSup_isCompact]
   refine iSup_le fun K ↦ iSup_le fun _hK_univ ↦ iSup_le fun hK ↦ ?_
   exact measure_compact_le_one T hT hT_norm x hK

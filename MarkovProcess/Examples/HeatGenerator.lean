@@ -62,7 +62,7 @@ theorem abs_sub_taylor_two_le (hf : ContDiff ℝ 2 f) (x h C : ℝ)
     |f (x + h) - f x - h * deriv f x - h ^ 2 / 2 * iteratedDeriv 2 f x| ≤ C * h ^ 2 := by
   have hd2 : ContDiff ℝ 1 (deriv f) := hf.deriv'
   have hdf : Differentiable ℝ f := hf.differentiable (by norm_num)
-  have hddf : Differentiable ℝ (deriv f) := hd2.differentiable le_rfl
+  have hddf : Differentiable ℝ (deriv f) := hd2.differentiable (by norm_num)
   have hiter : ∀ y : ℝ, deriv (deriv f) y = iteratedDeriv 2 f y := by
     intro y; rw [iteratedDeriv_succ, iteratedDeriv_one]
   set c := iteratedDeriv 2 f x with hcdef
@@ -83,7 +83,7 @@ theorem abs_sub_taylor_two_le (hf : ContDiff ℝ 2 f) (x h C : ℝ)
       exact hp.mul_const _
     have hsum := ((h1.sub_const (f x)).sub h2).sub h3
     convert hsum using 1
-    ring
+    all_goals first | rfl | ring
   have hGderiv : ∀ s : ℝ, HasDerivAt G (h ^ 2 * (iteratedDeriv 2 f (x + s * h) - c)) s := by
     intro s
     have h1 := (hddf (x + s * h)).hasDerivAt.comp s (hinner s)
@@ -92,7 +92,7 @@ theorem abs_sub_taylor_two_le (hf : ContDiff ℝ 2 f) (x h C : ℝ)
       simpa using (hasDerivAt_id s).mul_const (h ^ 2 * c)
     have hsum := ((h1.const_mul h).sub_const (h * deriv f x)).sub h2
     convert hsum using 1
-    ring
+    all_goals first | rfl | ring
   have hCnn : 0 ≤ C := by
     have h0 := hC 0 (by norm_num)
     rw [zero_mul, add_zero, ← hcdef, sub_self, abs_zero] at h0

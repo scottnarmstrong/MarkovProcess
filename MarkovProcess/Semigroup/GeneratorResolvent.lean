@@ -49,19 +49,19 @@ theorem yosidaOperator_apply_sub_eq_integral (R : ContractiveResolvent E)
     (α : PositiveShift) (t : NNReal) (x : E) :
     R.yosidaOperator α t x - x =
       ∫ s in (0 : ℝ)..(t : ℝ), R.yosidaOperator α (Real.toNNReal s) (R.yosidaGenerator α x) := by
-  have hderiv : ∀ s : ℝ, HasDerivAt (fun u : ℝ ↦ exp ℝ (u • R.yosidaGenerator α) x)
-      (exp ℝ (s • R.yosidaGenerator α) (R.yosidaGenerator α x)) s := by
+  have hderiv : ∀ s : ℝ, HasDerivAt (fun u : ℝ ↦ exp (u • R.yosidaGenerator α) x)
+      (exp (s • R.yosidaGenerator α) (R.yosidaGenerator α x)) s := by
     intro s
     have h := (hasDerivAt_exp_smul_const (𝕂 := ℝ) (R.yosidaGenerator α) s).clm_apply
       (hasDerivAt_const s x)
-    simpa only [ContinuousLinearMap.mul_apply, map_zero, add_zero] using h
+    simpa only [mul_apply_eq_comp, map_zero, add_zero] using h
   have hcont : Continuous fun s : ℝ ↦
-      exp ℝ (s • R.yosidaGenerator α) (R.yosidaGenerator α x) := by fun_prop
+      exp (s • R.yosidaGenerator α) (R.yosidaGenerator α x) := by fun_prop
   have hFTC := intervalIntegral.integral_eq_sub_of_hasDerivAt (fun s _ ↦ hderiv s)
     (hcont.intervalIntegrable 0 (t : ℝ))
   have hcongr :
       (∫ s in (0 : ℝ)..(t : ℝ), R.yosidaOperator α (Real.toNNReal s) (R.yosidaGenerator α x)) =
-        ∫ s in (0 : ℝ)..(t : ℝ), exp ℝ (s • R.yosidaGenerator α) (R.yosidaGenerator α x) := by
+        ∫ s in (0 : ℝ)..(t : ℝ), exp (s • R.yosidaGenerator α) (R.yosidaGenerator α x) := by
     refine intervalIntegral.integral_congr fun s hs ↦ ?_
     rw [Set.uIcc_of_le t.coe_nonneg] at hs
     unfold yosidaOperator

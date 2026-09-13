@@ -229,7 +229,7 @@ theorem hasDerivWithinAt_Ioi (f : S.generatorDomain) (t : NNReal) :
   rw [hasDerivWithinAt_iff_tendsto_slope]
   have hdiff : Set.Ioi (t : ℝ) \ {(t : ℝ)} = Set.Ioi (t : ℝ) := by
     ext y
-    simp only [Set.mem_diff, Set.mem_Ioi, Set.mem_singleton_iff, and_iff_left_iff_imp]
+    simp only [Set.mem_sdiff, Set.mem_Ioi, Set.mem_singleton_iff, and_iff_left_iff_imp]
     exact fun hy ↦ ne_of_gt hy
   rw [hdiff]
   refine ((S.tendsto_differenceQuotient_add f t).comp (tendsto_toNNReal_sub t)).congr' ?_
@@ -265,7 +265,7 @@ theorem hasDerivWithinAt_Iic (f : S.generatorDomain) {t : ℝ} (ht : 0 < t) :
   rw [hasDerivWithinAt_iff_tendsto_slope]
   have hdiff : Set.Iic t \ {t} = Set.Iio t := by
     ext y
-    simp only [Set.mem_diff, Set.mem_Iic, Set.mem_singleton_iff, Set.mem_Iio]
+    simp only [Set.mem_sdiff, Set.mem_Iic, Set.mem_singleton_iff, Set.mem_Iio]
     exact ⟨fun hy ↦ lt_of_le_of_ne hy.1 hy.2, fun hy ↦ ⟨hy.le, hy.ne⟩⟩
   rw [hdiff]
   have horbit : Tendsto (fun y : ℝ ↦ S (Real.toNNReal y) (S.generator f)) (𝓝[<] t)
@@ -340,9 +340,10 @@ theorem exp_smul_operator_sub_eq_integral (f : S.generatorDomain) (lam : ℝ) (t
     intro x hx
     have hexp : HasDerivAt (fun s : ℝ ↦ Real.exp (-lam * s))
         ((-lam) * Real.exp (-lam * x)) x := by
-      convert ((hasDerivAt_id x).const_mul (-lam)).exp using 1
-      simp only [id_eq, mul_one]
-      exact mul_comm _ _
+      have h : HasDerivAt (fun s : ℝ ↦ Real.exp (-lam * s))
+          (Real.exp (-lam * x) * (-lam * 1)) x := by
+        simpa only [id_eq] using ((hasDerivAt_id x).const_mul (-lam)).exp
+      exact h.congr_deriv (by ring)
     have horbit := S.hasDerivWithinAt_Ioi f (Real.toNNReal x)
     rw [Real.coe_toNNReal x hx.1.le] at horbit
     have hprod := hexp.hasDerivWithinAt.smul horbit

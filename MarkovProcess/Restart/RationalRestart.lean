@@ -70,7 +70,7 @@ instance instIsMarkovKernelRationalPastFutureRestartKernel
     (Q : Kernel alpha (ContinuousPath alpha)) [IsMarkovKernel Q] (S : DenseTime) :
     IsMarkovKernel (rationalPastFutureRestartKernel Q S) := by
   unfold rationalPastFutureRestartKernel
-  letI : IsMarkovKernel (Q.map (densePastRestriction S)) :=
+  let : IsMarkovKernel (Q.map (densePastRestriction S)) :=
     Kernel.IsMarkovKernel.map Q (measurable_densePastRestriction S)
   infer_instance
 
@@ -390,10 +390,10 @@ theorem rationalPastFutureRestartKernel_map_finitePastDenseFuture_restrict
   let Kp := finiteTimeKernel P (MixedPastFuture.cutPastOrderedPhysicalTimes S I)
   let Kf := finiteTimeKernel P
     (MixedPastFuture.positiveFutureOrderedPhysicalTimes S I)
-  letI : IsMarkovKernel Kp :=
+  let : IsMarkovKernel Kp :=
     hP.isMarkovKernel_finiteTimeKernel P
       (MixedPastFuture.cutPastOrderedPhysicalTimes S I)
-  letI : IsMarkovKernel Kf :=
+  let : IsMarkovKernel Kf :=
     hP.isMarkovKernel_finiteTimeKernel P
       (MixedPastFuture.positiveFutureOrderedPhysicalTimes S I)
   let rp := MixedPastFuture.reindexCutPast (alpha := alpha) S I
@@ -442,7 +442,7 @@ theorem rationalPastFutureRestartKernel_map_finitePastDenseFuture_restrict
       change (Q.map evalZero) x = Kernel.id x at h
       rw [Kernel.id_apply, Kernel.map_apply Q hEvalZero x] at h
       exact h
-    letI : IsProbabilityMeasure (Q x) := IsMarkovKernel.isProbabilityMeasure x
+    let : IsProbabilityMeasure (Q x) := IsMarkovKernel.isProbabilityMeasure x
     apply (mem_ae_iff_prob_eq_one
       (hEvalZero (MeasurableSet.singleton x))).mpr
     rw [← Measure.map_apply hEvalZero (MeasurableSet.singleton x), hmap]

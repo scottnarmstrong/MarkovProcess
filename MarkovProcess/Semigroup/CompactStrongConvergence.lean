@@ -45,7 +45,7 @@ theorem eventually_forall_mem_norm_apply_le_of_isCompact {ι : Type*} {l : Filte
   have hfin : ∀ᶠ i in l, ∀ y ∈ s, ‖T i y‖ ≤ ε / 2 := by
     rw [Filter.eventually_all_finite hsfin]
     intro y _
-    filter_upwards [NormedAddCommGroup.tendsto_nhds_zero.mp (hT y) (ε / 2) (by positivity)]
+    filter_upwards [NormedAddGroup.tendsto_nhds_zero.mp (hT y) (ε / 2) (by positivity)]
       with i hi
     exact hi.le
   filter_upwards [hfin] with i hi x hx

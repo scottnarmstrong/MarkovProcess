@@ -27,7 +27,7 @@ theorem exists_factor_succAboveOrderEmb {m n : ℕ} (e : Fin m ↪o Fin (n + 1))
     simp only [Fintype.card_fin] at hcard
     exact (Nat.not_succ_le_self n) (hcard.trans h)
   rw [Function.Surjective] at hns
-  push_neg at hns
+  push Not at hns
   obtain ⟨p, hp⟩ := hns
   by_cases plast : p = Fin.last n
   · have hlast : ∀ i, e i ≠ Fin.last n := by

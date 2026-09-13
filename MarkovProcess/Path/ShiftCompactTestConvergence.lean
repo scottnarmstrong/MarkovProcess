@@ -72,7 +72,7 @@ theorem tendsto_integral_continuousPath_finiteDenseEvaluation_shift
   · refine ⟨‖f₀‖, Filter.Eventually.of_forall fun n ↦ ?_⟩
     filter_upwards [] with omega
     simpa only [f₀, PositiveC0OperatorMeasure.compactlySupportedToC0LinearMap_apply,
-      Real.norm_eq_abs] using f₀.toBCF.norm_coe_le_norm
+      Real.norm_eq_abs] using! f₀.toBCF.norm_coe_le_norm
       (fun j : J ↦ omega (DenseTime.castOrderEmbedding (q n) +
         DenseTime.castOrderEmbedding j))
   · filter_upwards [] with omega

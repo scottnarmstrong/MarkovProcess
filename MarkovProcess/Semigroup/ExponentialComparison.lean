@@ -29,7 +29,7 @@ noncomputable section
 
 namespace MarkovProcess
 
-open Semigroup
+open _root_.MarkovProcess.Semigroup
 
 namespace PositiveC0ContractiveResolvent
 
@@ -45,15 +45,15 @@ private theorem pow_apply_le_pow_mul
   induction n with
   | zero =>
       intro x
-      simp only [pow_zero, ContinuousLinearMap.one_apply, one_mul]
+      simp only [pow_zero, one_apply_eq_self, one_mul]
       exact le_rfl
   | succ n ih =>
       intro x
-      rw [pow_succ', ContinuousLinearMap.mul_apply]
+      rw [pow_succ', mul_apply_eq_comp]
       calc
         T ((T ^ n) v) x ≤ T (a ^ n • v) x :=
           PositiveC0OperatorMeasure.apply_le_apply_of_isPositive T hT (fun y ↦ by
-            simpa only [ContinuousMap.coe_smul, Pi.smul_apply, smul_eq_mul] using ih y) x
+            simpa only [ContinuousMap.coe_smul, Pi.smul_apply, smul_eq_mul] using! ih y) x
         _ = a ^ n * T v x := by rw [map_smul]; rfl
         _ ≤ a ^ n * (a * v x) :=
           mul_le_mul_of_nonneg_left (hTv x) (pow_nonneg ha n)
@@ -63,7 +63,7 @@ private theorem pow_apply_le_pow_mul
 private theorem tsum_poissonWeight_mul_pow (c a : ℝ) :
     ∑' n : ℕ, poissonWeight c n * a ^ n = Real.exp (c * (a - 1)) := by
   have hsum : ∑' n : ℕ, (c * a) ^ n / n.factorial = Real.exp (c * a) := by
-    rw [Real.exp_eq_exp_ℝ, NormedSpace.exp_eq_tsum]
+    rw [Real.exp_eq_exp_ℝ, NormedSpace.exp_eq_tsum ℝ]
     apply tsum_congr
     intro n
     simp only [div_eq_mul_inv, smul_eq_mul]
@@ -125,7 +125,7 @@ private theorem yosidaOperator_apply_le_exp_mul
   have hleftC0 : Summable fun n : ℕ ↦ poissonWeight c n • (Q ^ n) v :=
     summable_poissonWeight_smul_pow_apply Q c v
   have hleft : Summable fun n : ℕ ↦ poissonWeight c n * (Q ^ n) v x := by
-    simpa only [Function.comp_apply, ContinuousLinearMap.smul_apply, smul_eq_mul] using
+    simpa only [Function.comp_apply, smul_apply, smul_eq_mul] using!
       hleftC0.map (c0EvalCLM x) (c0EvalCLM x).continuous
   have hright : Summable fun n : ℕ ↦ poissonWeight c n * (a ^ n * v x) := by
     have hscalar : Summable fun n : ℕ ↦ poissonWeight c n * a ^ n := by
@@ -138,7 +138,7 @@ private theorem yosidaOperator_apply_le_exp_mul
       exact (Real.summable_pow_div_factorial (c * a)).mul_left _
     simpa only [mul_assoc] using hscalar.mul_right (v x)
   rw [ContractiveResolvent.yosidaOperator, ContractiveResolvent.yosidaGenerator, smul_smul]
-  change exp ℝ (c • (Q - ContinuousLinearMap.id ℝ C₀(X, ℝ))) v x ≤ _
+  change exp (c • (Q - ContinuousLinearMap.id ℝ C₀(X, ℝ))) v x ≤ _
   rw [exp_smul_sub_id_apply_eq_tsum]
   change (∑' n : ℕ, poissonWeight c n • (Q ^ n) v) x ≤ _
   rw [show (∑' n : ℕ, poissonWeight c n • (Q ^ n) v) x =

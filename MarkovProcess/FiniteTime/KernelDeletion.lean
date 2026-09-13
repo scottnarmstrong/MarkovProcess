@@ -95,9 +95,9 @@ theorem finiteTimeKernel_map_removeNth (P : SubMarkovKernelSemigroup α)
   | zero =>
       have hp : p = 0 := Fin.eq_zero p
       subst p
-      letI : IsFiniteKernel (P (times 0)) :=
+      let : IsFiniteKernel (P (times 0)) :=
         (P.isSubMarkovKernel (times 0)).isFiniteKernel
-      letI : IsMarkovKernel (finiteTimeKernel P times.relativeTail) :=
+      let : IsMarkovKernel (finiteTimeKernel P times.relativeTail) :=
         hP.isMarkovKernel_finiteTimeKernel P times.relativeTail
       rw [finiteTimeKernel_succ, Kernel.mapOfMeasurable_eq_map, ← Kernel.map_comp_right]
       · rw [show (Fin.removeNth 0 ∘ fun z : α × (Fin 0 → α) ↦
@@ -110,9 +110,9 @@ theorem finiteTimeKernel_map_removeNth (P : SubMarkovKernelSemigroup α)
       · exact measurable_removeNth 0
   | succ n ih =>
       refine Fin.cases ?_ (fun p ↦ ?_) p
-      · letI : IsFiniteKernel (P (times 0)) :=
+      · let : IsFiniteKernel (P (times 0)) :=
           (P.isSubMarkovKernel (times 0)).isFiniteKernel
-        letI : IsMarkovKernel (finiteTimeKernel P times.relativeTail) :=
+        let : IsMarkovKernel (finiteTimeKernel P times.relativeTail) :=
           hP.isMarkovKernel_finiteTimeKernel P times.relativeTail
         rw [finiteTimeKernel_succ, Kernel.mapOfMeasurable_eq_map, ← Kernel.map_comp_right]
         · rw [show (Fin.removeNth 0 ∘ fun z : α × (Fin (n + 1) → α) ↦
@@ -123,9 +123,9 @@ theorem finiteTimeKernel_map_removeNth (P : SubMarkovKernelSemigroup α)
             ← hP.finiteTimeKernel_translate, translate_relativeTail_eq_restrict_zero]
         · exact measurable_finCons
         · exact measurable_removeNth 0
-      · letI : IsFiniteKernel (P (times 0)) :=
+      · let : IsFiniteKernel (P (times 0)) :=
           (P.isSubMarkovKernel (times 0)).isFiniteKernel
-        letI : IsMarkovKernel (finiteTimeKernel P times.relativeTail) :=
+        let : IsMarkovKernel (finiteTimeKernel P times.relativeTail) :=
           hP.isMarkovKernel_finiteTimeKernel P times.relativeTail
         rw [finiteTimeKernel_succ, Kernel.mapOfMeasurable_eq_map, ← Kernel.map_comp_right]
         · rw [show (Fin.removeNth p.succ ∘ fun z : α × (Fin (n + 1) → α) ↦

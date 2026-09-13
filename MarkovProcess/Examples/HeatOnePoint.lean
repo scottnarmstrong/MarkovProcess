@@ -43,7 +43,7 @@ theorem dist_le_two_heatExhaustion (z w : OnePoint ℝ) :
     letI := OnePoint.exhaustionMetricSpace heatExhaustion continuous_heatExhaustion
       heatExhaustion_pos lipschitzWith_one_heatExhaustion isCompact_heatExhaustion_superlevel
     dist z w ≤ 2 := by
-  letI := OnePoint.exhaustionMetricSpace heatExhaustion continuous_heatExhaustion
+  let := OnePoint.exhaustionMetricSpace heatExhaustion continuous_heatExhaustion
     heatExhaustion_pos lipschitzWith_one_heatExhaustion isCompact_heatExhaustion_superlevel
   induction z using OnePoint.rec with
   | infty =>
@@ -79,7 +79,7 @@ theorem edist_coe_coe_le_heatExhaustion (x y : ℝ) :
     letI := OnePoint.exhaustionMetricSpace heatExhaustion continuous_heatExhaustion
       heatExhaustion_pos lipschitzWith_one_heatExhaustion isCompact_heatExhaustion_superlevel
     edist (x : OnePoint ℝ) (y : OnePoint ℝ) ≤ edist x y := by
-  letI := OnePoint.exhaustionMetricSpace heatExhaustion continuous_heatExhaustion
+  let := OnePoint.exhaustionMetricSpace heatExhaustion continuous_heatExhaustion
     heatExhaustion_pos lipschitzWith_one_heatExhaustion isCompact_heatExhaustion_superlevel
   rw [edist_dist, edist_dist]
   exact ENNReal.ofReal_le_ofReal
@@ -97,7 +97,7 @@ theorem hasLocalKolmogorovMoments_onePointKernelSemigroup_heatResolvent :
       heatExhaustion_pos lipschitzWith_one_heatExhaustion isCompact_heatExhaustion_superlevel
     heatResolvent.onePointKernelSemigroup.HasLocalKolmogorovMoments 4 2
       gaussianFourthMoment 16 := by
-  letI := OnePoint.exhaustionMetricSpace heatExhaustion continuous_heatExhaustion
+  let := OnePoint.exhaustionMetricSpace heatExhaustion continuous_heatExhaustion
     heatExhaustion_pos lipschitzWith_one_heatExhaustion isCompact_heatExhaustion_superlevel
   refine ⟨by norm_num, by norm_num, ?_, ?_⟩
   · intro h _hh z
@@ -143,9 +143,9 @@ def onePointRegular_heatResolvent : heatResolvent.OnePointRegular where
   lipschitz_rho := lipschitzWith_one_heatExhaustion
   isCompact_superlevel := isCompact_heatExhaustion_superlevel
   kolmogorovRegular := by
-    letI := OnePoint.exhaustionMetricSpace heatExhaustion continuous_heatExhaustion
+    let := OnePoint.exhaustionMetricSpace heatExhaustion continuous_heatExhaustion
       heatExhaustion_pos lipschitzWith_one_heatExhaustion isCompact_heatExhaustion_superlevel
-    letI : CompleteSpace (OnePoint ℝ) :=
+    let : CompleteSpace (OnePoint ℝ) :=
       completeSpace_of_isComplete_univ isCompact_univ.isComplete
     exact SubMarkovKernelSemigroup.KolmogorovRegular.of_hasKolmogorovMoments _
       heatResolvent.isConservative_onePointKernelSemigroup

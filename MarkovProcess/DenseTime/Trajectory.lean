@@ -41,7 +41,7 @@ instance isMarkovKernel_trajDenseStep (P : SubMarkovKernelSemigroup α)
     (hP : P.IsConservative) (e : ℕ ≃ D) (ι : D ↪ NNReal) (n : ℕ) :
     IsMarkovKernel (trajDenseStep P hP e ι n) := by
   rw [trajDenseStep]
-  letI : IsMarkovKernel (denseStep P hP e ι n) :=
+  let : IsMarkovKernel (denseStep P hP e ι n) :=
     isMarkovKernel_denseStep P hP e ι n
   infer_instance
 
@@ -196,7 +196,7 @@ theorem partialTraj_map_denseTimeHistoryMeasurableEquiv
   induction n with
   | zero =>
       rw [Kernel.partialTraj_self, Kernel.id_comp]
-      letI : IsMarkovKernel (denseTimePrefixKernel P e ι 0) :=
+      let : IsMarkovKernel (denseTimePrefixKernel P e ι 0) :=
         hP.isMarkovKernel_denseTimePrefixKernel P e ι 0
       rw [augmentedPrefixKernel,
         markovKernel_finZero (denseTimePrefixKernel P e ι 0)]
@@ -217,9 +217,9 @@ theorem partialTraj_map_denseTimeHistoryMeasurableEquiv
       rfl
       all_goals fun_prop
   | succ n ih =>
-      letI : IsMarkovKernel (denseStep P hP e ι n) :=
+      let : IsMarkovKernel (denseStep P hP e ι n) :=
         isMarkovKernel_denseStep P hP e ι n
-      letI : IsMarkovKernel (augmentedPrefixKernel P e ι n) :=
+      let : IsMarkovKernel (augmentedPrefixKernel P e ι n) :=
         isMarkovKernel_augmentedPrefixKernel P hP e ι n
       rw [Kernel.partialTraj_succ_of_le (Nat.zero_le n)]
       rw [← Kernel.map_comp]
@@ -286,7 +286,7 @@ theorem enumeratedDenseTimeTrajectory_map_prefix
     (enumeratedDenseTimeTrajectory P hP e ι).map
         (enumeratedDenseTimePrefix (α := α) n) =
       denseTimePrefixKernel P e ι n := by
-  letI : IsMarkovKernel (denseTimePrefixKernel P e ι n) :=
+  let : IsMarkovKernel (denseTimePrefixKernel P e ι n) :=
     hP.isMarkovKernel_denseTimePrefixKernel P e ι n
   rw [enumeratedDenseTimeTrajectory, ← Kernel.map_comp_right]
   · rw [enumeratedDenseTimePrefix_dropInitialTrajCoordinate]

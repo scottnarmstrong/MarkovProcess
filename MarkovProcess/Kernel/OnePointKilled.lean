@@ -104,7 +104,7 @@ theorem IsFellerKernelSemigroup.ae_shift_exitTime_eq_const_of_compl_eq_singleton
     ContinuousPath.shift ((tau omega).untopD 0) omega
   have htau := ContinuousPath.isStoppingTime_exitTime U hU
   have hS : MeasurableSet S := by
-    simpa only [S, tau, ContinuousPath.exitTimeTop_apply] using
+    simpa only [S, tau, ContinuousPath.exitTimeTop_apply] using!
       ContinuousPath.measurableSet_exitTime_lt_top U hU
   have hY : Measurable Y := ContinuousPath.measurable_shift_untopD_stoppingTime tau htau
   have heval0 : ∀ᵐ omega ∂Q x, omega 0 = x := IsConservative.ae_eval_zero_eq hP hK x
@@ -113,7 +113,7 @@ theorem IsFellerKernelSemigroup.ae_shift_exitTime_eq_const_of_compl_eq_singleton
     rw [ae_restrict_iff' hS]
     filter_upwards [heval0] with omega hzero homega
     have hfin : ContinuousPath.exitTime U omega ≠ ⊤ := by
-      exact ne_of_lt (by simpa only [S, tau, ContinuousPath.exitTimeTop_apply] using homega)
+      exact ne_of_lt (by simpa only [S, tau, ContinuousPath.exitTimeTop_apply] using! homega)
     rw [ContinuousPath.untopD_exitTimeTop_eq_toNNReal U omega hfin]
     have hfront := ContinuousPath.coordinate_exitTime_mem_frontier U hU omega
       (hzero.symm ▸ hx) hfin
@@ -136,14 +136,14 @@ theorem IsFellerKernelSemigroup.ae_shift_exitTime_eq_const_of_compl_eq_singleton
     apply Measure.ae_comp_of_ae_ae
       (show MeasurableSet ({eta : ContinuousPath alpha |
         eta = ContinuousMap.const NNReal a}) by
-          simpa only [Set.setOf_eq_eq_singleton] using
+          simpa only [Set.ofPred_eq_eq_singleton] using
             (isClosed_singleton (x := ContinuousMap.const NNReal a)).measurableSet)
     filter_upwards [hevalExit] with omega homega
     rw [Kernel.comap_apply, homega,
       hP.continuousProcess_eq_dirac_of_absorbing P hK a hAbsorb]
     exact (ae_dirac_iff (show MeasurableSet ({eta : ContinuousPath alpha |
       eta = ContinuousMap.const NNReal a}) by
-        simpa only [Set.setOf_eq_eq_singleton] using
+        simpa only [Set.ofPred_eq_eq_singleton] using
           (isClosed_singleton (x := ContinuousMap.const NNReal a)).measurableSet)).mpr rfl
   rw [← hRestart] at hrhs
   have hshift : ∀ᵐ omega ∂(Q x).restrict S,
@@ -151,7 +151,7 @@ theorem IsFellerKernelSemigroup.ae_shift_exitTime_eq_const_of_compl_eq_singleton
     (ae_map_iff hY.aemeasurable
       (show MeasurableSet ({eta : ContinuousPath alpha |
         eta = ContinuousMap.const NNReal a}) by
-          simpa only [Set.setOf_eq_eq_singleton] using
+          simpa only [Set.ofPred_eq_eq_singleton] using
             (isClosed_singleton (x := ContinuousMap.const NNReal a)).measurableSet)).mp hrhs
   rw [ae_restrict_iff' hS] at hshift
   filter_upwards [hshift] with omega homega hfin
@@ -221,6 +221,22 @@ open MarkovProcess.SubMarkovKernelSemigroup
 variable {X : Type*} [MetricSpace X] [LocallyCompactSpace X]
   [SecondCountableTopology X] [MeasurableSpace X] [BorelSpace X]
 
+omit [LocallyCompactSpace X] [SecondCountableTopology X] [MeasurableSpace X] [BorelSpace X] in
+/-- The one-point compactification is compact under the exhaustion metric's topology, since that
+topology coincides with the canonical one-point topology (which is always compact). This is a
+typeclass-search cache in the same spirit as `OnePoint.instCompleteSpaceOnePointExhaustion`: it
+lets the `isCompact_univ` calls that build `CompleteSpace (OnePoint X)` (via
+`completeSpace_of_isComplete_univ`) inside this file's `letI` chains resolve automatically. -/
+private instance instCompactSpaceOnePointExhaustion
+    (rho : X → ℝ) (hrho_cont : Continuous rho) (hrho_pos : ∀ x, 0 < rho x)
+    (hrho_lipschitz : LipschitzWith 1 rho)
+    (hrho_compact : ∀ epsilon > 0, IsCompact {x | epsilon ≤ rho x}) :
+    @CompactSpace (OnePoint X)
+      (OnePoint.exhaustionMetricSpace rho hrho_cont hrho_pos hrho_lipschitz
+        hrho_compact).toPseudoMetricSpace.toUniformSpace.toTopologicalSpace := by
+  rw [OnePoint.exhaustionMetricSpace_toTopologicalSpace]
+  infer_instance
+
 /-- The original space is homeomorphic to the live part of its one-point compactification. -/
 noncomputable def onePointLiveHomeomorph :
     X ≃ₜ Set.range ((↑) : X → OnePoint X) :=
@@ -239,29 +255,29 @@ theorem onePointKernelSemigroup_apply_coe
     R.onePointKernelSemigroup t (x : OnePoint X) =
       (R.kernelSemigroup t x).map ((↑) : X → OnePoint X) +
         (1 - R.kernelSemigroup t x Set.univ) • Measure.dirac OnePoint.infty := by
-  letI : (R.kernelSemigroup t x).Regular := by
+  let : (R.kernelSemigroup t x).Regular := by
     rw [PositiveC0ContractiveResolvent.kernelSemigroup,
       PositiveC0SemigroupKernel.kernelSemigroup_apply,
       PositiveC0OperatorKernel.kernel_apply]
     infer_instance
-  letI : IsFiniteMeasure (R.kernelSemigroup t x) :=
+  let : IsFiniteMeasure (R.kernelSemigroup t x) :=
     ⟨lt_of_le_of_lt (R.kernelSemigroup.measure_univ_le_one t x) ENNReal.one_lt_top⟩
-  letI : Measure.InnerRegularCompactLTTop
+  let : Measure.InnerRegularCompactLTTop
       ((R.kernelSemigroup t x).map ((↑) : X → OnePoint X)) :=
     Measure.InnerRegularCompactLTTop.map_of_continuous OnePoint.continuous_coe
-  letI : IsFiniteMeasure
+  let : IsFiniteMeasure
       ((R.kernelSemigroup t x).map ((↑) : X → OnePoint X)) := inferInstance
   have hmissing_ne_top : 1 - R.kernelSemigroup t x Set.univ ≠ ⊤ :=
     ne_top_of_le_ne_top ENNReal.one_ne_top tsub_le_self
-  letI : IsFiniteMeasure
+  let : IsFiniteMeasure
       ((1 - R.kernelSemigroup t x Set.univ) •
         Measure.dirac (OnePoint.infty : OnePoint X)) :=
     Measure.smul_finite _ hmissing_ne_top
-  letI : IsFiniteMeasure
+  let : IsFiniteMeasure
       ((R.kernelSemigroup t x).map ((↑) : X → OnePoint X) +
         (1 - R.kernelSemigroup t x Set.univ) • Measure.dirac OnePoint.infty) :=
     ⟨(ENNReal.add_lt_top).2 ⟨measure_lt_top _ _, measure_lt_top _ _⟩⟩
-  letI : (R.onePointKernelSemigroup t (x : OnePoint X)).Regular := by
+  let : (R.onePointKernelSemigroup t (x : OnePoint X)).Regular := by
     rw [onePointKernelSemigroup, PositiveC0ContractiveResolvent.kernelSemigroup,
       PositiveC0SemigroupKernel.kernelSemigroup_apply,
       PositiveC0OperatorKernel.kernel_apply]
@@ -275,7 +291,7 @@ theorem onePointKernelSemigroup_apply_coe
   have hmap :
       ∫ z, f z ∂(R.kernelSemigroup t x).map ((↑) : X → OnePoint X) =
         ∫ y, f (y : OnePoint X) ∂R.kernelSemigroup t x := by
-    simpa only using integral_map OnePoint.continuous_coe.aemeasurable
+    simpa only using! integral_map OnePoint.continuous_coe.aemeasurable
       f.continuous.aestronglyMeasurable
   have hmass : R.kernelSemigroup t x Set.univ ≠ ⊤ :=
     (lt_of_le_of_lt (R.kernelSemigroup.measure_univ_le_one t x) ENNReal.one_lt_top).ne
@@ -310,7 +326,7 @@ theorem onePointKernelSemigroup_tail_le_of_tail_le
     R.onePointKernelSemigroup h (x : OnePoint X)
         {z | r < dist z (x : OnePoint X)} ≤
       a + (1 - R.kernelSemigroup h x Set.univ) := by
-  letI := OnePoint.exhaustionMetricSpace rho hrho_cont hrho_pos hrho_lipschitz hrho_compact
+  let := OnePoint.exhaustionMetricSpace rho hrho_cont hrho_pos hrho_lipschitz hrho_compact
   let tail : Set (OnePoint X) := {z | r < dist z (x : OnePoint X)}
   let live : Set (OnePoint X) := Set.range ((↑) : X → OnePoint X)
   have htail : MeasurableSet tail :=
@@ -364,8 +380,8 @@ theorem ae_absorbed_after_onePoint_exitTime
         ∀ t : NNReal,
           (ContinuousPath.exitTime (Set.range ((↑) : X → OnePoint X)) omega).toNNReal ≤ t →
             omega t = OnePoint.infty := by
-  letI := OnePoint.exhaustionMetricSpace rho hrho_cont hrho_pos hrho_lipschitz hrho_compact
-  letI : CompleteSpace (OnePoint X) :=
+  let := OnePoint.exhaustionMetricSpace rho hrho_cont hrho_pos hrho_lipschitz hrho_compact
+  let : CompleteSpace (OnePoint X) :=
     completeSpace_of_isComplete_univ isCompact_univ.isComplete
   exact R.isFellerKernelSemigroup_onePointKernelSemigroup
     |>.ae_absorbed_after_exitTime_of_compl_eq_singleton R.onePointKernelSemigroup
@@ -396,8 +412,8 @@ theorem ae_lt_onePoint_exitTime_iff_mem
       ((t : ℝ≥0∞) < ContinuousPath.exitTime
           (Set.range ((↑) : X → OnePoint X)) omega ↔
         omega t ∈ Set.range ((↑) : X → OnePoint X)) := by
-  letI := OnePoint.exhaustionMetricSpace rho hrho_cont hrho_pos hrho_lipschitz hrho_compact
-  letI : CompleteSpace (OnePoint X) :=
+  let := OnePoint.exhaustionMetricSpace rho hrho_cont hrho_pos hrho_lipschitz hrho_compact
+  let : CompleteSpace (OnePoint X) :=
     completeSpace_of_isComplete_univ isCompact_univ.isComplete
   exact R.isFellerKernelSemigroup_onePointKernelSemigroup
     |>.ae_lt_exitTime_iff_mem_of_compl_eq_singleton R.onePointKernelSemigroup
@@ -430,8 +446,8 @@ theorem killedSemigroup_onePointLive_image
         hK t
         (onePointLiveHomeomorph x) (onePointLiveHomeomorph '' B) =
       R.kernelSemigroup t x B := by
-  letI := OnePoint.exhaustionMetricSpace rho hrho_cont hrho_pos hrho_lipschitz hrho_compact
-  letI : CompleteSpace (OnePoint X) :=
+  let := OnePoint.exhaustionMetricSpace rho hrho_cont hrho_pos hrho_lipschitz hrho_compact
+  let : CompleteSpace (OnePoint X) :=
     completeSpace_of_isComplete_univ isCompact_univ.isComplete
   let live : Set (OnePoint X) := Set.range ((↑) : X → OnePoint X)
   let e := onePointLiveHomeomorph (X := X)
@@ -464,7 +480,10 @@ theorem killedSemigroup_onePointLive_image
           (((↑) : X → OnePoint X) '' B) ↔
         omega t ∈ ((↑) : X → OnePoint X) '' B) := by
     filter_upwards [hae] with omega homega
-    rw [ContinuousPath.mem_killedEvent_iff, homega]
+    have homega' : ((t : ℝ≥0∞) < ContinuousPath.exitTime
+        (Set.range ((↑) : X → OnePoint X)) omega ↔
+      omega t ∈ Set.range ((↑) : X → OnePoint X)) := homega
+    rw [ContinuousPath.mem_killedEvent_iff, homega']
     exact and_iff_right_of_imp fun h ↦ Set.mem_of_mem_of_subset h (Set.image_subset_range _ _)
   have hmeasure :
       IsConservative.continuousProcess R.onePointKernelSemigroup
@@ -478,10 +497,19 @@ theorem killedSemigroup_onePointLive_image
     filter_upwards [hevent] with omega homega
     exact propext homega
   rw [hmeasure]
-  have heval : Measurable (fun omega : ContinuousPath (OnePoint X) ↦ omega t) :=
-    ContinuousPath.measurable_coordinateProcess (alpha := OnePoint X) t
-  rw [← Measure.map_apply heval hcoeB, ← Kernel.map_apply _ heval,
-    R.isFellerKernelSemigroup_onePointKernelSemigroup.continuousProcess_map_eval_nnreal
+  show (IsConservative.continuousProcess R.onePointKernelSemigroup
+      R.isConservative_onePointKernelSemigroup (x : OnePoint X))
+      (ContinuousPath.coordinateProcess t ⁻¹' (((↑) : X → OnePoint X) '' B)) =
+    R.kernelSemigroup t x B
+  rw [← Kernel.map_apply'
+    (IsConservative.continuousProcess R.onePointKernelSemigroup
+      R.isConservative_onePointKernelSemigroup) (hf := ContinuousPath.measurable_coordinateProcess t)
+    (x : OnePoint X) hcoeB]
+  show ((IsConservative.continuousProcess R.onePointKernelSemigroup
+      R.isConservative_onePointKernelSemigroup).map (fun omega => omega t) (x : OnePoint X))
+      (((↑) : X → OnePoint X) '' B) =
+    R.kernelSemigroup t x B
+  rw [R.isFellerKernelSemigroup_onePointKernelSemigroup.continuousProcess_map_eval_nnreal
       R.onePointKernelSemigroup R.isConservative_onePointKernelSemigroup
       hK t,
     R.onePointKernelSemigroup_apply_coe, Measure.add_apply,
@@ -511,8 +539,8 @@ theorem killedKernel_onePointLive_eq_map
         (Set.range ((↑) : X → OnePoint X)) OnePoint.isOpen_range_coe t
         (x : OnePoint X) =
       (R.kernelSemigroup t x).map ((↑) : X → OnePoint X) := by
-  letI := OnePoint.exhaustionMetricSpace rho hrho_cont hrho_pos hrho_lipschitz hrho_compact
-  letI : CompleteSpace (OnePoint X) :=
+  let := OnePoint.exhaustionMetricSpace rho hrho_cont hrho_pos hrho_lipschitz hrho_compact
+  let : CompleteSpace (OnePoint X) :=
     completeSpace_of_isComplete_univ isCompact_univ.isComplete
   let live : Set (OnePoint X) := Set.range ((↑) : X → OnePoint X)
   apply Measure.ext
@@ -527,7 +555,10 @@ theorem killedKernel_onePointLive_eq_map
       R.isConservative_onePointKernelSemigroup (x : OnePoint X),
       (omega ∈ ContinuousPath.killedEvent live t A ↔ omega t ∈ A ∩ live) := by
     filter_upwards [hae] with omega homega
-    rw [ContinuousPath.mem_killedEvent_iff, homega]
+    have homega' : ((t : ℝ≥0∞) < ContinuousPath.exitTime
+        (Set.range ((↑) : X → OnePoint X)) omega ↔
+      omega t ∈ Set.range ((↑) : X → OnePoint X)) := homega
+    rw [ContinuousPath.mem_killedEvent_iff, homega']
     exact and_comm
   have hmeasure :
       IsConservative.continuousProcess R.onePointKernelSemigroup
@@ -540,10 +571,19 @@ theorem killedKernel_onePointLive_eq_map
     filter_upwards [hevent] with omega homega
     exact propext homega
   rw [hmeasure]
-  have heval : Measurable (fun omega : ContinuousPath (OnePoint X) ↦ omega t) :=
-    ContinuousPath.measurable_coordinateProcess (alpha := OnePoint X) t
-  rw [← Measure.map_apply heval hAlive, ← Kernel.map_apply _ heval,
-    R.isFellerKernelSemigroup_onePointKernelSemigroup.continuousProcess_map_eval_nnreal
+  show (IsConservative.continuousProcess R.onePointKernelSemigroup
+      R.isConservative_onePointKernelSemigroup (x : OnePoint X))
+      (ContinuousPath.coordinateProcess t ⁻¹' (A ∩ live)) =
+    (R.kernelSemigroup t x).map ((↑) : X → OnePoint X) A
+  rw [← Kernel.map_apply'
+    (IsConservative.continuousProcess R.onePointKernelSemigroup
+      R.isConservative_onePointKernelSemigroup) (hf := ContinuousPath.measurable_coordinateProcess t)
+    (x : OnePoint X) hAlive]
+  show ((IsConservative.continuousProcess R.onePointKernelSemigroup
+      R.isConservative_onePointKernelSemigroup).map (fun omega => omega t) (x : OnePoint X))
+      (A ∩ live) =
+    (R.kernelSemigroup t x).map ((↑) : X → OnePoint X) A
+  rw [R.isFellerKernelSemigroup_onePointKernelSemigroup.continuousProcess_map_eval_nnreal
       R.onePointKernelSemigroup R.isConservative_onePointKernelSemigroup
       hK t,
     R.onePointKernelSemigroup_apply_coe, Measure.add_apply,
@@ -623,8 +663,8 @@ theorem killedResolvent_onePointLive_eq_kernelResolvent
         (Set.range ((↑) : X → OnePoint X)) OnePoint.isOpen_range_coe lam
         (onePointLiveExtension f) (x : OnePoint X) =
       R.kernelSemigroup.kernelResolvent lam f x := by
-  letI := OnePoint.exhaustionMetricSpace rho hrho_cont hrho_pos hrho_lipschitz hrho_compact
-  letI : CompleteSpace (OnePoint X) :=
+  let := OnePoint.exhaustionMetricSpace rho hrho_cont hrho_pos hrho_lipschitz hrho_compact
+  let : CompleteSpace (OnePoint X) :=
     completeSpace_of_isComplete_univ isCompact_univ.isComplete
   unfold IsConservative.killedResolvent SubMarkovKernelSemigroup.kernelResolvent
   apply setLIntegral_congr_fun measurableSet_Ioi
@@ -663,8 +703,8 @@ theorem killedResolvent_onePointLive_ofReal_eq_operator
         (Set.range ((↑) : X → OnePoint X)) OnePoint.isOpen_range_coe (mu : ℝ)
         (onePointLiveExtension fun y ↦ ENNReal.ofReal (f y)) (x : OnePoint X) =
       ENNReal.ofReal (R.toContractiveResolvent.operator mu f x) := by
-  letI := OnePoint.exhaustionMetricSpace rho hrho_cont hrho_pos hrho_lipschitz hrho_compact
-  letI : CompleteSpace (OnePoint X) :=
+  let := OnePoint.exhaustionMetricSpace rho hrho_cont hrho_pos hrho_lipschitz hrho_compact
+  let : CompleteSpace (OnePoint X) :=
     completeSpace_of_isComplete_univ isCompact_univ.isComplete
   calc
     IsConservative.killedResolvent R.onePointKernelSemigroup
@@ -707,13 +747,25 @@ theorem lintegral_exp_neg_onePoint_exitTime
         R.isConservative_onePointKernelSemigroup (x : OnePoint X) =
       1 - ENNReal.ofReal lam *
         R.kernelSemigroup.kernelResolvent lam (fun _ : X ↦ 1) x := by
-  letI := OnePoint.exhaustionMetricSpace rho hrho_cont hrho_pos hrho_lipschitz hrho_compact
-  letI : CompleteSpace (OnePoint X) :=
+  let := OnePoint.exhaustionMetricSpace rho hrho_cont hrho_pos hrho_lipschitz hrho_compact
+  let : CompleteSpace (OnePoint X) :=
     completeSpace_of_isComplete_univ isCompact_univ.isComplete
-  rw [IsConservative.lintegral_exp_neg_exitTime R.onePointKernelSemigroup
-    R.isConservative_onePointKernelSemigroup
-    (Set.range ((↑) : X → OnePoint X)) OnePoint.isOpen_range_coe lam hlam
-    (x : OnePoint X)]
+  have hUexh : @IsOpen (OnePoint X)
+      (OnePoint.exhaustionMetricSpace rho hrho_cont hrho_pos hrho_lipschitz
+        hrho_compact).toPseudoMetricSpace.toUniformSpace.toTopologicalSpace
+      (Set.range ((↑) : X → OnePoint X)) :=
+    OnePoint.isOpen_range_coe
+  have hlem := @IsConservative.lintegral_exp_neg_exitTime (OnePoint X)
+    (OnePoint.exhaustionMetricSpace rho hrho_cont hrho_pos hrho_lipschitz hrho_compact)
+    inferInstance OnePoint.instMeasurableSpace inferInstance inferInstance inferInstance
+    R.onePointKernelSemigroup R.isConservative_onePointKernelSemigroup
+    (Set.range ((↑) : X → OnePoint X)) hUexh lam hlam
+    (x : OnePoint X)
+  trans (1 - ENNReal.ofReal lam *
+      IsConservative.killedResolvent R.onePointKernelSemigroup
+        R.isConservative_onePointKernelSemigroup
+        (Set.range ((↑) : X → OnePoint X)) hUexh lam (fun _ : OnePoint X ↦ 1) x)
+  · exact hlem
   congr 2
   unfold IsConservative.killedResolvent SubMarkovKernelSemigroup.kernelResolvent
   apply setLIntegral_congr_fun measurableSet_Ioi

@@ -56,7 +56,7 @@ theorem exists_uniform_sampling (omega : ContinuousPath alpha) (T : NNReal) (h :
   have hmem : ∀ j : ℕ, j ≤ n + 1 →
       (j : NNReal) * T / ((n + 1 : ℕ) : NNReal) ∈ Set.Icc (0 : NNReal) T := by
     intro j hj
-    refine ⟨zero_le _, ?_⟩
+    refine ⟨zero_le, ?_⟩
     rw [div_le_iff₀ hMN]
     calc
       (j : NNReal) * T ≤ ((n + 1 : ℕ) : NNReal) * T :=

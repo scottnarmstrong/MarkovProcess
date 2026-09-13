@@ -69,7 +69,7 @@ theorem IsConservative.canonicalDiscreteLaw_map_coordinate_zero
     (canonicalDiscreteLaw P hP grid x).map (DiscretePath.coordinate 0) = Measure.dirac x := by
   rw [IsConservative.canonicalDiscreteLaw_map_coordinate P hP grid x 0,
     Kernel.partialTraj_self, Kernel.id_apply]
-  exact Measure.map_dirac
+  exact Measure.map_dirac'
     (measurable_pi_apply (X := fun _ : Finset.Iic 0 => α)
       ⟨0, Finset.mem_Iic.mpr le_rfl⟩) (initialHistory x)
 

@@ -46,7 +46,7 @@ theorem IsOpenExhaustion.iUnion_killedEvent {U : ℕ → Set alpha} (hU : IsOpen
     (t : NNReal) (B : Set alpha) :
     ⋃ n, killedEvent (U n) t B = {omega : ContinuousPath alpha | omega t ∈ B} := by
   ext omega
-  simp only [Set.mem_iUnion, mem_killedEvent_iff, Set.mem_setOf_eq]
+  simp only [Set.mem_iUnion, mem_killedEvent_iff, Set.mem_ofPred_eq]
   constructor
   · rintro ⟨n, -, hmem⟩
     exact hmem
@@ -59,7 +59,7 @@ theorem IsOpenExhaustion.iUnion_lt_exitTime {U : ℕ → Set alpha} (hU : IsOpen
     (t : NNReal) :
     ⋃ n, {omega : ContinuousPath alpha | (t : ℝ≥0∞) < exitTime (U n) omega} = Set.univ := by
   ext omega
-  simp only [Set.mem_iUnion, Set.mem_setOf_eq, Set.mem_univ, iff_true]
+  simp only [Set.mem_iUnion, Set.mem_ofPred_eq, Set.mem_univ, iff_true]
   obtain ⟨N, hN⟩ := hU.exists_lt_exitTime omega t
   exact ⟨N, hN N le_rfl⟩
 

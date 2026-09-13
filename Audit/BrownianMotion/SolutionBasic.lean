@@ -52,7 +52,7 @@ theorem measurable_gaussianReal_left (t : NNReal) :
     rw [← hmap, Measure.map_apply (measurable_add_const x) hs]
     congr 1
     ext y
-    simp only [Set.mem_preimage, Set.mem_setOf_eq, add_comm]
+    simp only [Set.mem_preimage, Set.mem_ofPred_eq, add_comm]
   simp_rw [h]
   exact measurable_measure_prodMk_left
     ((measurable_fst.add measurable_snd) hs)
@@ -89,7 +89,7 @@ theorem measurable_finCons {α : Type*} [MeasurableSpace α] {n : ℕ} :
   intro i
   refine Fin.cases ?_ (fun j ↦ ?_) i
   · simpa only [Fin.cons_zero] using (measurable_fst : Measurable (Prod.fst : α × (Fin n → α) → α))
-  · simpa only [Fin.cons_succ] using
+  · simpa only [Fin.cons_succ] using!
       (measurable_pi_apply j).comp (measurable_snd : Measurable (Prod.snd : α × (Fin n → α) → _))
 
 /-- The finite-time law of the heat kernels along a strictly ordered family of times: sample at

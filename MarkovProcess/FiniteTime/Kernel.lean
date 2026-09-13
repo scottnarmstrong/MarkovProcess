@@ -33,7 +33,7 @@ theorem measurable_finCons {α : Type*} [MeasurableSpace α] {n : ℕ} :
   intro i
   refine Fin.cases ?_ (fun j ↦ ?_) i
   · simpa only [Fin.cons_zero] using (measurable_fst : Measurable (Prod.fst : α × (Fin n → α) → α))
-  · simpa only [Fin.cons_succ] using
+  · simpa only [Fin.cons_succ] using!
       (measurable_pi_apply j).comp (measurable_snd : Measurable (Prod.snd : α × (Fin n → α) → _))
 
 namespace SubMarkovKernelSemigroup
@@ -79,8 +79,8 @@ theorem IsConservative.isMarkovKernel_finiteTimeKernel
       rw [finiteTimeKernel_zero]
       infer_instance
   | succ n ih =>
-      letI : IsMarkovKernel (P (times 0)) := hP.isMarkovKernel (times 0)
-      letI : IsMarkovKernel (finiteTimeKernel P times.relativeTail) := ih times.relativeTail
+      let : IsMarkovKernel (P (times 0)) := hP.isMarkovKernel (times 0)
+      let : IsMarkovKernel (finiteTimeKernel P times.relativeTail) := ih times.relativeTail
       rw [finiteTimeKernel_succ, Kernel.mapOfMeasurable_eq_map]
       exact Kernel.IsMarkovKernel.map _ measurable_finCons
 
@@ -93,7 +93,7 @@ noncomputable def finiteTimeLaw (P : SubMarkovKernelSemigroup α) {n : ℕ}
 theorem IsConservative.isProbabilityMeasure_finiteTimeLaw
     (P : SubMarkovKernelSemigroup α) (hP : P.IsConservative) {n : ℕ}
     (times : FiniteOrderedTimes n) (x : α) : IsProbabilityMeasure (finiteTimeLaw P times x) := by
-  letI : IsMarkovKernel (finiteTimeKernel P times) :=
+  let : IsMarkovKernel (finiteTimeKernel P times) :=
     hP.isMarkovKernel_finiteTimeKernel P times
   exact IsMarkovKernel.isProbabilityMeasure x
 
@@ -103,8 +103,8 @@ time. -/
 theorem finiteTimeKernel_one_map_eval (P : SubMarkovKernelSemigroup α)
     (times : FiniteOrderedTimes 1) :
     (finiteTimeKernel P times).map (fun path ↦ path 0) = P (times 0) := by
-  letI : IsFiniteKernel (P (times 0)) := (P.isSubMarkovKernel (times 0)).isFiniteKernel
-  letI : IsMarkovKernel (finiteTimeKernel P times.relativeTail) :=
+  let : IsFiniteKernel (P (times 0)) := (P.isSubMarkovKernel (times 0)).isFiniteKernel
+  let : IsMarkovKernel (finiteTimeKernel P times.relativeTail) :=
     by rw [finiteTimeKernel_zero]; infer_instance
   rw [finiteTimeKernel_succ, Kernel.mapOfMeasurable_eq_map]
   rw [← Kernel.map_comp_right]

@@ -56,9 +56,9 @@ theorem finiteTimeKernel_cemeterySemigroup_delta {n : ℕ} (times : FiniteOrdere
       rw [finiteTimeKernel_zero, Kernel.const_apply]
       exact congrArg Measure.dirac (Subsingleton.elim _ _)
   | succ n ih =>
-      letI : IsMarkovKernel (cemeterySemigroup S (times 0)) :=
+      let : IsMarkovKernel (cemeterySemigroup S (times 0)) :=
         (isConservative_cemeterySemigroup S).isMarkovKernel (times 0)
-      letI : IsMarkovKernel (finiteTimeKernel (cemeterySemigroup S) times.relativeTail) :=
+      let : IsMarkovKernel (finiteTimeKernel (cemeterySemigroup S) times.relativeTail) :=
         (isConservative_cemeterySemigroup S).isMarkovKernel_finiteTimeKernel _ _
       have hprod : (cemeterySemigroup S (times 0) ⊗ₖ
             Kernel.prodMkLeft (Cemetery beta)
@@ -80,7 +80,7 @@ theorem finiteTimeKernel_cemeterySemigroup_delta {n : ℕ} (times : FiniteOrdere
               Prod.mk (Cemetery.delta : Cemetery beta) ⁻¹' s from fun h ↦ hmem h)
             (1 : (Fin n → Cemetery beta) → ℝ≥0∞)
       rw [finiteTimeKernel_succ, Kernel.mapOfMeasurable_eq_map,
-        Kernel.map_apply _ measurable_finCons, hprod, Measure.map_dirac measurable_finCons]
+        Kernel.map_apply _ measurable_finCons, hprod, Measure.map_dirac' measurable_finCons _]
       refine congrArg Measure.dirac ?_
       funext i
       refine Fin.cases ?_ (fun j ↦ ?_) i
@@ -123,7 +123,6 @@ theorem IsConservative.continuousProcess_killedEvent_inter_shift
   have hrestart := congrArg (fun mu : Measure (ContinuousPath alpha) ↦ mu D)
     (hFeller.continuousProcess_restrict_map_shift P hP hK (x : alpha) t
       (ContinuousPath.killedEvent U t (Subtype.val '' C)) hAfilt)
-  simp only at hrestart
   rw [Measure.map_apply (ContinuousPath.measurable_shift_fixed t) hD,
     Measure.restrict_apply ((ContinuousPath.measurable_shift_fixed t) hD),
     Measure.bind_apply hD (Kernel.aemeasurable _)] at hrestart
@@ -132,7 +131,7 @@ theorem IsConservative.continuousProcess_killedEvent_inter_shift
         {omega : ContinuousPath alpha | (t : ℝ≥0∞) < ContinuousPath.exitTime U omega} := by
     ext omega
     simp only [ContinuousPath.mem_killedEvent_iff, Set.mem_inter_iff, Set.mem_preimage,
-      Set.mem_setOf_eq]
+      Set.mem_ofPred_eq]
     exact and_comm
   have hcoord : Measurable fun omega : ContinuousPath alpha ↦ omega t :=
     ContinuousPath.measurable_coordinateProcess (alpha := alpha) t
@@ -202,13 +201,13 @@ theorem IsConservative.killedProcess_map_coordinates_ordered {n : ℕ}
         measurable_pi_lambda _ fun i ↦
           ContinuousPath.measurable_coordinate_killAtExit U hU (times.relativeTail i)
       have hRcons : (cemeterySemigroup (IsConservative.killedSemigroup P hP U hU hFeller hK)).IsConservative := isConservative_cemeterySemigroup _
-      letI : IsMarkovKernel (finiteTimeKernel (cemeterySemigroup (IsConservative.killedSemigroup P hP U hU hFeller hK)) times) :=
+      let : IsMarkovKernel (finiteTimeKernel (cemeterySemigroup (IsConservative.killedSemigroup P hP U hU hFeller hK)) times) :=
         hRcons.isMarkovKernel_finiteTimeKernel _ times
-      letI : IsMarkovKernel (finiteTimeKernel (cemeterySemigroup (IsConservative.killedSemigroup P hP U hU hFeller hK)) times.relativeTail) :=
+      let : IsMarkovKernel (finiteTimeKernel (cemeterySemigroup (IsConservative.killedSemigroup P hP U hU hFeller hK)) times.relativeTail) :=
         hRcons.isMarkovKernel_finiteTimeKernel _ _
-      letI : IsMarkovKernel ((cemeterySemigroup (IsConservative.killedSemigroup P hP U hU hFeller hK)) (times 0)) := hRcons.isMarkovKernel (times 0)
+      let : IsMarkovKernel ((cemeterySemigroup (IsConservative.killedSemigroup P hP U hU hFeller hK)) (times 0)) := hRcons.isMarkovKernel (times 0)
       rw [IsConservative.killedProcess_map_coordinates P hP U hU _ x]
-      haveI : IsProbabilityMeasure
+      have : IsProbabilityMeasure
           ((IsConservative.continuousProcess P hP (x : alpha)).map (fun omega : ContinuousPath alpha ↦ fun i : Fin (n + 1) ↦
             LifetimePath.coordinate (times i) (ContinuousPath.killAtExit U omega))) :=
         Measure.isProbabilityMeasure_map hmeasTimes.aemeasurable
@@ -241,7 +240,7 @@ theorem IsConservative.killedProcess_map_coordinates_ordered {n : ℕ}
               LifetimePath.coordinate (times.relativeTail i)
                 (ContinuousPath.killAtExit U omega)) ⁻¹' (Set.univ.pi fun i : Fin n ↦ B i.succ)) := by
           ext omega
-          simp only [Set.mem_inter_iff, Set.mem_preimage, Set.mem_univ_pi, Set.mem_setOf_eq,
+          simp only [Set.mem_inter_iff, Set.mem_preimage, Set.mem_univ_pi, Set.mem_ofPred_eq,
             ContinuousPath.mem_killedEvent_iff]
           constructor
           · rintro ⟨hmem, hsurv⟩
@@ -357,7 +356,7 @@ theorem IsConservative.killedProcess_map_coordinates_ordered {n : ℕ}
               exact hz h0
             rw [hempty, measure_empty]
         rw [Measure.map_apply hmeasTimes hbox,
-          ← measure_inter_add_diff (μ := IsConservative.continuousProcess P hP (x : alpha))
+          ← measure_inter_add_sdiff (μ := IsConservative.continuousProcess P hP (x : alpha))
             ((fun omega : ContinuousPath alpha ↦ fun i : Fin (n + 1) ↦
             LifetimePath.coordinate (times i) (ContinuousPath.killAtExit U omega)) ⁻¹' Set.univ.pi B) hA,
           hliveval, hdeadval, finiteTimeKernel_succ, Kernel.mapOfMeasurable_eq_map,

@@ -37,7 +37,7 @@ theorem eq_of_map_finiteRestriction_eq
   have hnu : IsProjectiveLimit nu family := by
     intro I
     exact (h I).symm
-  letI (I : Finset index) : IsFiniteMeasure (family I) := by
+  let (I : Finset index) : IsFiniteMeasure (family I) := by
     dsimp only [family]
     infer_instance
   exact hmu.unique hnu

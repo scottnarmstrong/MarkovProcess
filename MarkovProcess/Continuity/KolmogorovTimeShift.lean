@@ -47,7 +47,7 @@ theorem IsKolmogorovProcess.timeShift
       rw [NNRat.dist_eq, NNRat.dist_eq, Rat.dist_eq, Rat.dist_eq]
       push_cast
       rw [add_sub_add_left_eq_sub]
-    simpa only [timeShift, edist_dist, hdist] using
+    simpa only [timeShift, edist_dist, hdist] using!
       hX.kolmogorovCondition (k + s) (k + t)
   p_pos := hX.p_pos
   q_pos := hX.q_pos

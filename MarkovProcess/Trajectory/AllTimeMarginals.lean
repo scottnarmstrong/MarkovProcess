@@ -36,7 +36,7 @@ theorem exists_denseTime_seq_tendsto (t : NNReal) :
   obtain ⟨q, _, _, hq⟩ := ContinuousPath.denseRange_castOrderEmbedding
     |>.exists_seq_strictAnti_tendsto
     DenseTime.castOrderEmbedding.monotone t
-  exact ⟨q, by simpa only [Function.comp_apply] using hq⟩
+  exact ⟨q, by simpa only [Function.comp_apply] using! hq⟩
 
 namespace SubMarkovKernelSemigroup
 namespace IsConservative
@@ -58,7 +58,7 @@ theorem continuousPathTrajectory_map_eval_nnreal
     (t : NNReal) :
     (continuousPathTrajectory P hP default).map (fun path ↦ path t) = P t := by
   obtain ⟨q, hq⟩ := exists_denseTime_seq_tendsto t
-  letI : IsMarkovKernel (P t) := hP.isMarkovKernel t
+  let : IsMarkovKernel (P t) := hP.isMarkovKernel t
   apply Kernel.ext
   intro x
   apply Measure.ext_of_integral_eq_on_compactlySupported
@@ -77,7 +77,7 @@ theorem continuousPathTrajectory_map_eval_nnreal
     · refine ⟨‖f0‖, Filter.Eventually.of_forall fun n ↦ ?_⟩
       filter_upwards [] with omega
       simpa only [f0, PositiveC0OperatorMeasure.compactlySupportedToC0LinearMap_apply,
-        Real.norm_eq_abs] using f0.toBCF.norm_coe_le_norm
+        Real.norm_eq_abs] using! f0.toBCF.norm_coe_le_norm
         (omega (DenseTime.castOrderEmbedding (q n)))
     · filter_upwards [] with omega
       exact Filter.Tendsto.comp f.continuous.continuousAt
@@ -91,7 +91,7 @@ theorem continuousPathTrajectory_map_eval_nnreal
     have horbit :=
       (hF.c0Semigroup.continuous_apply_apply f0).tendsto (t, x) |>.comp hpair
     simpa only [IsFellerKernelSemigroup.c0Semigroup_apply_apply,
-      PositiveC0OperatorMeasure.compactlySupportedToC0LinearMap_apply] using horbit
+      PositiveC0OperatorMeasure.compactlySupportedToC0LinearMap_apply] using! horbit
   have heq : ∀ n,
       (∫ omega, f (omega (DenseTime.castOrderEmbedding (q n))) ∂K x) =
         kernelIntegral (P (DenseTime.castOrderEmbedding (q n))) f x := by

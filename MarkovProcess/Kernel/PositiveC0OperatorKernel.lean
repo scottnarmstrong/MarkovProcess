@@ -26,7 +26,7 @@ variable {α : Type*} [TopologicalSpace α] [T2Space α] [LocallyCompactSpace α
 variable (T : C₀(α, ℝ) →L[ℝ] C₀(α, ℝ))
   (hT : PositiveC0OperatorMeasure.IsPositive T)
 
-omit [MeasurableSpace α] [BorelSpace α] in
+omit [SecondCountableTopology α] [MeasurableSpace α] [BorelSpace α] in
 private lemma exists_compactlySupported_norm_sub_le (f : C₀(α, ℝ)) {ε : ℝ}
     (hε : 0 < ε) :
     ∃ g : C_c(α, ℝ),
@@ -101,14 +101,14 @@ theorem integral_kernel_compactlySupported (hT_norm : ‖T‖ ≤ 1) (x : α)
 /-- Every real continuous function vanishing at infinity is integrable against a kernel value. -/
 theorem integrable_kernel (hT_norm : ‖T‖ ≤ 1) (x : α) (f : C₀(α, ℝ)) :
     Integrable f (kernel T hT hT_norm x) := by
-  letI : IsFiniteMeasure (kernel T hT hT_norm x) :=
+  let : IsFiniteMeasure (kernel T hT hT_norm x) :=
     PositiveC0OperatorMeasure.isFiniteMeasure_measure T hT hT_norm x
   exact f.toBCF.integrable _
 
 /-- The kernel represents `T` on every real continuous function vanishing at infinity. -/
 theorem integral_kernel (hT_norm : ‖T‖ ≤ 1) (x : α) (f : C₀(α, ℝ)) :
     ∫ y, f y ∂kernel T hT hT_norm x = T f x := by
-  letI : IsFiniteMeasure (kernel T hT hT_norm x) :=
+  let : IsFiniteMeasure (kernel T hT hT_norm x) :=
     PositiveC0OperatorMeasure.isFiniteMeasure_measure T hT hT_norm x
   apply eq_of_forall_dist_le
   intro ε hε
@@ -128,7 +128,7 @@ theorem integral_kernel (hT_norm : ‖T‖ ≤ 1) (x : α) (f : C₀(α, ℝ)) :
       ‖∫ y, (f - g₀) y ∂kernel T hT hT_norm x‖ ≤
           (kernel T hT hT_norm x).real Set.univ * ‖(f - g₀).toBCF‖ :=
         (f - g₀).toBCF.norm_integral_le_mul_norm _
-      _ ≤ 1 * (ε / 2) := mul_le_mul hmass (by simpa only [norm_sub_rev] using hg)
+      _ ≤ 1 * (ε / 2) := mul_le_mul hmass (by simpa only [norm_sub_rev] using! hg)
         (norm_nonneg _) zero_le_one
       _ = ε / 2 := one_mul _
   have hoperator : dist (T g₀ x) (T f x) ≤ ε / 2 := by

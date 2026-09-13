@@ -43,7 +43,7 @@ private noncomputable instance cacheTopologicalSpaceLp (p : ℝ≥0∞) [Fact (1
 private theorem ae_integrable_kernel_finite {μ : Measure α} {κ : Kernel α α}
     (hκ : IsSubMarkovKernel κ) (hκμ : κ ∘ₘ μ ≤ μ) {p : NNReal}
     (hp : 1 ≤ p) (f : Lp ℝ (p : ℝ≥0∞) μ) : ∀ᵐ x ∂μ, Integrable f (κ x) := by
-  letI : IsFiniteKernel κ := hκ.isFiniteKernel
+  let : IsFiniteKernel κ := hκ.isFiniteKernel
   have hfComp : MemLp f p (κ ∘ₘ μ) := (Lp.memLp f).mono_measure hκμ
   have hFiberEq := Measure.ae_ae_of_ae_comp hfComp.1.ae_eq_mk
   have hp0 : (p : ℝ≥0∞) ≠ 0 := by
@@ -69,7 +69,7 @@ private theorem ae_integrable_kernel_top {μ : Measure α} {κ : Kernel α α}
   have hFiberEq : ∀ᵐ x ∂μ, f =ᵐ[κ x] (Lp.aestronglyMeasurable f).mk f :=
     ae_ae_kernel_of_comp_le hκμ (Lp.aestronglyMeasurable f).ae_eq_mk
   have hBound := ae_ae_kernel_of_comp_le hκμ (enorm_ae_le_eLpNormEssSup f μ)
-  letI : IsFiniteKernel κ := hκ.isFiniteKernel
+  let : IsFiniteKernel κ := hκ.isFiniteKernel
   filter_upwards [hFiberEq, hBound] with x hxEq hxBound
   have hxAS : AEStronglyMeasurable f (κ x) :=
     (Lp.aestronglyMeasurable f).stronglyMeasurable_mk.aestronglyMeasurable.congr hxEq.symm

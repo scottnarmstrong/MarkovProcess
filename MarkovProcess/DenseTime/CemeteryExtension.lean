@@ -52,10 +52,14 @@ noncomputable def cemeteryExtension (κ : ProbabilityTheory.Kernel α α) :
     (fun _ ↦ Measure.dirac Cemetery.delta)
   measurable' := measurable_fun_sum
     (by
-      simpa only [Function.comp_apply, ProbabilityTheory.Kernel.map_apply κ measurable_inl] using
-        ((ProbabilityTheory.Kernel.map κ Cemetery.alive).measurable.add
-          ((measurable_const.sub (κ.measurable_coe MeasurableSet.univ)).smul_measure
-            (Measure.dirac Cemetery.delta))))
+      have h :=
+        (ProbabilityTheory.Kernel.map κ Cemetery.alive).measurable.add
+          (((measurable_const : Measurable (fun _ : α => (1 : ℝ≥0∞))).sub
+            (κ.measurable_coe MeasurableSet.univ)).smul_measure
+            (Measure.dirac Cemetery.delta))
+      simpa only [Function.comp_def, Sum.elim_inl, Pi.add_def, Pi.sub_apply,
+        ProbabilityTheory.Kernel.map_apply κ measurable_inl] using!
+        h)
     measurable_const
 
 theorem cemeteryExtension_alive_apply (κ : ProbabilityTheory.Kernel α α) (x : α) :
@@ -92,7 +96,7 @@ theorem cemeteryExtension_alive_image (κ : ProbabilityTheory.Kernel α α) (x :
   rw [Sum.inl_injective.preimage_image]
   have hnot : Cemetery.delta ∉ Sum.inl '' s := by
     rintro ⟨y, -, hy⟩
-    exact Sum.noConfusion hy
+    exact Sum.inl_ne_inr hy
   rw [Set.indicator_of_notMem hnot, mul_zero, add_zero]
 
 /-- The mass assigned to the cemetery singleton is exactly the missing mass. -/

@@ -49,7 +49,7 @@ theorem IsKolmogorovProcess.ae_eq_continuousShiftedUnitDyadicFloorLimit
     (hγq : γ < (q - 1) / p) (k t : NNRat) (ht : t ≤ 1) :
     X (k + t) =ᵐ[P] fun ω ↦
       continuousShiftedUnitDyadicFloorLimit k X ω (unitIccOfNNRat t ht) := by
-  simpa only [continuousShiftedUnitDyadicFloorLimit, timeShift_apply] using
+  simpa only [continuousShiftedUnitDyadicFloorLimit, timeShift_apply] using!
     IsKolmogorovProcess.ae_eq_continuousUnitDyadicFloorLimit
       (IsKolmogorovProcess.timeShift hX k) hγ hγq t ht
 

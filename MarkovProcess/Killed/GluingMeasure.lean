@@ -95,7 +95,6 @@ def minimalPotential (hemb : ∀ m, MeasurableEmbedding (emb m))
     (fun S _ ↦ minimalResolvent R emb lam (S.indicator fun _ ↦ 1) x)
     (by simpa using minimalResolvent_zero R emb hemb hlam x)
     (fun {S} hS hdisj ↦ by
-      dsimp only
       have hindicator : (⋃ i, S i).indicator (fun _ ↦ (1 : ℝ≥0∞)) =
           fun y ↦ ∑' i, (S i).indicator (fun _ ↦ (1 : ℝ≥0∞)) y := by
         funext y

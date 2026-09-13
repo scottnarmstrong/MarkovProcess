@@ -55,7 +55,7 @@ theorem isClosed_modulusSet (T : ℝ≥0) (delta r : ℝ≥0∞) :
       ⋂ s : ℝ≥0, ⋂ t : ℝ≥0, ⋂ _ : s ≤ T, ⋂ _ : t ≤ T, ⋂ _ : edist s t ≤ delta,
         {omega : ContinuousPath alpha | edist (omega s) (omega t) ≤ r} := by
     ext omega
-    simp only [modulusSet, Set.mem_setOf_eq, Set.mem_iInter]
+    simp only [modulusSet, Set.mem_ofPred_eq, Set.mem_iInter]
   rw [hrewrite]
   refine isClosed_iInter fun s ↦ isClosed_iInter fun t ↦ isClosed_iInter fun _ ↦
     isClosed_iInter fun _ ↦ isClosed_iInter fun _ ↦ ?_
@@ -88,7 +88,7 @@ private theorem tendsto_dyadicChainBound {gamma : ℝ} (hgamma : 0 < gamma) :
   have hdouble : Tendsto (fun N : ℕ ↦ 2 * (dyadicIncrementThreshold gamma (N + 1) *
       (1 - dyadicIncrementThresholdRatio gamma)⁻¹)) atTop (nhds 0) := by
     simpa using ENNReal.Tendsto.const_mul htail (Or.inr (by simp))
-  simpa only [dyadicChainBound, add_zero] using hdouble.add hthr
+  simpa only [dyadicChainBound, add_zero] using! hdouble.add hthr
 
 /-- The event that some adjacent increment of the level-`n` subdivision of `[0, T]` reaches the
 level's Kolmogorov--Chentsov threshold. -/
@@ -98,8 +98,7 @@ private def badLevel (T : ℝ≥0) (p gamma : ℝ) (n : ℕ) : Set (ContinuousPa
 
 private theorem coe_div_two_pow (T : ℝ≥0) (n : ℕ) :
     ((T / 2 ^ n : ℝ≥0) : ℝ≥0∞) = (T : ℝ≥0∞) * ((2 : ℝ≥0∞) ^ n)⁻¹ := by
-  rw [ENNReal.coe_div (by positivity), div_eq_mul_inv]
-  norm_cast
+  rw [ENNReal.coe_div (by positivity), div_eq_mul_inv, ENNReal.coe_pow, ENNReal.coe_ofNat]
 
 private theorem measure_badLevel_le {p q : ℝ} {M : ℝ≥0} {mu : Measure (ContinuousPath alpha)}
     (hX : IsKolmogorovProcess (fun (t : ℝ≥0) (omega : ContinuousPath alpha) ↦ omega t) mu p q M)
@@ -111,7 +110,7 @@ private theorem measure_badLevel_le {p q : ℝ} {M : ℝ≥0} {mu : Measure (Con
           ((fun i : Fin (2 ^ n + 1) ↦ dyadicTime T n (i : ℕ)) i.succ) ≤
         ((T / 2 ^ n : ℝ≥0) : ℝ≥0∞) := by
     intro i
-    simpa only [Fin.coe_castSucc, Fin.val_succ] using edist_dyadicTime_succ_le T n (i : ℕ)
+    simpa only [Fin.val_castSucc, Fin.val_succ] using edist_dyadicTime_succ_le T n (i : ℕ)
   have hbound := IsKolmogorovProcess.measure_finiteGridBadIncrement_le hX
     (fun i : Fin (2 ^ n + 1) ↦ dyadicTime T n (i : ℕ)) _ _ hgrid
     (dyadicIncrementThreshold_ne_zero hgamma n) (dyadicIncrementThreshold_ne_top hgamma n)
@@ -144,7 +143,7 @@ private theorem mem_modulusSet_of_notMem_badLevel {p gamma : ℝ} (hp : 0 < p)
       (X := fun (t : ℝ≥0) (eta : ContinuousPath alpha) ↦ eta t)
       (grid := fun i : Fin (2 ^ n + 1) ↦ dyadicTime T n (i : ℕ)) hp (homega n hn)
       (⟨i, hi⟩ : Fin (2 ^ n))
-    simpa only [Fin.coe_castSucc, Fin.val_succ] using hlt.le
+    simpa only [Fin.val_castSucc, Fin.val_succ] using hlt.le
   have key : ∀ s t : ℝ≥0, s ≤ T → t ≤ T → s ≤ t →
       edist s t ≤ ((T / 2 ^ (N + 1) : ℝ≥0) : ℝ≥0∞) →
         edist (omega s) (omega t) ≤ dyadicChainBound gamma N := by
@@ -235,14 +234,14 @@ theorem ContinuousPath.exists_measure_compl_modulusSet_le {p q : ℝ} {M : ℝ�
       ∀ mu : Measure (ContinuousPath alpha),
         IsKolmogorovProcess (fun (t : ℝ≥0) (omega : ContinuousPath alpha) ↦ omega t) mu p q M →
           mu (ContinuousPath.modulusSet T delta r)ᶜ ≤ eps := by
-  rcases eq_or_lt_of_le (zero_le T) with hT | hT
+  rcases eq_or_lt_of_le (zero_le : (0 : ℝ≥0) ≤ T) with hT | hT
   · refine ⟨1, one_pos, fun mu _ ↦ ?_⟩
     have hempty : (ContinuousPath.modulusSet (alpha := alpha) T 1 r)ᶜ = ∅ := by
       rw [Set.eq_empty_iff_forall_notMem]
       intro omega homega
       refine homega fun s t hs ht _ ↦ ?_
-      have hs0 : s = 0 := le_antisymm (hT ▸ hs) (zero_le s)
-      have ht0 : t = 0 := le_antisymm (hT ▸ ht) (zero_le t)
+      have hs0 : s = 0 := le_antisymm (hT ▸ hs) (zero_le : (0 : ℝ≥0) ≤ s)
+      have ht0 : t = 0 := le_antisymm (hT ▸ ht) (zero_le : (0 : ℝ≥0) ≤ t)
       subst hs0
       subst ht0
       simp

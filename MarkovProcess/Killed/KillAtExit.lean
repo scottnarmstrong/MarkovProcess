@@ -38,7 +38,7 @@ variable {alpha : Type*} (U : Set alpha)
 element of the carrier lies in that set. -/
 theorem mem_image_val_iff {C : Set U} {y : alpha} (hy : y ∈ U) :
     y ∈ Subtype.val '' C ↔ (⟨y, hy⟩ : U) ∈ C := by
-  rw [Subtype.coe_image, Set.mem_setOf_eq]
+  rw [Subtype.coe_image, Set.mem_ofPred_eq]
   exact ⟨fun h ↦ h.choose_spec, fun h ↦ ⟨hy, h⟩⟩
 
 end SubtypeImage
@@ -123,7 +123,7 @@ theorem preimage_coordinate_killAtExit_of_notMem {S : Set (Cemetery U)}
       {omega : ContinuousPath alpha | (t : ℝ≥0∞) < exitTime U omega ∧
         omega t ∈ Subtype.val '' (Cemetery.alive ⁻¹' S)} := by
   ext omega
-  rw [Set.mem_preimage, coordinate_killAtExit, Set.mem_setOf_eq]
+  rw [Set.mem_preimage, coordinate_killAtExit, Set.mem_ofPred_eq]
   by_cases ht : (t : ℝ≥0∞) < exitTime U omega
   · rw [dif_pos ht]
     have hmem := mem_image_val_iff U (C := Cemetery.alive ⁻¹' S)
@@ -142,7 +142,7 @@ theorem preimage_coordinate_killAtExit_of_mem {S : Set (Cemetery U)}
           omega t ∈ Subtype.val '' (Cemetery.alive ⁻¹' S)} ∪
         {omega : ContinuousPath alpha | ¬ (t : ℝ≥0∞) < exitTime U omega} := by
   ext omega
-  rw [Set.mem_preimage, coordinate_killAtExit, Set.mem_union, Set.mem_setOf_eq, Set.mem_setOf_eq]
+  rw [Set.mem_preimage, coordinate_killAtExit, Set.mem_union, Set.mem_ofPred_eq, Set.mem_ofPred_eq]
   by_cases ht : (t : ℝ≥0∞) < exitTime U omega
   · rw [dif_pos ht]
     have hmem := mem_image_val_iff U (C := Cemetery.alive ⁻¹' S)

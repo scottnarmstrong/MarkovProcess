@@ -30,13 +30,14 @@ variable {alpha : Type*} [TopologicalSpace alpha] [TopologicalSpace.PseudoMetriz
 
 /-- The coordinate process is adapted to the canonical filtration. -/
 theorem adapted_coordinateProcess :
-    Adapted (canonicalFiltration (alpha := alpha)) (coordinateProcess (alpha := alpha)) :=
+    StronglyAdapted (canonicalFiltration (alpha := alpha)) (coordinateProcess (alpha := alpha)) :=
   fun t ↦ (measurable_coordinateProcess_canonicalFiltration (alpha := alpha) t).stronglyMeasurable
 
 /-- The coordinate process is progressively measurable for the canonical filtration. -/
 theorem progMeasurable_coordinateProcess :
-    ProgMeasurable (canonicalFiltration (alpha := alpha)) (coordinateProcess (alpha := alpha)) :=
-  adapted_coordinateProcess.progMeasurable_of_continuous fun omega ↦ omega.continuous
+    IsStronglyProgressive (canonicalFiltration (alpha := alpha))
+      (coordinateProcess (alpha := alpha)) :=
+  adapted_coordinateProcess.isStronglyProgressive_of_continuous fun omega ↦ omega.continuous
 
 /-- The state at a finite stopping time is measurable for the stopped sigma-algebra. -/
 theorem measurable_eval_stoppingTime (T : ContinuousPath alpha → NNReal)
@@ -44,7 +45,7 @@ theorem measurable_eval_stoppingTime (T : ContinuousPath alpha → NNReal)
       (fun omega ↦ (T omega : WithTop NNReal))) :
     Measurable[hT.measurableSpace] (fun omega ↦ omega (T omega)) := by
   have h := measurable_stoppedValue (progMeasurable_coordinateProcess (alpha := alpha)) hT
-  simpa only [stoppedValue, coordinateProcess_apply] using h
+  simpa only [stoppedValue, coordinateProcess_apply] using! h
 
 end ContinuousPath
 end MarkovProcess

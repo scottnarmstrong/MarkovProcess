@@ -56,11 +56,11 @@ theorem IsConservative.norm_integral_map_finiteSetKernel_pullbackPhysicalSet_le
       ‖PositiveC0OperatorMeasure.compactlySupportedToC0LinearMap f‖ := by
   let K := (finiteSetKernel P (denseTimePhysicalSet J)).map
     (DenseTimePath.pullbackPhysicalSet J)
-  letI : IsMarkovKernel K := by
-    letI : IsMarkovKernel (finiteSetKernel P (denseTimePhysicalSet J)) :=
+  let : IsMarkovKernel K := by
+    let : IsMarkovKernel (finiteSetKernel P (denseTimePhysicalSet J)) :=
       hP.isMarkovKernel_finiteSetKernel P (denseTimePhysicalSet J)
     exact Kernel.IsMarkovKernel.map _ (DenseTimePath.measurable_pullbackPhysicalSet J)
-  letI : IsProbabilityMeasure (K y) := IsMarkovKernel.isProbabilityMeasure y
+  let : IsProbabilityMeasure (K y) := IsMarkovKernel.isProbabilityMeasure y
   let f₀ : C₀(J → alpha, ℝ) :=
     PositiveC0OperatorMeasure.compactlySupportedToC0LinearMap f
   change ‖∫ z, f z ∂K y‖ ≤ ‖f₀‖
@@ -69,7 +69,7 @@ theorem IsConservative.norm_integral_map_finiteSetKernel_pullbackPhysicalSet_le
       MeasureTheory.norm_integral_le_of_norm_le_const
         (ae_of_all _ fun z ↦ by
           simpa only [f₀,
-            PositiveC0OperatorMeasure.compactlySupportedToC0LinearMap_apply] using
+            PositiveC0OperatorMeasure.compactlySupportedToC0LinearMap_apply] using!
             f₀.toBCF.norm_coe_le_norm z)
     _ = ‖f₀‖ := by
       simp only [measureReal_def, measure_univ, ENNReal.toReal_one, mul_one]

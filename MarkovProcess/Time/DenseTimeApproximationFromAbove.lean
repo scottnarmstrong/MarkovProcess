@@ -32,6 +32,6 @@ theorem exists_denseTime_seq_strictAnti_tendsto (s : NNReal) :
     ContinuousPath.denseRange_castOrderEmbedding.exists_seq_strictAnti_tendsto
       DenseTime.castOrderEmbedding.monotone s
   exact ⟨q, hqAnti, fun n ↦ hqAbove n, by
-    simpa only [Function.comp_apply] using hq⟩
+    simpa only [Function.comp_apply] using! hq⟩
 
 end MarkovProcess

@@ -44,7 +44,7 @@ private theorem norm_kernelIntegral_le_of_bound (P : SubMarkovKernelSemigroup al
     |kernelIntegral (P t) f x| ≤ D := by
   have hD0 : 0 ≤ D := (abs_nonneg (f x)).trans (hfD x)
   rw [← Real.norm_eq_abs]
-  letI : IsFiniteKernel (P t) := (P.isSubMarkovKernel t).isFiniteKernel
+  let : IsFiniteKernel (P t) := (P.isSubMarkovKernel t).isFiniteKernel
   calc
     ‖kernelIntegral (P t) f x‖ ≤ ∫ _y, D ∂(P t x) := by
       apply norm_integral_le_of_norm_le (integrable_const D)
@@ -91,7 +91,7 @@ theorem kernelResolventReal_add (P : SubMarkovKernelSemigroup alpha)
     (integrableOn_kernelResolventReal_integrand P hlam hg hgE x)]
   apply setIntegral_congr_fun measurableSet_Ioi
   intro t _ht
-  letI : IsFiniteKernel (P (Real.toNNReal t)) :=
+  let : IsFiniteKernel (P (Real.toNNReal t)) :=
     (P.isSubMarkovKernel (Real.toNNReal t)).isFiniteKernel
   have hfint : Integrable f (P (Real.toNNReal t) x) :=
     Integrable.of_bound hf.stronglyMeasurable.aestronglyMeasurable D

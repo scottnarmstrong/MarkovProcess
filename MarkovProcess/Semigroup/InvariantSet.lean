@@ -125,11 +125,11 @@ theorem preservesSet_scaledOperator_pow (R : ContractiveResolvent E)
     PreservesSet ((R.scaledOperator α) ^ n) C C := by
   induction n with
   | zero =>
-      simpa only [pow_zero, ContinuousLinearMap.one_apply] using
+      simpa only [pow_zero, one_apply_eq_self] using!
         (PreservesSet.id (C := C))
   | succ n ih =>
       intro x hx
-      rw [pow_succ, ContinuousLinearMap.mul_apply]
+      rw [pow_succ, mul_apply_eq_comp]
       exact ih (hQ hx)
 
 section CompleteSpace

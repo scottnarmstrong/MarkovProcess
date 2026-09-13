@@ -99,7 +99,7 @@ theorem exists_isCompact_measure_compl_le_insert
       (∀ i, continuousProcess (P i) (hPc i) x Kᶜ ≤ eps) ∧
         continuousProcess Q hQc x Kᶜ ≤ eps := by
   obtain ⟨K, hKcompact, hKmass⟩ :=
-    IsTightMeasureSet_iff_exists_isCompact_measure_compl_le.mp
+    isTightMeasureSet_iff_exists_isCompact_measure_compl_le.mp
       (isTightMeasureSet_insert_continuousProcess hPc hQc hPmom hQmom x) eps heps
   exact ⟨K, hKcompact, fun i ↦ hKmass _ (Set.mem_insert_of_mem _ ⟨i, rfl⟩),
     hKmass _ (Set.mem_insert _ _)⟩

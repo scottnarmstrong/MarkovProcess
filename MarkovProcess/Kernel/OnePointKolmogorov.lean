@@ -218,6 +218,7 @@ private theorem isOpen_iff_exhaustionDist {rho : X → ℝ} (hrho_cont : Continu
     have hrho : rho x < epsilon := lt_of_not_ge hnot
     exact hx (hepsilon_ball (x : OnePoint X) hrho)
 
+set_option warn.classDefReducibility false in
 /-- The explicit metric on the one-point compactification determined by a positive Lipschitz
 exhaustion function with compact positive superlevel sets. -/
 noncomputable def exhaustionMetricSpace (rho : X → ℝ) (hrho_cont : Continuous rho)
@@ -256,7 +257,7 @@ theorem exhaustionMetricSpace_dist_coe_coe_le (rho : X → ℝ) (hrho_cont : Con
     (hrho_compact : ∀ epsilon > 0, IsCompact {x | epsilon ≤ rho x}) (x y : X) :
     letI := exhaustionMetricSpace rho hrho_cont hrho_pos hrho_lipschitz hrho_compact
     dist (x : OnePoint X) (y : OnePoint X) ≤ dist x y := by
-  letI := exhaustionMetricSpace rho hrho_cont hrho_pos hrho_lipschitz hrho_compact
+  let := exhaustionMetricSpace rho hrho_cont hrho_pos hrho_lipschitz hrho_compact
   exact min_le_left _ _
 
 /-- Under the explicit metric, a live point's distance to infinity is its exhaustion value. -/
@@ -273,7 +274,7 @@ theorem exhaustionMetricSpace_live_tail_subset (rho : X → ℝ) (hrho_cont : Co
     (hrho_compact : ∀ epsilon > 0, IsCompact {x | epsilon ≤ rho x}) (x : X) (r : ℝ) :
     letI := exhaustionMetricSpace rho hrho_cont hrho_pos hrho_lipschitz hrho_compact
     {y : X | r < dist (y : OnePoint X) (x : OnePoint X)} ⊆ {y | r < dist y x} := by
-  letI := exhaustionMetricSpace rho hrho_cont hrho_pos hrho_lipschitz hrho_compact
+  let := exhaustionMetricSpace rho hrho_cont hrho_pos hrho_lipschitz hrho_compact
   intro y hy
   exact hy.trans_le (exhaustionMetricSpace_dist_coe_coe_le rho hrho_cont hrho_pos
     hrho_lipschitz hrho_compact y x)
@@ -331,6 +332,46 @@ variable {X : Type*} [MetricSpace X] [LocallyCompactSpace X]
   (hrho_compact : ∀ epsilon > 0, IsCompact {x | epsilon ≤ rho x})
 
 omit [LocallyCompactSpace X] [SecondCountableTopology X] in
+/-- The one-point compactification is complete under the exhaustion metric, since it is
+compact under that metric's (canonical) topology. This is a typeclass-search cache: it lets
+`letI := OnePoint.exhaustionMetricSpace …` discharge the ambient `[CompleteSpace (OnePoint X)]`
+hypothesis of `KolmogorovRegular` without re-deriving compactness at each call site. -/
+private instance instCompleteSpaceOnePointExhaustion :
+    @CompleteSpace (OnePoint X)
+      (OnePoint.exhaustionMetricSpace rho hrho_cont hrho_pos hrho_lipschitz
+        hrho_compact).toPseudoMetricSpace.toUniformSpace := by
+  have hCompact : @CompactSpace (OnePoint X)
+      (OnePoint.exhaustionMetricSpace rho hrho_cont hrho_pos hrho_lipschitz
+        hrho_compact).toPseudoMetricSpace.toUniformSpace.toTopologicalSpace := by
+    rw [OnePoint.exhaustionMetricSpace_toTopologicalSpace]
+    infer_instance
+  exact @complete_of_compact (OnePoint X)
+    (OnePoint.exhaustionMetricSpace rho hrho_cont hrho_pos hrho_lipschitz
+      hrho_compact).toPseudoMetricSpace.toUniformSpace
+    hCompact
+
+/-- The one-point compactification is a Borel space under the exhaustion metric: its
+`MeasurableSpace` (the canonical Borel structure fixed at `OnePoint.instMeasurableSpace`) agrees
+with the exhaustion metric's Borel sets, since the two topologies coincide. This is a
+typeclass-search cache in the same spirit as `instCompleteSpaceOnePointExhaustion`. -/
+private instance instBorelSpaceOnePointExhaustion :
+    @BorelSpace (OnePoint X)
+      (OnePoint.exhaustionMetricSpace rho hrho_cont hrho_pos hrho_lipschitz
+        hrho_compact).toPseudoMetricSpace.toUniformSpace.toTopologicalSpace
+      OnePoint.instMeasurableSpace := by
+  rw [OnePoint.exhaustionMetricSpace_toTopologicalSpace]
+  exact OnePoint.instBorelSpace
+
+/-- The one-point compactification is second countable under the exhaustion metric's topology,
+since that topology coincides with the canonical one. Typeclass-search cache, as above. -/
+private instance instSecondCountableTopologyOnePointExhaustion :
+    @SecondCountableTopology (OnePoint X)
+      (OnePoint.exhaustionMetricSpace rho hrho_cont hrho_pos hrho_lipschitz
+        hrho_compact).toPseudoMetricSpace.toUniformSpace.toTopologicalSpace := by
+  rw [OnePoint.exhaustionMetricSpace_toTopologicalSpace]
+  exact OnePoint.instSecondCountableTopology
+
+omit [LocallyCompactSpace X] [SecondCountableTopology X] in
 /-- Kernel-level Markov inequality for a nonnegative `C₀` majorant of an exhaustion-metric tail
 set. A semigroup comparison bound on the integral becomes the advertised exponential tail
 bound. -/
@@ -346,9 +387,9 @@ theorem measure_gt_le_of_le_c0 (P : SubMarkovKernelSemigroup (OnePoint X))
     letI := OnePoint.exhaustionMetricSpace rho hrho_cont hrho_pos hrho_lipschitz hrho_compact
     P h (x : OnePoint X) {z | r < dist z (x : OnePoint X)} ≤
       ENNReal.ofReal (Real.exp (theta * (h : ℝ)) * v (x : OnePoint X) / A) := by
-  letI := OnePoint.exhaustionMetricSpace rho hrho_cont hrho_pos hrho_lipschitz hrho_compact
+  let := OnePoint.exhaustionMetricSpace rho hrho_cont hrho_pos hrho_lipschitz hrho_compact
   let mu := P h (x : OnePoint X)
-  letI : IsFiniteMeasure mu :=
+  let : IsFiniteMeasure mu :=
     ⟨lt_of_le_of_lt (P.measure_univ_le_one h (x : OnePoint X)) ENNReal.one_lt_top⟩
   have hv_integrable : Integrable v mu := v.toBCF.integrable mu
   have hmajorant' :
@@ -405,16 +446,19 @@ theorem hasLocalKolmogorovMoments
     (hAbsorb : ∀ h, P h OnePoint.infty = Measure.dirac OnePoint.infty) :
     letI := OnePoint.exhaustionMetricSpace rho hrho_cont hrho_pos hrho_lipschitz hrho_compact
     P.HasLocalKolmogorovMoments p q M B := by
-  letI := OnePoint.exhaustionMetricSpace rho hrho_cont hrho_pos hrho_lipschitz hrho_compact
+  let := OnePoint.exhaustionMetricSpace rho hrho_cont hrho_pos hrho_lipschitz hrho_compact
   refine ⟨htail.2.1, htail.2.2.1, ?_, htail.2.2.2.2.2⟩
   intro h hh z
   induction z using OnePoint.rec with
   | infty =>
       rw [hAbsorb h, lintegral_dirac]
       simp only [edist_self, ENNReal.zero_rpow_of_pos htail.2.1]
-      exact zero_le _
+      exact zero_le
   | coe x =>
       let mu := P h (x : OnePoint X)
+      have hBorel : BorelSpace (OnePoint X) := OnePoint.instBorelSpace
+      have hSecondCountable : SecondCountableTopology (OnePoint X) :=
+        OnePoint.instSecondCountableTopology
       have hdist_meas : Measurable (fun z : OnePoint X ↦ dist z (x : OnePoint X)) :=
         measurable_dist.comp (measurable_id.prodMk measurable_const)
       rw [show (∫⁻ z, edist z (x : OnePoint X) ^ p ∂mu) =
@@ -446,7 +490,7 @@ theorem hasKolmogorovMoments (hP : P.IsConservative)
     (hAbsorb : ∀ h, P h OnePoint.infty = Measure.dirac OnePoint.infty) :
     letI := OnePoint.exhaustionMetricSpace rho hrho_cont hrho_pos hrho_lipschitz hrho_compact
     P.HasKolmogorovMoments p q (M + B) := by
-  letI := OnePoint.exhaustionMetricSpace rho hrho_cont hrho_pos hrho_lipschitz hrho_compact
+  let := OnePoint.exhaustionMetricSpace rho hrho_cont hrho_pos hrho_lipschitz hrho_compact
   exact
   (htail.hasLocalKolmogorovMoments hAbsorb).toHasKolmogorovMoments hP
 
@@ -457,7 +501,7 @@ theorem kolmogorovRegular (hP : P.IsConservative)
     (hAbsorb : ∀ h, P h OnePoint.infty = Measure.dirac OnePoint.infty) :
     letI := OnePoint.exhaustionMetricSpace rho hrho_cont hrho_pos hrho_lipschitz hrho_compact
     P.KolmogorovRegular hP := by
-  letI := OnePoint.exhaustionMetricSpace rho hrho_cont hrho_pos hrho_lipschitz hrho_compact
+  let := OnePoint.exhaustionMetricSpace rho hrho_cont hrho_pos hrho_lipschitz hrho_compact
   exact
   KolmogorovRegular.of_hasKolmogorovMoments P hP (htail.hasKolmogorovMoments hP hAbsorb)
 
@@ -487,7 +531,7 @@ theorem kolmogorovRegular_onePointKernelSemigroup
     letI := OnePoint.exhaustionMetricSpace rho hrho_cont hrho_pos hrho_lipschitz hrho_compact
     R.onePointKernelSemigroup.KolmogorovRegular
       R.isConservative_onePointKernelSemigroup := by
-  letI := OnePoint.exhaustionMetricSpace rho hrho_cont hrho_pos hrho_lipschitz hrho_compact
+  let := OnePoint.exhaustionMetricSpace rho hrho_cont hrho_pos hrho_lipschitz hrho_compact
   exact htail.kolmogorovRegular R.isConservative_onePointKernelSemigroup
     R.onePointKernelSemigroup_absorbing
 

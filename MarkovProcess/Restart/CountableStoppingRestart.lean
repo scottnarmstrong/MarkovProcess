@@ -57,7 +57,7 @@ private theorem measurable_shift_stoppingTime
       ⋃ S ∈ Set.range tau, {omega | tau omega = S} ∩ shift S ⁻¹' B := by
     ext omega
     simp only [Set.mem_preimage, Set.mem_iUnion, Set.mem_range, Set.mem_inter_iff,
-      Set.mem_setOf_eq]
+      Set.mem_ofPred_eq]
     exact ⟨fun homega ↦ ⟨tau omega, ⟨omega, rfl⟩, rfl, homega⟩,
       fun ⟨S, _, htauS, homega⟩ ↦ by simpa only [htauS] using homega⟩
   rw [hpre]
@@ -114,7 +114,7 @@ theorem condExp_shift_stoppingTime_ae_eq_integral_pathKernel_of_restart_on_range
   have huniv : Set.univ = ⋃ i ∈ Set.range tauTop, {omega | tauTop omega = i} := by
     ext omega
     simp only [Set.mem_univ, Set.mem_range, Set.iUnion_exists, Set.iUnion_iUnion_eq',
-      Set.mem_iUnion, Set.mem_setOf_eq, exists_apply_eq_apply']
+      Set.mem_iUnion, Set.mem_ofPred_eq, exists_apply_eq_apply']
   have hRandomShiftMeas : Measurable (fun omega ↦ shift (tau omega) omega) :=
     measurable_shift_stoppingTime tau htau htauRange
   have hRandomInt : Integrable (fun omega ↦ F (shift (tau omega) omega)) (Q x) :=
@@ -147,7 +147,7 @@ theorem condExp_shift_stoppingTime_ae_eq_integral_pathKernel_of_restart_on_range
     rw [Filter.EventuallyEq, ae_restrict_iff'
       ((canonicalFiltration (alpha := alpha)).le S _ hLevel)]
     exact Filter.Eventually.of_forall fun omega homega ↦ by
-      simp only [Set.mem_setOf_eq, tauTop, WithTop.coe_eq_coe] at homega
+      simp only [Set.mem_ofPred_eq, tauTop, WithTop.coe_eq_coe] at homega
       rw [homega]
   have hLocalOutput :
       (fun omega ↦ ∫ eta, F eta ∂Q (omega S)) =ᵐ[(Q x).restrict {omega | tauTop omega = S}]
@@ -155,7 +155,7 @@ theorem condExp_shift_stoppingTime_ae_eq_integral_pathKernel_of_restart_on_range
     rw [Filter.EventuallyEq, ae_restrict_iff'
       ((canonicalFiltration (alpha := alpha)).le S _ hLevel)]
     exact Filter.Eventually.of_forall fun omega homega ↦ by
-      simp only [Set.mem_setOf_eq, tauTop, WithTop.coe_eq_coe] at homega
+      simp only [Set.mem_ofPred_eq, tauTop, WithTop.coe_eq_coe] at homega
       rw [homega]
   exact
     (condExp_stopping_time_ae_eq_restrict_eq_of_countable_range

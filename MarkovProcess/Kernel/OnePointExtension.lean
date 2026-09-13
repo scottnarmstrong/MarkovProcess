@@ -134,22 +134,26 @@ noncomputable def onePointAssemble (f : C₀(X, ℝ)) (c : ℝ) : C₀(OnePoint 
     (OnePoint.continuousMapMk (f.toContinuousMap + ContinuousMap.const X c) c (by
       rw [Filter.coclosedCompact_eq_cocompact]
       simpa only [ContinuousMap.coe_add, ContinuousMap.coe_const, Pi.add_apply, zero_add]
-        using (zero_at_infty f).add_const c))
+        using! (zero_at_infty f).add_const c))
 
+omit [LocallyCompactSpace X] [SecondCountableTopology X] in
 /-- The remainder of a compactified observable, unfolded. -/
 @[simp] theorem onePointRemainder_apply (g : C₀(OnePoint X, ℝ)) (x : X) :
     onePointRemainder g x = g (x : OnePoint X) - g OnePoint.infty := rfl
 
+omit [LocallyCompactSpace X] [SecondCountableTopology X] in
 /-- The assembled observable at a live point. -/
 @[simp] theorem onePointAssemble_coe (f : C₀(X, ℝ)) (c : ℝ) (x : X) :
     onePointAssemble f c (x : OnePoint X) = f x + c := by
   rfl
 
+omit [LocallyCompactSpace X] [SecondCountableTopology X] in
 /-- The assembled observable at the added point. -/
 @[simp] theorem onePointAssemble_infty (f : C₀(X, ℝ)) (c : ℝ) :
     onePointAssemble f c OnePoint.infty = c := by
   rfl
 
+omit [LocallyCompactSpace X] [SecondCountableTopology X] in
 /-- Assembling an observable and taking the remainder returns it. -/
 @[simp] theorem onePointRemainder_assemble (f : C₀(X, ℝ)) (c : ℝ) :
     onePointRemainder (onePointAssemble f c) = f := by
@@ -158,6 +162,7 @@ noncomputable def onePointAssemble (f : C₀(X, ℝ)) (c : ℝ) : C₀(OnePoint 
   simp only [onePointRemainder_apply, onePointAssemble_coe, onePointAssemble_infty,
     add_sub_cancel_right]
 
+omit [LocallyCompactSpace X] [SecondCountableTopology X] in
 /-- Taking the remainder and reassembling at the value at infinity returns the observable. -/
 @[simp] theorem onePointAssemble_remainder (g : C₀(OnePoint X, ℝ)) :
     onePointAssemble (onePointRemainder g) (g OnePoint.infty) = g := by
@@ -167,6 +172,7 @@ noncomputable def onePointAssemble (f : C₀(X, ℝ)) (c : ℝ) : C₀(OnePoint 
   | infty => rfl
   | coe x => simp only [onePointAssemble_coe, onePointRemainder_apply, sub_add_cancel]
 
+omit [LocallyCompactSpace X] [SecondCountableTopology X] in
 /-- The remainder is additive. -/
 @[simp] theorem onePointRemainder_add (g h : C₀(OnePoint X, ℝ)) :
     onePointRemainder (g + h) = onePointRemainder g + onePointRemainder h := by
@@ -175,6 +181,7 @@ noncomputable def onePointAssemble (f : C₀(X, ℝ)) (c : ℝ) : C₀(OnePoint 
   simp only [onePointRemainder_apply, ZeroAtInftyContinuousMap.add_apply]
   ring
 
+omit [LocallyCompactSpace X] [SecondCountableTopology X] in
 /-- The remainder commutes with scalar multiplication. -/
 @[simp] theorem onePointRemainder_smul (c : ℝ) (g : C₀(OnePoint X, ℝ)) :
     onePointRemainder (c • g) = c • onePointRemainder g := by
@@ -189,6 +196,7 @@ private noncomputable def onePointRemainderLinearMap :
   map_add' := onePointRemainder_add
   map_smul' := onePointRemainder_smul
 
+omit [LocallyCompactSpace X] [SecondCountableTopology X] in
 private theorem norm_onePointRemainder_le (g : C₀(OnePoint X, ℝ)) :
     ‖onePointRemainder g‖ ≤ 2 * ‖g‖ := by
   rw [← ZeroAtInftyContinuousMap.norm_toBCF_eq_norm]
@@ -206,6 +214,7 @@ private noncomputable def onePointRemainderCLM :
     C₀(OnePoint X, ℝ) →L[ℝ] C₀(X, ℝ) :=
   onePointRemainderLinearMap.mkContinuous 2 norm_onePointRemainder_le
 
+omit [LocallyCompactSpace X] [SecondCountableTopology X] in
 @[simp] private theorem onePointRemainderCLM_apply (g : C₀(OnePoint X, ℝ)) :
     onePointRemainderCLM g = onePointRemainder g := rfl
 
@@ -220,7 +229,7 @@ noncomputable def onePointSemigroupAction (t : NNReal) (g : C₀(OnePoint X, ℝ
     (R.toContractiveResolvent.generatedSemigroup t (onePointRemainder g))
     (g OnePoint.infty)
 
-omit [MeasurableSpace X] [BorelSpace X] in
+omit [MeasurableSpace X] [BorelSpace X] [LocallyCompactSpace X] [SecondCountableTopology X] in
 /-- The extended action fixes the value of an observable at the added point. -/
 @[simp] theorem onePointSemigroupAction_infty (t : NNReal) (g : C₀(OnePoint X, ℝ)) :
     R.onePointSemigroupAction t g OnePoint.infty = g OnePoint.infty := by
@@ -238,7 +247,7 @@ theorem onePointSemigroupAction_coe (t : NNReal) (g : C₀(OnePoint X, ℝ)) (x 
   have hmassE := R.kernelSemigroup.measure_univ_le_one t x
   have hfin : μ Set.univ < ⊤ :=
     lt_of_le_of_lt hmassE ENNReal.one_lt_top
-  letI : IsFiniteMeasure μ := ⟨hfin⟩
+  let : IsFiniteMeasure μ := ⟨hfin⟩
   let gc : X →ᵇ ℝ := g.toBCF.compContinuous
     ⟨fun x : X ↦ (x : OnePoint X), OnePoint.continuous_coe⟩
   have hg : Integrable (fun y : X ↦ g (y : OnePoint X)) μ := gc.integrable μ
@@ -264,7 +273,7 @@ private theorem norm_onePointSemigroupAction_le (t : NNReal) (g : C₀(OnePoint 
       let μ := R.kernelSemigroup t x
       have hmassE : μ Set.univ ≤ 1 := R.kernelSemigroup.measure_univ_le_one t x
       have hfin : μ Set.univ < ⊤ := lt_of_le_of_lt hmassE ENNReal.one_lt_top
-      letI : IsFiniteMeasure μ := ⟨hfin⟩
+      let : IsFiniteMeasure μ := ⟨hfin⟩
       have hmass0 : 0 ≤ μ.real Set.univ := measureReal_nonneg
       have hmass1 : μ.real Set.univ ≤ 1 := by
         rw [measureReal_def]
@@ -314,7 +323,7 @@ private noncomputable def onePointSemigroupLinearMap (t : NNReal) :
 noncomputable def onePointSemigroupOperator (t : NNReal) :
     C₀(OnePoint X, ℝ) →L[ℝ] C₀(OnePoint X, ℝ) :=
   (R.onePointSemigroupLinearMap t).mkContinuous 1 fun g ↦ by
-    simpa only [one_mul] using R.norm_onePointSemigroupAction_le t g
+    simpa only [one_mul] using! R.norm_onePointSemigroupAction_le t g
 
 /-- The bundled extended operator acts by the extended semigroup action. -/
 @[simp] theorem onePointSemigroupOperator_apply (t : NNReal) (g : C₀(OnePoint X, ℝ)) :
@@ -337,7 +346,7 @@ private noncomputable def onePointEmbedLinearMap : C₀(X, ℝ) →ₗ[ℝ] C₀
     | coe x => simp only [onePointAssemble_coe, ZeroAtInftyContinuousMap.smul_apply,
         add_zero, smul_eq_mul, RingHom.id_apply]
 
-omit [MeasurableSpace X] [BorelSpace X] in
+omit [MeasurableSpace X] [BorelSpace X] [LocallyCompactSpace X] [SecondCountableTopology X] in
 private theorem norm_onePointEmbed_le (f : C₀(X, ℝ)) :
     ‖onePointAssemble f 0‖ ≤ ‖f‖ := by
   rw [← ZeroAtInftyContinuousMap.norm_toBCF_eq_norm]
@@ -354,13 +363,13 @@ private theorem norm_onePointEmbed_le (f : C₀(X, ℝ)) :
 
 private noncomputable def onePointEmbed : C₀(X, ℝ) →L[ℝ] C₀(OnePoint X, ℝ) :=
   onePointEmbedLinearMap.mkContinuous 1 fun f ↦ by
-    simpa only [one_mul] using norm_onePointEmbed_le f
+    simpa only [one_mul] using! norm_onePointEmbed_le f
 
-omit [MeasurableSpace X] [BorelSpace X] in
+omit [MeasurableSpace X] [BorelSpace X] [LocallyCompactSpace X] [SecondCountableTopology X] in
 @[simp] private theorem onePointEmbed_apply (f : C₀(X, ℝ)) :
     onePointEmbed f = onePointAssemble f 0 := rfl
 
-omit [MeasurableSpace X] [BorelSpace X] in
+omit [MeasurableSpace X] [BorelSpace X] [LocallyCompactSpace X] [SecondCountableTopology X] in
 private theorem onePointSemigroupAction_eq (t : NNReal) (g : C₀(OnePoint X, ℝ)) :
     R.onePointSemigroupAction t g =
       onePointEmbed (R.toContractiveResolvent.generatedSemigroup t (onePointRemainder g)) +
@@ -540,7 +549,7 @@ theorem integral_onePointKernelSemigroup (t : NNReal) (g : C₀(OnePoint X, ℝ)
 private noncomputable def onePointConstant (c : ℝ) : C₀(OnePoint X, ℝ) :=
   onePointAssemble 0 c
 
-omit [MeasurableSpace X] [BorelSpace X] in
+omit [MeasurableSpace X] [BorelSpace X] [LocallyCompactSpace X] [SecondCountableTopology X] in
 @[simp] private theorem onePointConstant_apply (c : ℝ) (z : OnePoint X) :
     onePointConstant c z = c := by
   induction z using OnePoint.rec with
@@ -578,7 +587,7 @@ theorem onePointKernelSemigroup_absorbing (t : NNReal) :
   have h := R.integral_onePointKernelSemigroup t f₀ OnePoint.infty
   rw [onePointSemigroup_apply, onePointSemigroupAction_infty] at h
   change (∫ x, f x ∂R.onePointKernelSemigroup t OnePoint.infty) = f OnePoint.infty at h
-  simpa only [integral_dirac] using h
+  simpa only [integral_dirac] using! h
 
 
 end MarkovProcess.PositiveC0ContractiveResolvent

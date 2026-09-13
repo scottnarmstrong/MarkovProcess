@@ -56,7 +56,7 @@ theorem measurableSet_hitsSetBetween
     have hevent : hitsSetBetween T t F = ∅ := by
       rw [hFempty]
       ext omega
-      simp only [hitsSetBetween, Set.mem_setOf_eq, Set.notMem_empty, and_false,
+      simp only [hitsSetBetween, Set.mem_ofPred_eq, Set.notMem_empty, and_false,
         exists_const]
     rw [hevent]
     exact @MeasurableSet.empty _ (canonicalFiltration (alpha := alpha) t)
@@ -67,8 +67,7 @@ theorem measurableSet_hitsSetBetween
   have hut : ∀ omega, u omega ≤ t := by
     intro omega
     apply WithTop.coe_le_coe.mp
-    rw [StoppingTime.coe_truncTime]
-    exact min_le_right _ _
+    exact (le_of_eq (StoppingTime.coe_truncTime T t omega)).trans (min_le_right _ _)
   have huSpace : huStop.measurableSpace ≤ canonicalFiltration (alpha := alpha) t :=
     huStop.measurableSpace_le_of_le_const fun omega ↦ WithTop.coe_le_coe.mpr (hut omega)
   have huMeas : Measurable[canonicalFiltration (alpha := alpha) t]
@@ -79,14 +78,14 @@ theorem measurableSet_hitsSetBetween
     (measurable_eval_stoppingTime u huStop).mono huSpace le_rfl
   have hDistU : Measurable[canonicalFiltration (alpha := alpha) t]
       (fun omega : ContinuousPath alpha ↦ Metric.infDist (omega (u omega)) F) := by
-    letI : MeasurableSpace (ContinuousPath alpha) := canonicalFiltration (alpha := alpha) t
+    let : MeasurableSpace (ContinuousPath alpha) := canonicalFiltration (alpha := alpha) t
     exact hEvalU.infDist
   have hEvalT : Measurable[canonicalFiltration (alpha := alpha) t]
       (fun omega : ContinuousPath alpha ↦ omega t) :=
     measurable_coordinateProcess_canonicalFiltration t
   have hDistT : Measurable[canonicalFiltration (alpha := alpha) t]
       (fun omega : ContinuousPath alpha ↦ Metric.infDist (omega t) F) := by
-    letI : MeasurableSpace (ContinuousPath alpha) := canonicalFiltration (alpha := alpha) t
+    let : MeasurableSpace (ContinuousPath alpha) := canonicalFiltration (alpha := alpha) t
     exact hEvalT.infDist
   let A : ℕ → Set (ContinuousPath alpha) := fun n ↦
     {omega | Metric.infDist (omega (u omega)) F < closedSetDetectionThreshold n}
@@ -125,14 +124,14 @@ theorem measurableSet_hitsSetBetween
         (measurable_coordinateProcess_canonicalFiltration
           (DenseTime.castOrderEmbedding (DenseTime.enumeration k))).mono
             (canonicalFiltration.mono hkt.le) le_rfl
-      letI : MeasurableSpace (ContinuousPath alpha) := canonicalFiltration (alpha := alpha) t
+      let : MeasurableSpace (ContinuousPath alpha) := canonicalFiltration (alpha := alpha) t
       exact hEvalQ.infDist
         (measurableSet_Iio : MeasurableSet (Set.Iio (closedSetDetectionThreshold n)))
     · exact @MeasurableSet.empty _ (canonicalFiltration (alpha := alpha) t)
   have hevent : hitsSetBetween T t F =
       {omega | T omega ≤ (t : ℝ≥0∞)} ∩ ⋂ n : ℕ, (A n ∪ B n ∪ ⋃ k : ℕ, C n k) := by
     ext omega
-    simp only [hitsSetBetween, Set.mem_setOf_eq, Set.mem_inter_iff, Set.mem_iInter,
+    simp only [hitsSetBetween, Set.mem_ofPred_eq, Set.mem_inter_iff, Set.mem_iInter,
       Set.mem_union, Set.mem_iUnion]
     constructor
     · rintro ⟨s, hTs, hst, hsF⟩
@@ -157,9 +156,9 @@ theorem measurableSet_hitsSetBetween
         change Metric.infDist (omega (u omega)) F < closedSetDetectionThreshold n
         rw [huEq]
         exact hu
-      · exact Or.inl (Or.inr (by simpa only [B] using ht))
+      · exact Or.inl (Or.inr (by simpa only [B] using! ht))
       · refine Or.inr ⟨k, ?_⟩
-        simp only [C, dif_pos hkt, Set.mem_inter_iff, Set.mem_setOf_eq]
+        simp only [C, dif_pos hkt, Set.mem_inter_iff, Set.mem_ofPred_eq]
         exact ⟨huEq.symm ▸ huk, hk⟩
     · rintro ⟨hTt, hdetect⟩
       have hTne : T omega ≠ ⊤ := ne_top_of_le_ne_top (WithTop.coe_ne_top) hTt
@@ -180,7 +179,7 @@ theorem measurableSet_hitsSetBetween
           change Metric.infDist (omega a) F < closedSetDetectionThreshold n
           rw [← huEq]
           exact hu
-        · exact Or.inr (Or.inl (by simpa only [B] using ht))
+        · exact Or.inr (Or.inl (by simpa only [B] using! ht))
         · dsimp only [C] at hk
           split_ifs at hk with hkt
           · refine Or.inr (Or.inr ⟨k, ?_, hkt, hk.2⟩)

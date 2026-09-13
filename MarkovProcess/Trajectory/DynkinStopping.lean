@@ -55,9 +55,9 @@ variable [SecondCountableTopology alpha]
 /-- The Dynkin process is progressively measurable: it is adapted and continuous in time. -/
 theorem IsFellerKernelSemigroup.progMeasurable_dynkinProcess (hFeller : P.IsFellerKernelSemigroup)
     (f : hFeller.c0Semigroup.generatorDomain) :
-    ProgMeasurable (ContinuousPath.canonicalFiltration (alpha := alpha))
+    IsStronglyProgressive (ContinuousPath.canonicalFiltration (alpha := alpha))
       (hFeller.dynkinProcess f) := by
-  simpa only [hFeller.discountedDynkinProcess_zero f] using
+  simpa only [hFeller.discountedDynkinProcess_zero f] using!
     hFeller.progMeasurable_discountedDynkinProcess f 0
 
 /-- The Dynkin process evaluated at a finite stopping time is Borel measurable. -/
@@ -235,7 +235,7 @@ private theorem integral_generator_exitTimeTrunc_le (hFeller : P.IsFellerKernelS
   have hsingleton : ∀ᵐ s : ℝ ∂(volume : Measure ℝ),
       s ≠ ((ContinuousPath.exitTimeTrunc U K omega : NNReal) : ℝ) := by
     rw [ae_iff]
-    simpa only [Ne, not_not, Set.setOf_eq_eq_singleton] using
+    simpa only [Ne, not_not, Set.ofPred_eq_eq_singleton] using
       measure_singleton ((ContinuousPath.exitTimeTrunc U K omega : NNReal) : ℝ)
   have hae : ∀ᵐ s : ℝ ∂(volume.restrict
       (Set.Icc (0 : ℝ) ((ContinuousPath.exitTimeTrunc U K omega : NNReal) : ℝ))),

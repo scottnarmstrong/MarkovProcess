@@ -109,7 +109,7 @@ theorem parameterizedDenseTimeTrajectory_apply
     P.parameterizedDenseTimeTrajectory hP e iota (theta, x) =
       SubMarkovKernelSemigroup.IsConservative.denseTimeTrajectory
         (P.toSubMarkovKernelSemigroup theta) (hP theta) e iota x := by
-  letI : IsMarkovKernel (P.parameterizedDenseTimeTrajectory hP e iota) :=
+  let : IsMarkovKernel (P.parameterizedDenseTimeTrajectory hP e iota) :=
     P.isMarkovKernel_parameterizedDenseTimeTrajectory hP e iota
   refine measure_eq_of_map_denseTimeTrajectoryPrefix_eq e _ _ fun n ↦ ?_
   have hprefix : Measurable
@@ -160,7 +160,7 @@ def IsConservative.continuousProcess : Kernel (Theta × alpha) (ContinuousPath a
 starting state it assigns total mass one to continuous-path space. -/
 instance isMarkovKernel_continuousProcess :
     IsMarkovKernel (IsConservative.continuousProcess P hP) := by
-  letI : IsMarkovKernel (P.parameterizedDenseTimeTrajectory hP DenseTime.enumeration
+  let : IsMarkovKernel (P.parameterizedDenseTimeTrajectory hP DenseTime.enumeration
       DenseTime.castOrderEmbedding.toEmbedding) :=
     P.isMarkovKernel_parameterizedDenseTimeTrajectory hP _ _
   unfold IsConservative.continuousProcess
@@ -205,7 +205,7 @@ theorem IsConservative.isSupportedOnContinuousPaths_parameterizedDenseTimeTrajec
     Kernel.IsSupportedOnContinuousPaths
       (P.parameterizedDenseTimeTrajectory hP DenseTime.enumeration
         DenseTime.castOrderEmbedding.toEmbedding) := by
-  letI : IsMarkovKernel (P.parameterizedDenseTimeTrajectory hP DenseTime.enumeration
+  let : IsMarkovKernel (P.parameterizedDenseTimeTrajectory hP DenseTime.enumeration
       DenseTime.castOrderEmbedding.toEmbedding) :=
     P.isMarkovKernel_parameterizedDenseTimeTrajectory hP _ _
   refine Kernel.IsSupportedOnContinuousPaths.of_isKolmogorovCoordinate _ ?_

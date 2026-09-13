@@ -161,7 +161,7 @@ theorem lintegral_kernelResolvent_eq (mu : ℝ) {f : alpha → ℝ≥0∞} (hf :
     (x : alpha) {s : ℝ} (hs : 0 < s) :
     ∫⁻ y, P.kernelResolvent mu f y ∂P (Real.toNNReal s) x =
       ∫⁻ t, expWeight mu t * P.transitionProfile f x (s + t) := by
-  haveI := P.isFiniteMeasure_apply (Real.toNNReal s) x
+  have := P.isFiniteMeasure_apply (Real.toNNReal s) x
   have hjoint : Measurable fun q : alpha × ℝ ↦
       expWeight mu q.2 * ∫⁻ z, f z ∂P (Real.toNNReal q.2) q.1 :=
     ((measurable_expWeight mu).comp measurable_snd).mul
@@ -258,10 +258,20 @@ theorem kernelResolvent_resolventEquation {lam mu : ℝ} (hlt : lam < mu)
     refine lintegral_congr fun v ↦ ?_
     exact lintegral_mul_const _ ((measurable_expWeight lam).mul
       ((measurable_expWeight mu).comp (measurable_const.sub measurable_id)))
+  have hconst : ENNReal.ofReal (mu - lam) *
+      ∫⁻ u, (∫⁻ s, expWeight lam s * expWeight mu (u - s)) * P.transitionProfile f x u =
+      ∫⁻ u, ENNReal.ofReal (mu - lam) *
+        ((∫⁻ s, expWeight lam s * expWeight mu (u - s)) * P.transitionProfile f x u) :=
+    (lintegral_const_mul _ (hconvmeas.mul hFmeas)).symm
+  have hadd : (∫⁻ u, expWeight mu u * P.transitionProfile f x u) +
+      ∫⁻ u, ENNReal.ofReal (mu - lam) *
+        ((∫⁻ s, expWeight lam s * expWeight mu (u - s)) * P.transitionProfile f x u) =
+      ∫⁻ u, expWeight mu u * P.transitionProfile f x u +
+        ENNReal.ofReal (mu - lam) *
+          ((∫⁻ s, expWeight lam s * expWeight mu (u - s)) * P.transitionProfile f x u) :=
+    (lintegral_add_left ((measurable_expWeight mu).mul hFmeas) _).symm
   rw [hdouble, hswap, P.kernelResolvent_eq_lintegral_expWeight lam f x,
-    P.kernelResolvent_eq_lintegral_expWeight mu f x,
-    ← lintegral_const_mul _ (hconvmeas.mul hFmeas),
-    ← lintegral_add_left ((measurable_expWeight mu).mul hFmeas)]
+    P.kernelResolvent_eq_lintegral_expWeight mu f x, hconst, hadd]
   refine lintegral_congr fun u ↦ ?_
   rw [← mul_assoc, ← add_mul, expWeight_convolution hlt u]
 

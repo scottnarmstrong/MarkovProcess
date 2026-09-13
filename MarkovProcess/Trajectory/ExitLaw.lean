@@ -184,7 +184,7 @@ theorem IsConservative.exitLaw_apply (x : alpha) {B : Set alpha} (hB : Measurabl
     Kernel.restrict_apply' _ _ _ ((ContinuousPath.measurable_eval_untopD_exitTimeTop U hU) hB)]
   congr 1
   ext omega
-  simp only [Set.mem_inter_iff, Set.mem_preimage, Set.mem_setOf_eq]
+  simp only [Set.mem_inter_iff, Set.mem_preimage, Set.mem_ofPred_eq]
   exact and_comm
 
 /-- The total mass of the exit distribution is the probability of leaving `U`. -/

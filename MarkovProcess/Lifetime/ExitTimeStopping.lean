@@ -166,7 +166,7 @@ private theorem detectsLiveClosedSetBy_iff (t : NNReal) (F : Set alpha)
     · left
       simpa only [ContinuousPath.restrictIic, restrictBefore_apply,
         liveInfDist, detectionThreshold,
-        coordinate_of_lt omega t ht] using hendpoint
+        coordinate_of_lt omega t ht] using! hendpoint
     · right
       refine ⟨k, hkt, ?_⟩
       have hklife :
@@ -175,14 +175,14 @@ private theorem detectsLiveClosedSetBy_iff (t : NNReal) (F : Set alpha)
         (ENNReal.coe_lt_coe.mpr hkt).trans ht
       simpa only [ContinuousPath.restrictIic, restrictBefore_apply,
         liveInfDist, detectionThreshold,
-        coordinate_of_lt omega _ hklife] using hk
+        coordinate_of_lt omega _ hklife] using! hk
   · rintro ⟨hFnonempty, hdetect⟩
     refine ⟨hFnonempty, fun n ↦ ?_⟩
     rcases hdetect n with hendpoint | ⟨k, hkt, hk⟩
     · left
       simpa only [ContinuousPath.restrictIic, restrictBefore_apply,
         liveInfDist, detectionThreshold,
-        coordinate_of_lt omega t ht] using hendpoint
+        coordinate_of_lt omega t ht] using! hendpoint
     · right
       refine ⟨k, hkt, ?_⟩
       have hklife :
@@ -191,7 +191,7 @@ private theorem detectsLiveClosedSetBy_iff (t : NNReal) (F : Set alpha)
         (ENNReal.coe_lt_coe.mpr hkt).trans ht
       simpa only [ContinuousPath.restrictIic, restrictBefore_apply,
         liveInfDist, detectionThreshold,
-        coordinate_of_lt omega _ hklife] using hk
+        coordinate_of_lt omega _ hklife] using! hk
 
 section Measurable
 
@@ -247,7 +247,7 @@ private theorem measurableSet_detectsLiveClosedSetBy (t : NNReal) (F : Set alpha
                 detectionThreshold n}
           else ∅) := by
     ext omega
-    simp only [DetectsLiveClosedSetBy, hFnonempty, true_and, Set.mem_setOf_eq,
+    simp only [DetectsLiveClosedSetBy, hFnonempty, true_and, Set.mem_ofPred_eq,
       Set.mem_iInter, Set.mem_union, Set.mem_iUnion]
     constructor
     · intro h n
@@ -258,7 +258,7 @@ private theorem measurableSet_detectsLiveClosedSetBy (t : NNReal) (F : Set alpha
       rcases h n with hendpoint | ⟨k, hk⟩
       · exact Or.inl hendpoint
       · by_cases hkt : DenseTime.castOrderEmbedding (DenseTime.enumeration k) < t
-        · exact Or.inr ⟨k, hkt, by simpa only [dif_pos hkt] using hk⟩
+        · exact Or.inr ⟨k, hkt, by simpa only [dif_pos hkt] using! hk⟩
         · simp only [dif_neg hkt, Set.notMem_empty] at hk
   rw [hevent]
   exact MeasurableSet.iInter hmeas
@@ -277,7 +277,7 @@ theorem isStoppingTime_exitTime (U : Set alpha) (hU : IsOpen U) :
       {omega : LifetimePath alpha | (t : ENNReal) < omega.lifetime} := by
     have hcompl : {omega : LifetimePath alpha | (t : ENNReal) < omega.lifetime} = deathᶜ := by
       ext omega
-      simp only [death, Set.mem_setOf_eq, Set.mem_compl_iff]
+      simp only [death, Set.mem_ofPred_eq, Set.mem_compl_iff]
       exact lt_iff_not_ge
     rw [hcompl]
     exact hdeath.compl
@@ -290,11 +290,11 @@ theorem isStoppingTime_exitTime (U : Set alpha) (hU : IsOpen U) :
     rw [Set.mem_union]
     rw [exitTime_le_iff U hU]
     by_cases hlifetime : omega.lifetime ≤ (t : ENNReal)
-    · simp only [death, spatial, Set.mem_setOf_eq, hlifetime, true_or,
+    · simp only [death, spatial, Set.mem_ofPred_eq, hlifetime, true_or,
         not_lt_of_ge hlifetime, false_and, or_false]
     · have ht : (t : ENNReal) < omega.lifetime := lt_of_not_ge hlifetime
       have hdetect := detectsLiveClosedSetBy_iff t Uᶜ hU.isClosed_compl omega ht
-      simp only [death, spatial, Set.mem_setOf_eq, hlifetime, false_or, ht, true_and]
+      simp only [death, spatial, Set.mem_ofPred_eq, hlifetime, false_or, ht, true_and]
       exact hdetect.symm
   change MeasurableSet[canonicalFiltration (alpha := alpha) t]
     {omega : LifetimePath alpha | exitTime U omega ≤ (t : ENNReal)}

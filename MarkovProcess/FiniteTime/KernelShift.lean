@@ -38,13 +38,13 @@ theorem finiteTimeKernel_translate (P : SubMarkovKernelSemigroup α) (hP : P.IsC
     finiteTimeKernel P (times.translate s) = (finiteTimeKernel P times).comp (P s) := by
   induction n with
   | zero =>
-      letI : IsMarkovKernel (P s) := hP.isMarkovKernel s
+      let : IsMarkovKernel (P s) := hP.isMarkovKernel s
       rw [finiteTimeKernel_zero, finiteTimeKernel_zero, Kernel.const_comp']
   | succ n ih =>
-      letI : IsFiniteKernel (P s) := (P.isSubMarkovKernel s).isFiniteKernel
-      letI : IsFiniteKernel (P (times 0)) :=
+      let : IsFiniteKernel (P s) := (P.isSubMarkovKernel s).isFiniteKernel
+      let : IsFiniteKernel (P (times 0)) :=
         (P.isSubMarkovKernel (times 0)).isFiniteKernel
-      letI : IsMarkovKernel (finiteTimeKernel P times.relativeTail) :=
+      let : IsMarkovKernel (finiteTimeKernel P times.relativeTail) :=
         hP.isMarkovKernel_finiteTimeKernel P times.relativeTail
       rw [finiteTimeKernel_succ, finiteTimeKernel_succ]
       simp only [FiniteOrderedTimes.translate_apply, FiniteOrderedTimes.relativeTail_translate]

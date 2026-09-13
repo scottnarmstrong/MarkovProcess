@@ -118,13 +118,13 @@ variable [BorelSpace α]
 /-- Every `C₀` function is integrable against each transition measure. -/
 theorem integrable_fiber (t : NNReal) (f : C₀(α, ℝ)) (x : α) :
     Integrable f (P t x) := by
-  letI : IsFiniteKernel (P t) := P.isFiniteKernel t
+  let : IsFiniteKernel (P t) := P.isFiniteKernel t
   exact f.toBCF.integrable (P t x)
 
 /-- The `C₀` kernel integral is a contraction. -/
 theorem norm_c0KernelIntegral_le (t : NNReal) (f : C₀(α, ℝ)) :
     ‖P.c0KernelIntegral hC0 t f‖ ≤ ‖f‖ := by
-  letI : IsFiniteKernel (P t) := P.isFiniteKernel t
+  let : IsFiniteKernel (P t) := P.isFiniteKernel t
   rw [← ZeroAtInftyContinuousMap.norm_toBCF_eq_norm]
   apply (BoundedContinuousFunction.norm_le (norm_nonneg f)).2
   intro x
@@ -200,7 +200,7 @@ theorem measurable_finCons {n : ℕ} :
   intro i
   refine Fin.cases ?_ (fun j ↦ ?_) i
   · simpa only [Fin.cons_zero] using (measurable_fst : Measurable (Prod.fst : α × (Fin n → α) → α))
-  · simpa only [Fin.cons_succ] using
+  · simpa only [Fin.cons_succ] using!
       (measurable_pi_apply j).comp (measurable_snd : Measurable (Prod.snd : α × (Fin n → α) → _))
 
 /-- The finite-time kernel obtained by recursively sampling a strictly ordered family of times:

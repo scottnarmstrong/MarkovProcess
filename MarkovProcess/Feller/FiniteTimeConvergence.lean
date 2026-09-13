@@ -106,7 +106,7 @@ private theorem integrable_coordinateProductTerm
             simp only [List.map_cons, List.prod_cons]
             exact mul_nonneg (norm_nonneg _) ih_nonneg
       have hnonneg : 0 ≤ ((factors.map fun p ↦ p.2 (path p.1)).map norm).prod := by
-        simpa only [List.map_map, Function.comp_apply] using all_nonneg factors
+        simpa only [List.map_map, Function.comp_apply] using! all_nonneg factors
       exact mul_le_mul (p.2.toBCF.norm_coe_le_norm (path p.1)) ih hnonneg (norm_nonneg _)
 
 omit [LocallyCompactSpace alpha] [T2Space alpha] in
@@ -148,7 +148,7 @@ private theorem integral_coordinateProductTerm_eq_coefficient
     (hA : PiContinuousMap.activeCoordinates term.factors = ∅)
     (u : FiniteOrderedTimes n) (x : alpha) :
     ∫ path, term.toContinuousMap path ∂finiteTimeKernel Q u x = term.coefficient := by
-  letI : IsProbabilityMeasure (finiteTimeKernel Q u x) :=
+  let : IsProbabilityMeasure (finiteTimeKernel Q u x) :=
     hQc.isProbabilityMeasure_finiteTimeLaw Q u x
   have hTerm : ∀ path : Fin n → alpha, term.toContinuousMap path = term.coefficient := by
     intro path
@@ -281,7 +281,7 @@ theorem tendstoUniformly_integral_coordinatePolynomial_finiteTimeKernel
               ∫ path, PiContinuousMap.coordinatePolynomial terms path
                 ∂finiteTimeKernel R times y := by
         intro R hRc y
-        letI : IsProbabilityMeasure (finiteTimeKernel R times y) :=
+        let : IsProbabilityMeasure (finiteTimeKernel R times y) :=
           hRc.isProbabilityMeasure_finiteTimeLaw R times y
         rw [PiContinuousMap.coordinatePolynomial_cons]
         exact integral_add (integrable_coordinateProductTerm term _)
@@ -332,7 +332,7 @@ theorem tendstoUniformly_integral_compactlySupported_finiteTimeKernel
       dist (∫ path, PiContinuousMap.coordinatePolynomial terms path ∂finiteTimeKernel R times y)
         (∫ path, f path ∂finiteTimeKernel R times y) ≤ eps / 3 := by
     intro R hRc y
-    letI : IsProbabilityMeasure (finiteTimeKernel R times y) :=
+    let : IsProbabilityMeasure (finiteTimeKernel R times y) :=
       hRc.isProbabilityMeasure_finiteTimeLaw R times y
     have hp : Integrable (PiContinuousMap.coordinatePolynomial terms)
         (finiteTimeKernel R times y) := integrable_coordinatePolynomial terms _

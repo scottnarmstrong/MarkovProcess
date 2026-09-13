@@ -5,7 +5,7 @@ open Lake DSL
 package «MarkovProcess» where
 
 require mathlib from git
-  "https://github.com/leanprover-community/mathlib4.git" @ "v4.26.0"
+  "https://github.com/leanprover-community/mathlib4.git" @ "v4.33.1"
 
 /-- The comparator surface (`Audit/*/Challenge.lean`, `SolutionBasic.lean`, `Solution.lean`).
 Not a default target: build on demand with `lake build Audit`. -/

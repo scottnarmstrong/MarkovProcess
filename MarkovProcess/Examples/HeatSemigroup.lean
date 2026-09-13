@@ -208,7 +208,7 @@ theorem exists_measure_abs_ge_lt (nu : Measure ℝ) [IsFiniteMeasure nu] {eps : 
     ((isClosed_le continuous_const continuous_abs).measurableSet).nullMeasurableSet
   have hanti : Antitone (fun n : ℕ ↦ {z : ℝ | (n : ℝ) ≤ |z|}) := by
     intro n m hnm z hz
-    simp only [Set.mem_setOf_eq] at hz ⊢
+    simp only [Set.mem_ofPred_eq] at hz ⊢
     exact le_trans (Nat.cast_le.mpr hnm) hz
   have hempty : (⋂ n : ℕ, {z : ℝ | (n : ℝ) ≤ |z|}) = (∅ : Set ℝ) := by
     refine Set.eq_empty_of_forall_notMem fun z hz ↦ ?_
@@ -285,7 +285,7 @@ theorem exists_norm_c0Operator_sub_le_heatSemigroup (f : C₀(ℝ, ℝ)) {eps : 
   · have hdist : dist (x + Real.sqrt h * z) x < delta0 := by
       rw [dist_eq_norm, add_sub_cancel_left, Real.norm_eq_abs, abs_mul,
         abs_of_nonneg (Real.sqrt_nonneg _)]
-      have hzR : |z| < R := lt_of_not_ge (by simpa only [hS, Set.mem_setOf_eq] using hz)
+      have hzR : |z| < R := lt_of_not_ge (by simpa only [hS, Set.mem_ofPred_eq] using hz)
       calc Real.sqrt h * |z| ≤ Real.sqrt h * R :=
             mul_le_mul_of_nonneg_left (le_of_lt hzR) (Real.sqrt_nonneg _)
         _ < delta0 := hsqrt

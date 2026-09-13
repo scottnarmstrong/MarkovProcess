@@ -325,9 +325,9 @@ private theorem finiteTimeKernel_map_splitFinitePath_zero
       congr 1
       apply Fin.ext
       simp [cutIndexOrderIso]
-  letI : IsMarkovKernel (finiteTimeKernel P times.relativeTail) :=
+  let : IsMarkovKernel (finiteTimeKernel P times.relativeTail) :=
     hP.isMarkovKernel_finiteTimeKernel P times.relativeTail
-  letI : IsMarkovKernel (P (times 0)) := hP.isMarkovKernel (times 0)
+  let : IsMarkovKernel (P (times 0)) := hP.isMarkovKernel (times 0)
   rw [hsplit, Kernel.map_comp_right _ measurable_headTail
     (E.measurable.prodMap measurable_id), finiteTimeKernel_map_headTail]
   rw [compProd_map_left_equiv]
@@ -371,13 +371,13 @@ theorem finiteTimeKernel_map_splitFinitePath
             g ∘ f := by
         funext z
         exact splitFinitePath_cons z
-      letI : IsMarkovKernel (P (times 0)) := hP.isMarkovKernel (times 0)
-      letI : IsMarkovKernel (finiteTimeKernel P times.relativeTail) :=
+      let : IsMarkovKernel (P (times 0)) := hP.isMarkovKernel (times 0)
+      let : IsMarkovKernel (finiteTimeKernel P times.relativeTail) :=
         hP.isMarkovKernel_finiteTimeKernel P times.relativeTail
-      letI : IsMarkovKernel
+      let : IsMarkovKernel
           (finiteTimeKernel P (FiniteOrderedTimes.initialSegment times.relativeTail)) :=
         hP.isMarkovKernel_finiteTimeKernel P _
-      letI : IsMarkovKernel
+      let : IsMarkovKernel
           (finiteTimeKernel P (FiniteOrderedTimes.relativeFinalSegment times.relativeTail)) :=
         hP.isMarkovKernel_finiteTimeKernel P _
       rw [finiteTimeKernel_succ, Kernel.mapOfMeasurable_eq_map,
@@ -392,7 +392,7 @@ theorem finiteTimeKernel_map_splitFinitePath
               P (times 0) ⊗ₖ Kernel.prodMkLeft alpha
                 ((finiteTimeKernel P times.relativeTail).map
                   (splitFinitePath (alpha := alpha) (m := m) (n := n))) := by
-          simpa only [f] using map_compProd_prodMkLeft_right
+          simpa only [f] using! map_compProd_prodMkLeft_right
             (P (times 0)) (finiteTimeKernel P times.relativeTail)
             (splitFinitePath (alpha := alpha) (m := m) (n := n))
             measurable_splitFinitePath

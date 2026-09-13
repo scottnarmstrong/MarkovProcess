@@ -109,7 +109,7 @@ theorem edist_dyadicTime_parent_le {f : ℝ≥0 → E} {T : ℝ≥0} {m : ℕ} {
   rcases Nat.mod_two_eq_zero_or_one i with hmod | hmod
   · have hval : 2 * (i / 2) = i := by omega
     rw [← dyadicTime_succ_level T m (i / 2), hval, edist_self]
-    exact zero_le e
+    exact zero_le
   · have hval : 2 * (i / 2) + 1 = i := by omega
     have hlt : 2 * (i / 2) < 2 ^ (m + 1) := by omega
     have hbound := hf (2 * (i / 2)) hlt

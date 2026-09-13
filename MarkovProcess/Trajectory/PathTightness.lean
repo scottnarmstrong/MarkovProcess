@@ -97,7 +97,7 @@ theorem IsConservative.exists_isCompact_measure_compl_le {p q : ℝ} {M : ℝ≥
     ∃ K : Set (ContinuousPath alpha), IsCompact K ∧
       ∀ x ∈ K0, continuousProcess P hP x Kᶜ ≤ eps := by
   obtain ⟨K, hKcompact, hKmass⟩ :=
-    IsTightMeasureSet_iff_exists_isCompact_measure_compl_le.mp
+    isTightMeasureSet_iff_exists_isCompact_measure_compl_le.mp
       (IsConservative.isTightMeasureSet_continuousProcess P hP hmom hK0) eps heps
   exact ⟨K, hKcompact, fun x hx ↦ hKmass _ ⟨x, hx, rfl⟩⟩
 

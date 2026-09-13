@@ -251,9 +251,10 @@ theorem resolventFamily_eq_of_eventually
       linarith only [hx]
     have hnegBound : ∃ E, ∀ x, |-(Y mu f x)| ≤ E :=
       ⟨EY, fun x ↦ by simpa only [abs_neg] using hEY x⟩
-    have hsum := hX_add hlam hXm hYm.neg ⟨D / mu, hDX⟩ hnegBound
+    have hnegMeas : Measurable (fun x ↦ -(Y mu f x)) := hYm.neg
+    have hsum := hX_add hlam hXm hnegMeas ⟨D / mu, hDX⟩ hnegBound
     have hneg : X lam (fun x ↦ -(Y mu f x)) = -X lam (Y mu f) := by
-      have hcancel := hX_add hlam hYm hYm.neg ⟨EY, hEY⟩ hnegBound
+      have hcancel := hX_add hlam hYm hnegMeas ⟨EY, hEY⟩ hnegBound
       rw [show (Y mu f + fun x ↦ -(Y mu f x)) = fun _ ↦ 0 by
         funext x
         simp only [Pi.add_apply, add_neg_cancel]] at hcancel

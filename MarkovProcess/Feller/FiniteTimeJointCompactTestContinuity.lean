@@ -89,7 +89,7 @@ private theorem integrable_coordinateProductTerm_joint
             exact mul_nonneg (norm_nonneg _) ihFactors
       have hnonneg : 0 ≤
           ((factors.map fun p ↦ p.2 (path p.1)).map norm).prod := by
-        simpa only [List.map_map, Function.comp_apply] using all_nonneg factors
+        simpa only [List.map_map, Function.comp_apply] using! all_nonneg factors
       apply mul_le_mul (p.2.toBCF.norm_coe_le_norm (path p.1)) ih
       · exact hnonneg
       · exact norm_nonneg _
@@ -182,7 +182,7 @@ private theorem tendsto_integral_coordinateProductTerm_joint
         Finset.card_empty, Finset.prod_fin_eq_prod_range, Finset.prod_range_zero, mul_one]
     have hIntegral (u : FiniteOrderedTimes n) (y : alpha) :
         ∫ path, term.toContinuousMap path ∂finiteTimeKernel P u y = term.coefficient := by
-      letI : IsProbabilityMeasure (finiteTimeKernel P u y) :=
+      let : IsProbabilityMeasure (finiteTimeKernel P u y) :=
         hP.isProbabilityMeasure_finiteTimeLaw P u y
       rw [integral_congr_ae (ae_of_all _ hTerm)]
       simp only [integral_const, probReal_univ, one_smul]
@@ -263,7 +263,7 @@ private theorem tendsto_integral_coordinatePolynomial_joint
             (∫ path, term.toContinuousMap path ∂finiteTimeKernel P u y) +
               ∫ path, PiContinuousMap.coordinatePolynomial terms path
                 ∂finiteTimeKernel P u y := by
-        letI : IsProbabilityMeasure (finiteTimeKernel P u y) :=
+        let : IsProbabilityMeasure (finiteTimeKernel P u y) :=
           hP.isProbabilityMeasure_finiteTimeLaw P u y
         rw [PiContinuousMap.coordinatePolynomial_cons]
         exact integral_add (integrable_coordinateProductTerm_joint term _)
@@ -294,7 +294,7 @@ theorem IsFellerKernelSemigroup.tendsto_integral_compactlySupported_finiteTimeKe
   have hApprox (u : FiniteOrderedTimes n) (y : alpha) :
       dist (∫ path, polynomial path ∂finiteTimeKernel P u y)
           (∫ path, f path ∂finiteTimeKernel P u y) ≤ epsilon / 3 := by
-    letI : IsProbabilityMeasure (finiteTimeKernel P u y) :=
+    let : IsProbabilityMeasure (finiteTimeKernel P u y) :=
       hP.isProbabilityMeasure_finiteTimeLaw P u y
     have hdiff : Integrable (fun path ↦ polynomial path - f path)
         (finiteTimeKernel P u y) := by

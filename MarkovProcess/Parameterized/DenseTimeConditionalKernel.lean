@@ -72,7 +72,7 @@ def parameterizedObservationCondKernel
     Kernel ((Theta × alpha) × (Fin n → alpha)) alpha := by
   letI : IsMarkovKernel (P.parameterizedNextObservationJoint e iota n) := by
     rw [parameterizedNextObservationJoint, Kernel.mapOfMeasurable_eq_map]
-    letI : IsMarkovKernel (P.parameterizedDenseTimePrefixKernel e iota (n + 1)) :=
+    let : IsMarkovKernel (P.parameterizedDenseTimePrefixKernel e iota (n + 1)) :=
       P.isMarkovKernel_parameterizedDenseTimePrefixKernel hP e iota (n + 1)
     exact Kernel.IsMarkovKernel.map _ (DenseTimeHistory.splitLast n).measurable
   exact (P.parameterizedNextObservationJoint e iota n).condKernel

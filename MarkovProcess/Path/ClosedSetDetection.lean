@@ -99,10 +99,10 @@ theorem detectsClosedSetOnIic_iff
         simp only [Set.mem_Iic, Set.mem_Icc, zero_le, true_and]
       rw [heq]
       exact isCompact_Icc
-    letI : CompactSpace (Set.Iic t) := isCompact_iff_compactSpace.mp hIic
+    let : CompactSpace (Set.Iic t) := isCompact_iff_compactSpace.mp hIic
     have hcompact : IsCompact (Set.univ : Set (Set.Iic t)) := isCompact_univ
     have huniv : (Set.univ : Set (Set.Iic t)).Nonempty :=
-      ⟨⟨0, zero_le t⟩, Set.mem_univ _⟩
+      ⟨⟨0, (zero_le : (0 : NNReal) ≤ t)⟩, Set.mem_univ _⟩
     obtain ⟨s, -, hsmin⟩ := hcompact.exists_isMinOn huniv hg.continuousOn
     have hgs : 0 < g s := (hF.notMem_iff_infDist_pos hFnonempty).mp (hnotmem s)
     obtain ⟨n, hn⟩ := exists_nat_one_div_lt hgs
@@ -187,7 +187,7 @@ private theorem exists_denseTime_sample_between
           (by simpa only [hkq] using hqW.2.1.le),
           (by simpa only [hkq] using hqW.2.2.le)⟩ : Set.Icc u t) ∈ O := by
       rw [← hW]
-      simpa only [hkq] using hqW.1
+      simpa only [hkq] using! hqW.1
     exact hqO
 
 /-- A continuous map on a nonempty compact interval meets a closed set exactly when the
@@ -204,7 +204,7 @@ theorem detectsClosedSetOnIcc_iff
       exact hmeet ⟨s, hs⟩
     let g : Set.Icc u t → ℝ := fun s ↦ Metric.infDist (f s) F
     have hg : Continuous g := (Metric.continuous_infDist_pt (s := F)).comp f.continuous
-    letI : CompactSpace (Set.Icc u t) := isCompact_iff_compactSpace.mp isCompact_Icc
+    let : CompactSpace (Set.Icc u t) := isCompact_iff_compactSpace.mp isCompact_Icc
     have hcompact : IsCompact (Set.univ : Set (Set.Icc u t)) := isCompact_univ
     have huniv : (Set.univ : Set (Set.Icc u t)).Nonempty :=
       ⟨⟨u, le_rfl, hut⟩, Set.mem_univ _⟩
@@ -275,7 +275,7 @@ theorem measurableSet_hitsSetBy (t : NNReal) (F : Set alpha) (hF : IsClosed F) :
     have hevent : hitsSetBy t F = ∅ := by
       rw [hFempty]
       ext omega
-      simp only [hitsSetBy, Set.mem_setOf_eq, Set.notMem_empty, exists_const]
+      simp only [hitsSetBy, Set.mem_ofPred_eq, Set.notMem_empty, exists_const]
     rw [hevent]
     exact @MeasurableSet.empty _ (canonicalFiltration (alpha := alpha) t)
   let A : ℕ → Set (ContinuousPath alpha) := fun n ↦
@@ -303,7 +303,7 @@ theorem measurableSet_hitsSetBy (t : NNReal) (F : Set alpha) (hF : IsClosed F) :
     change (∃ s : Set.Iic t, (restrictIic t omega) s ∈ F) ↔ _
     rw [← detectsClosedSetOnIic_iff t F hF (restrictIic t omega)]
     simp only [DetectsClosedSetOnIic, hFnonempty, true_and, Set.mem_union,
-      Set.mem_iUnion, Set.mem_setOf_eq, A, B, restrictIic]
+      Set.mem_iUnion, Set.mem_ofPred_eq, A, B, restrictIic]
     constructor
     · intro hdetect n
       rcases hdetect n with hendpoint | ⟨k, hkt, hk⟩
@@ -313,7 +313,7 @@ theorem measurableSet_hitsSetBy (t : NNReal) (F : Set alpha) (hF : IsClosed F) :
       rcases h n with hendpoint | ⟨k, hk⟩
       · exact Or.inl hendpoint
       · by_cases hkt : DenseTime.castOrderEmbedding (DenseTime.enumeration k) < t
-        · exact Or.inr ⟨k, hkt, by simpa only [dif_pos hkt] using hk⟩
+        · exact Or.inr ⟨k, hkt, by simpa only [dif_pos hkt] using! hk⟩
         · simp only [dif_neg hkt, Set.notMem_empty] at hk
   rw [hevent]
   exact MeasurableSet.iInter fun n ↦ (hA n).union (MeasurableSet.iUnion (hB n))

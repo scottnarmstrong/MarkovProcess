@@ -188,7 +188,7 @@ theorem IsConservative.continuousProcess_eq_map_rescale
       (Kernel.comap (continuousProcess P hP) e.symm e.symm.measurable).map
         (ContinuousPath.rescale e c) := by
   classical
-  letI : IsMarkovKernel
+  let : IsMarkovKernel
       ((Kernel.comap (continuousProcess P hP) e.symm e.symm.measurable).map
         (ContinuousPath.rescale e c)) :=
     Kernel.IsMarkovKernel.map _ (ContinuousPath.measurable_rescale e c)

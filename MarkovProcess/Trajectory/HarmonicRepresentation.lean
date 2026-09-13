@@ -103,7 +103,7 @@ theorem IsConservative.ae_eval_zero_eq (hK : P.KolmogorovRegular hP) (x : alpha)
   have hset : {omega : ContinuousPath alpha | ¬ omega 0 = x} =
       (fun omega : ContinuousPath alpha ↦ omega 0) ⁻¹' ({x}ᶜ : Set alpha) := by
     ext omega
-    simp only [Set.mem_setOf_eq, Set.mem_preimage, Set.mem_compl_iff, Set.mem_singleton_iff]
+    simp only [Set.mem_ofPred_eq, Set.mem_preimage, Set.mem_compl_iff, Set.mem_singleton_iff]
   rw [hset, ← Measure.map_apply hmeas (measurableSet_singleton x).compl, hmap,
     Measure.dirac_apply' _ (measurableSet_singleton x).compl,
     Set.indicator_of_notMem (by simp only [Set.mem_compl_iff, Set.mem_singleton_iff,

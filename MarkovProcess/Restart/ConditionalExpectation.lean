@@ -71,7 +71,7 @@ theorem condExp_comp_ae_eq_integral_kernel_of_restrict_map
       ∫ omega in A, (∫ y, F y ∂kappa omega) ∂mu =
           ∫ omega, (∫ y, F y ∂kappa omega) ∂(mu.restrict A) := rfl
       _ = ∫ y, F y ∂(kappa ∘ₘ (mu.restrict A)) :=
-        by simpa only [Kernel.const_apply] using hIntegralComp.symm
+        by simpa only [Kernel.const_apply] using! hIntegralComp.symm
       _ = ∫ y, F y ∂((mu.restrict A).map Y) := by rw [hJoint A hA]
       _ = ∫ omega, F (Y omega) ∂(mu.restrict A) := by
         rw [integral_map hY.aemeasurable hF.aestronglyMeasurable]

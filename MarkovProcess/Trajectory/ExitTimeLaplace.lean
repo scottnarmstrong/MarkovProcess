@@ -92,7 +92,7 @@ private theorem ofReal_mul_lintegral_exp_neg_mul_indicator (lam : ℝ) (hlam : 0
       lintegral_exp_neg_mul_Ioi_zero lam hlam]
     subst tau
     have hnot : (⊤ : ℝ≥0∞) ∉ {tau | tau < ⊤} := by
-      simp only [mem_setOf_eq, lt_self_iff_false, not_false_eq_true]
+      simp only [mem_ofPred_eq, lt_self_iff_false, not_false_eq_true]
     rw [Set.indicator_of_notMem hnot, tsub_zero]
     rw [← ENNReal.ofReal_mul hlam.le]
     simp only [mul_inv_cancel₀ hlam.ne', ENNReal.ofReal_one]
@@ -176,7 +176,7 @@ theorem IsConservative.lintegral_exp_neg_exitTime (lam : ℝ) (hlam : 0 < lam) (
     · change S.indicator (fun omega ↦ ENNReal.ofReal
           (Real.exp (-lam * (ContinuousPath.exitTime U omega).toReal))) omega ≤ 1
       rw [Set.indicator_of_notMem homega]
-      exact zero_le _
+      exact zero_le
   have hWint : ∫⁻ omega, W omega ∂Q ≤ 1 := by
     calc
       ∫⁻ omega, W omega ∂Q ≤ ∫⁻ _omega, 1 ∂Q := lintegral_mono hWle
@@ -246,7 +246,7 @@ theorem IsConservative.measure_exitTime_le_le (lam : ℝ) (hlam : 0 ≤ lam)
         mul_nonneg hlam (sub_nonneg.mpr htau)
       _ = lam * (t : ℝ) + -lam * (ContinuousPath.exitTime U omega).toReal := by ring
   · rw [Set.indicator_of_notMem homega]
-    exact zero_le _
+    exact zero_le
 
 end
 

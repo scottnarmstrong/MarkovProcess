@@ -169,7 +169,7 @@ theorem isStoppingTime_dyadicCeiling {f : Filtration NNReal m} {T : Omega → NN
   intro i
   refine (f.mono (dyadicFloor_le n i) _ (hT (dyadicFloor n i))).congr ?_
   ext omega
-  simp only [Set.mem_setOf_eq, WithTop.coe_le_coe]
+  simp only [Set.mem_ofPred_eq, WithTop.coe_le_coe]
   exact (dyadicCeiling_le_iff n (T omega) i).symm
 
 end

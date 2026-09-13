@@ -41,7 +41,7 @@ private theorem integrable_coordinateProduct
     rw [norm_prod]
     apply Finset.prod_le_prod (fun _ _ ↦ norm_nonneg _)
     intro i _
-    simpa only [ZeroAtInftyContinuousMap.norm_toBCF_eq_norm] using
+    simpa only [ZeroAtInftyContinuousMap.norm_toBCF_eq_norm] using!
       (factors i).toBCF.norm_coe_le_norm (eval omega i)
 
 omit [TopologicalSpace alpha] [BorelSpace alpha] [LocallyCompactSpace alpha]
@@ -54,9 +54,9 @@ private theorem isFiniteKernel_finiteTimeKernel
       rw [finiteTimeKernel_zero]
       infer_instance
   | succ n ih =>
-      letI : IsFiniteKernel (P (times 0)) :=
+      let : IsFiniteKernel (P (times 0)) :=
         (P.isSubMarkovKernel (times 0)).isFiniteKernel
-      letI : IsFiniteKernel (finiteTimeKernel P times.relativeTail) :=
+      let : IsFiniteKernel (finiteTimeKernel P times.relativeTail) :=
         ih times.relativeTail
       rw [finiteTimeKernel_succ, Kernel.mapOfMeasurable_eq_map]
       infer_instance
@@ -81,9 +81,9 @@ theorem IsFellerKernelSemigroup.backwardC0_apply_eq_integral_finiteTimeKernel
       funext path
       rw [Fin.prod_univ_one]
   | succ n ih =>
-      letI : IsFiniteKernel (P (times 0)) :=
+      let : IsFiniteKernel (P (times 0)) :=
         (P.isSubMarkovKernel (times 0)).isFiniteKernel
-      letI : IsFiniteKernel (finiteTimeKernel P times.relativeTail) :=
+      let : IsFiniteKernel (finiteTimeKernel P times.relativeTail) :=
         isFiniteKernel_finiteTimeKernel P times.relativeTail
       let productTest : (Fin (n + 2) → alpha) → ℝ :=
         fun path ↦ ∏ i, factors i (path i)

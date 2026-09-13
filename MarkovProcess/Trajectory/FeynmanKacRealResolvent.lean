@@ -324,8 +324,9 @@ private theorem exp_sub_mul_integral_exp_mul_exp_sub (lam mu u : ℝ) (hu : 0 �
       ((hasDerivAt_const s (-mu)).mul
         ((hasDerivAt_const s u).sub (hasDerivAt_id s))).exp)
     convert hd using 1
-    all_goals simp only [Pi.mul_apply, Pi.sub_apply, id_eq]
-    all_goals ring
+    all_goals first
+      | rfl
+      | (simp only [Pi.mul_apply, Pi.sub_apply, id_eq]; ring)
   have hint : IntervalIntegrable (fun s ↦ (mu - lam) * phi s) volume 0 u :=
     (continuous_const.mul
       (continuous_iff_continuousAt.mpr fun s ↦ (hderiv s).continuousAt)).intervalIntegrable 0 u
@@ -505,7 +506,7 @@ private theorem IsConservative.kernelIntegral_mul_feynmanKacResolventReal
       ((IsConservative.measurable_feynmanKac_joint P hP hq hf).comp
         ((measurable_real_toNNReal.comp measurable_snd).prodMk measurable_fst)
       )).stronglyMeasurable
-  letI : IsFiniteKernel (P s) := (P.isSubMarkovKernel s).isFiniteKernel
+  let : IsFiniteKernel (P s) := (P.isSubMarkovKernel s).isFiniteKernel
   have hC0 : 0 ≤ C := (hq0 x).trans (hqC x)
   have hD0 : 0 ≤ D := (abs_nonneg (f x)).trans (hfD x)
   have hbase : Integrable (fun p : alpha × ℝ ↦
@@ -589,13 +590,13 @@ theorem IsFellerKernelSemigroup.feynmanKacResolventReal_perturbation
       { toFun := fun p ↦ P (Real.toNNReal p.1) x
         measurable' := P.measurable_toMeasure.comp
           ((measurable_real_toNNReal.comp measurable_fst).prodMk measurable_const) }
-    letI : IsFiniteKernel K :=
+    let : IsFiniteKernel K :=
       { exists_univ_le := ⟨1, ENNReal.one_lt_top, fun p ↦ P.measure_univ_le_one _ _⟩ }
     have hkernel : Measurable fun p : ℝ × ℝ ↦
         kernelIntegral (P (Real.toNNReal p.1))
           (fun y ↦ q y * IsConservative.feynmanKac P hP q (Real.toNNReal p.2) f y) x := by
       have hlin := hintegrand.stronglyMeasurable.integral_kernel_prod_right' (κ := K)
-      simpa only [K, kernelIntegral] using hlin.measurable
+      simpa only [K, kernelIntegral] using! hlin.measurable
     exact ((Real.continuous_exp.comp
       (continuous_const.mul (continuous_fst.add continuous_snd))).measurable.mul hkernel)
   have hC0 : 0 ≤ C := (hq0 x).trans (hqC x)
@@ -605,7 +606,7 @@ theorem IsFellerKernelSemigroup.feynmanKacResolventReal_perturbation
         (fun y ↦ q y * IsConservative.feynmanKac P hP q (Real.toNNReal u) f y) x| ≤
           C * D := by
     rw [← Real.norm_eq_abs]
-    letI : IsFiniteKernel (P (Real.toNNReal s)) :=
+    let : IsFiniteKernel (P (Real.toNNReal s)) :=
       (P.isSubMarkovKernel (Real.toNNReal s)).isFiniteKernel
     calc
       ‖kernelIntegral (P (Real.toNNReal s))

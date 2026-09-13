@@ -25,15 +25,19 @@ private def trajectoryCoordinate : ℕ → Type (max uTheta uAlpha)
   | 0 => ULift.{max uTheta uAlpha} (Theta × alpha)
   | _ + 1 => ULift.{max uTheta uAlpha} alpha
 
-private instance (n : ℕ) : MeasurableSpace
-    (trajectoryCoordinate (Theta := Theta) (alpha := alpha) n) := by
-  cases n with
-  | zero =>
-      simpa only [trajectoryCoordinate] using
-        (inferInstance : MeasurableSpace (ULift.{max uTheta uAlpha} (Theta × alpha)))
-  | succ n =>
-      simpa only [trajectoryCoordinate] using
-        (inferInstance : MeasurableSpace (ULift.{max uTheta uAlpha} alpha))
+private instance instMeasurableSpaceTrajectoryCoordinate (n : ℕ) : MeasurableSpace
+    (trajectoryCoordinate (Theta := Theta) (alpha := alpha) n) :=
+  match n with
+  | 0 => (inferInstance : MeasurableSpace (ULift.{max uTheta uAlpha} (Theta × alpha)))
+  | _ + 1 => (inferInstance : MeasurableSpace (ULift.{max uTheta uAlpha} alpha))
+
+omit [StandardBorelSpace alpha] [Nonempty alpha] in
+/-- Bridging lemma: `ULift.down` out of the `(n + 1)`-st trajectory coordinate is measurable
+w.r.t. the project's registered `MeasurableSpace (trajectoryCoordinate (n + 1))` instance, not
+just the generic `ULift.instMeasurableSpace` instance that `measurable_down` is stated for. -/
+private theorem measurable_down_trajectoryCoordinate (n : ℕ) :
+    Measurable (ULift.down : trajectoryCoordinate (Theta := Theta) (alpha := alpha) (n + 1) → alpha) := by
+  simpa only [trajectoryCoordinate] using! measurable_down
 
 private def historyInitial (n : ℕ)
     (path : (i : ↑(Finset.Iic n)) →
@@ -75,19 +79,19 @@ private def historyEquiv (n : ℕ) :
         (X := fun i : ↑(Finset.Iic n) ↦
           trajectoryCoordinate (Theta := Theta) (alpha := alpha) i)
         ⟨0, Finset.mem_Iic.mpr (Nat.zero_le n)⟩
-      simpa only [trajectoryCoordinate] using measurable_down.comp h
+      simpa only [trajectoryCoordinate] using! measurable_down.comp h
     · rw [measurable_pi_iff]
       intro i
       have h := measurable_pi_apply
         (X := fun i : ↑(Finset.Iic n) ↦
           trajectoryCoordinate (Theta := Theta) (alpha := alpha) i)
         ⟨i + 1, Finset.mem_Iic.mpr i.isLt⟩
-      simpa only [trajectoryCoordinate] using measurable_down.comp h
+      simpa only [trajectoryCoordinate] using! measurable_down.comp h
   measurable_invFun := by
     rw [measurable_pi_iff]
     rintro ⟨_ | k, hi⟩
-    · simpa only [trajectoryCoordinate] using measurable_up.comp measurable_fst
-    · simpa only [trajectoryCoordinate] using measurable_up.comp
+    · simpa only [trajectoryCoordinate] using! measurable_up.comp measurable_fst
+    · simpa only [trajectoryCoordinate] using! measurable_up.comp
         ((measurable_pi_apply
           (X := fun _ : Fin n ↦ alpha)
           ⟨k, Nat.succ_le_iff.mp (Finset.mem_Iic.mp hi)⟩).comp
@@ -112,7 +116,7 @@ private def parameterizedTrajStep
     Kernel ((i : ↑(Finset.Iic n)) → trajectoryCoordinate (Theta := Theta) (alpha := alpha) i)
       (trajectoryCoordinate (Theta := Theta) (alpha := alpha) (n + 1)) :=
   ((P.parameterizedObservationCondKernel hP e iota n).map
-      (ULift.up : alpha → ULift.{max uTheta uAlpha} alpha)).comap
+      (γ := trajectoryCoordinate (Theta := Theta) (alpha := alpha) (n + 1)) ULift.up).comap
     (historyEquiv n) (historyEquiv n).measurable
 
 private instance isMarkovKernel_parameterizedTrajStep
@@ -121,10 +125,11 @@ private instance isMarkovKernel_parameterizedTrajStep
     (e : ℕ ≃ D) (iota : D ↪ NNReal) (n : ℕ) :
     IsMarkovKernel (parameterizedTrajStep P hP e iota n) := by
   rw [parameterizedTrajStep]
-  letI := P.isMarkovKernel_parameterizedObservationCondKernel hP e iota n
-  letI : IsMarkovKernel ((P.parameterizedObservationCondKernel hP e iota n).map
-      (ULift.up : alpha → ULift.{max uTheta uAlpha} alpha)) :=
-    Kernel.IsMarkovKernel.map _ measurable_up
+  let _ := P.isMarkovKernel_parameterizedObservationCondKernel hP e iota n
+  let _ : IsMarkovKernel ((P.parameterizedObservationCondKernel hP e iota n).map
+      (γ := trajectoryCoordinate (Theta := Theta) (alpha := alpha) (n + 1)) ULift.up) :=
+    Kernel.IsMarkovKernel.map _
+      (by simpa only [trajectoryCoordinate] using! measurable_up)
   exact Kernel.IsMarkovKernel.comap _ (historyEquiv n).measurable
 
 private def initialHistory (q : Theta × alpha) :
@@ -140,7 +145,7 @@ private theorem measurable_initialHistory :
     Measurable (initialHistory (Theta := Theta) (alpha := alpha)) := by
   rw [measurable_pi_iff]
   rintro ⟨_ | k, hi⟩
-  · simpa only [trajectoryCoordinate] using
+  · simpa only [trajectoryCoordinate] using!
       (measurable_up : Measurable (ULift.up : Theta × alpha →
         ULift.{max uTheta uAlpha} (Theta × alpha)))
   · simp only [Finset.mem_Iic] at hi
@@ -155,7 +160,7 @@ private theorem measurable_eraseAugmentation (e : ℕ ≃ D) :
     Measurable (eraseAugmentation (Theta := Theta) (alpha := alpha) e) := by
   rw [measurable_pi_iff]
   intro d
-  simpa only [trajectoryCoordinate] using measurable_down.comp
+  simpa only [trajectoryCoordinate] using! measurable_down.comp
     (measurable_pi_apply
       (X := trajectoryCoordinate (Theta := Theta) (alpha := alpha)) (e.symm d + 1))
 
@@ -340,7 +345,7 @@ private theorem partialTraj_map_historyEquiv
   | zero =>
       rw [Kernel.partialTraj_self, Kernel.id_comp, initialHistoryKernel,
         Kernel.deterministic_map]
-      letI : IsMarkovKernel (P.parameterizedDenseTimePrefixKernel e iota 0) :=
+      let _ : IsMarkovKernel (P.parameterizedDenseTimePrefixKernel e iota 0) :=
         P.isMarkovKernel_parameterizedDenseTimePrefixKernel hP e iota 0
       rw [markovKernel_finZero (P.parameterizedDenseTimePrefixKernel e iota 0)]
       have hconst : Kernel.const (Theta × alpha)
@@ -360,16 +365,17 @@ private theorem partialTraj_map_historyEquiv
       · exact Subsingleton.elim _ _
       all_goals fun_prop
   | succ n ih =>
-      letI : IsMarkovKernel (P.parameterizedDenseTimePrefixKernel e iota n) :=
+      let _ : IsMarkovKernel (P.parameterizedDenseTimePrefixKernel e iota n) :=
         P.isMarkovKernel_parameterizedDenseTimePrefixKernel hP e iota n
-      letI : IsMarkovKernel (P.parameterizedObservationCondKernel hP e iota n) :=
+      let _ : IsMarkovKernel (P.parameterizedObservationCondKernel hP e iota n) :=
         P.isMarkovKernel_parameterizedObservationCondKernel hP e iota n
-      letI : IsMarkovKernel ((P.parameterizedObservationCondKernel hP e iota n).map
-          (ULift.up : alpha → ULift.{max uTheta uAlpha} alpha)) :=
-        Kernel.IsMarkovKernel.map _ measurable_up
-      letI : IsMarkovKernel
+      let _ : IsMarkovKernel ((P.parameterizedObservationCondKernel hP e iota n).map
+          (γ := trajectoryCoordinate (Theta := Theta) (alpha := alpha) (n + 1)) ULift.up) :=
+        Kernel.IsMarkovKernel.map _
+          (by simpa only [trajectoryCoordinate] using! measurable_up)
+      let _ : IsMarkovKernel
           (((P.parameterizedObservationCondKernel hP e iota n).map
-            (ULift.up : alpha → ULift.{max uTheta uAlpha} alpha)).comap
+            (γ := trajectoryCoordinate (Theta := Theta) (alpha := alpha) (n + 1)) ULift.up).comap
               (historyEquiv n) (historyEquiv n).measurable) :=
         Kernel.IsMarkovKernel.comap _ (historyEquiv n).measurable
       rw [Kernel.partialTraj_succ_of_le (Nat.zero_le n)]
@@ -390,7 +396,7 @@ private theorem partialTraj_map_historyEquiv
           have htransport := transport_traj_step
             (Kernel.id ×ₖ P.parameterizedDenseTimePrefixKernel e iota n)
             ((P.parameterizedObservationCondKernel hP e iota n).map
-              (ULift.up : alpha → ULift.{max uTheta uAlpha} alpha))
+              (γ := trajectoryCoordinate (Theta := Theta) (alpha := alpha) (n + 1)) ULift.up)
             (historyEquiv n)
             (historyEquiv (n + 1) ∘ rawTrajAppend n)
             ((historyEquiv (n + 1)).measurable.comp
@@ -415,7 +421,7 @@ private theorem partialTraj_map_historyEquiv
             rfl
           rw [hfun, htransport]
           let r : (Theta × alpha) ×
-              ((Fin n → alpha) × ULift.{max uTheta uAlpha} alpha) →
+              ((Fin n → alpha) × trajectoryCoordinate (Theta := Theta) (alpha := alpha) (n + 1)) →
               (Theta × alpha) × (Fin (n + 1) → alpha) :=
             fun z ↦ (z.1, (DenseTimeHistory.splitLast n).symm (z.2.1, z.2.2.down))
           have hq : appendObservation n = r ∘ MeasurableEquiv.prodAssoc := by
@@ -423,20 +429,38 @@ private theorem partialTraj_map_historyEquiv
           have hr_meas : Measurable r :=
             measurable_fst.prodMk ((DenseTimeHistory.splitLast n).symm.measurable.comp
               ((measurable_fst.comp measurable_snd).prodMk
-                (measurable_down.comp (measurable_snd.comp measurable_snd))))
+                ((measurable_down_trajectoryCoordinate n).comp
+                  (measurable_snd.comp measurable_snd))))
           rw [hq, Kernel.map_comp_right _ MeasurableEquiv.prodAssoc.measurable hr_meas]
           rw [prod_comp_prod_map_prodAssoc]
           have hr : r = Prod.map id
-              ((DenseTimeHistory.splitLast n).symm ∘ Prod.map id ULift.down) := by
+              ((DenseTimeHistory.splitLast n).symm ∘
+                Prod.map (β₁ := trajectoryCoordinate (Theta := Theta) (alpha := alpha) (n + 1))
+                  id ULift.down) := by
             rfl
           rw [hr, ← Kernel.map_id' Kernel.id]
-          rw [← Kernel.map_prod_map _ _ measurable_id
+          rw [← Kernel.map_prod_map (Kernel.id.map (fun a : Theta × alpha => a))
+            (P.parameterizedDenseTimePrefixKernel e iota n ⊗ₖ
+              (P.parameterizedObservationCondKernel hP e iota n).map
+                (γ := trajectoryCoordinate (Theta := Theta) (alpha := alpha) (n + 1)) ULift.up)
+            measurable_id
             ((DenseTimeHistory.splitLast n).symm.measurable.comp
-              (measurable_id.prodMap measurable_down))]
-          rw [Kernel.map_comp_right _
-            (measurable_id.prodMap measurable_down)
+              (measurable_id.prodMap (measurable_down_trajectoryCoordinate n)))]
+          rw [Kernel.map_comp_right
+            (P.parameterizedDenseTimePrefixKernel e iota n ⊗ₖ
+              (P.parameterizedObservationCondKernel hP e iota n).map
+                (γ := trajectoryCoordinate (Theta := Theta) (alpha := alpha) (n + 1)) ULift.up)
+            (measurable_id.prodMap (measurable_down_trajectoryCoordinate n))
             (DenseTimeHistory.splitLast n).symm.measurable]
-          rw [compProd_map_ulift_down]
+          have hcpmud :
+              (P.parameterizedDenseTimePrefixKernel e iota n ⊗ₖ
+                (P.parameterizedObservationCondKernel hP e iota n).map
+                  (γ := trajectoryCoordinate (Theta := Theta) (alpha := alpha) (n + 1))
+                  ULift.up).map (Prod.map id ULift.down) =
+                P.parameterizedDenseTimePrefixKernel e iota n ⊗ₖ
+                  P.parameterizedObservationCondKernel hP e iota n :=
+            compProd_map_ulift_down _ _
+          rw [hcpmud]
           rw [P.compProd_parameterizedObservationCondKernel hP e iota n]
           rw [parameterizedNextObservationJoint, Kernel.mapOfMeasurable_eq_map]
           rw [← Kernel.map_comp_right _
@@ -497,7 +521,7 @@ theorem parameterizedDenseTimeTrajectory_map_prefix
     (P.parameterizedDenseTimeTrajectory hP e iota).map
         (SubMarkovKernelSemigroup.IsConservative.denseTimeTrajectoryPrefix e n) =
       P.parameterizedDenseTimePrefixKernel e iota n := by
-  letI : IsMarkovKernel (P.parameterizedDenseTimePrefixKernel e iota n) :=
+  let _ : IsMarkovKernel (P.parameterizedDenseTimePrefixKernel e iota n) :=
     P.isMarkovKernel_parameterizedDenseTimePrefixKernel hP e iota n
   rw [parameterizedDenseTimeTrajectory, ← Kernel.map_comp_right]
   · rw [denseTimeTrajectoryPrefix_eraseAugmentation]

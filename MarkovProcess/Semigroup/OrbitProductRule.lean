@@ -42,7 +42,7 @@ theorem hasDerivWithinAt_operator_apply {v : ℝ → E} {v' : E} {s : ℝ} (hs :
       (S (Real.toNNReal s) (S.generator ⟨v s, hmem⟩ + v')) (Set.Ioi s) s := by
   have hdiff : Set.Ioi s \ {s} = Set.Ioi s := by
     ext y
-    simp only [Set.mem_diff, Set.mem_Ioi, Set.mem_singleton_iff, and_iff_left_iff_imp]
+    simp only [Set.mem_sdiff, Set.mem_Ioi, Set.mem_singleton_iff, and_iff_left_iff_imp]
     exact fun hy ↦ ne_of_gt hy
   have hcoe : ((Real.toNNReal s : NNReal) : ℝ) = s := Real.coe_toNNReal s hs
   have hslope : Tendsto (slope v s) (𝓝[>] s) (𝓝 v') := by

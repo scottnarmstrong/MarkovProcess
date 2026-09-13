@@ -107,7 +107,7 @@ private theorem tendstoUniformlyOn_resolvent_resolvent
       _ = 2 * (μ : ℝ)⁻¹ := by ring
   have hDzero : ∀ y : E, Tendsto (fun i ↦ ((S i).resolvent μ - S'.resolvent μ) y) l (𝓝 0) := by
     intro y
-    simp only [ContinuousLinearMap.sub_apply]
+    simp only [sub_apply]
     simpa using (hres y).sub (tendsto_const_nhds (x := S'.resolvent μ y))
   have hK₁ : IsCompact ((fun u : ℝ ↦ S' (Real.toNNReal u) z) '' Set.Icc (0 : ℝ) (b : ℝ)) :=
     isCompact_Icc.image (S'.continuous_operator_toNNReal z)
@@ -120,9 +120,9 @@ private theorem tendstoUniformlyOn_resolvent_resolvent
     (fun i ↦ (S i).resolvent μ - S'.resolvent μ) hDbound hDzero hK₂ hε₁
   have h3 : ∀ᶠ i in l, ‖(S i).resolvent μ (S'.resolvent μ z) -
       S'.resolvent μ (S'.resolvent μ z)‖ < ε / 3 := by
-    have h := NormedAddCommGroup.tendsto_nhds_zero.mp (hDzero (S'.resolvent μ z)) (ε / 3)
+    have h := NormedAddGroup.tendsto_nhds_zero.mp (hDzero (S'.resolvent μ z)) (ε / 3)
       (by positivity)
-    simpa only [ContinuousLinearMap.sub_apply] using h
+    simpa only [sub_apply] using h
   filter_upwards [h1, h2, h3] with i hi1 hi2 hi3 t ht
   have htb : (t : ℝ) ≤ (b : ℝ) := NNReal.coe_le_coe.mpr ht
   have hterm1 : ‖(S i) t (S'.resolvent μ (S'.resolvent μ z)) -
@@ -139,14 +139,14 @@ private theorem tendstoUniformlyOn_resolvent_resolvent
     have hmem : S' (Real.toNNReal u) z ∈
         (fun u : ℝ ↦ S' (Real.toNNReal u) z) '' Set.Icc (0 : ℝ) (b : ℝ) :=
       ⟨u, ⟨hu.1, hu.2.trans htb⟩, rfl⟩
-    simpa only [ContinuousLinearMap.sub_apply] using hi1 _ hmem
+    simpa only [sub_apply] using hi1 _ hmem
   have hterm3 : ‖(S i).resolvent μ (S' t (S'.resolvent μ z)) -
       S' t (S'.resolvent μ (S'.resolvent μ z))‖ ≤ ε₁ := by
     rw [S'.operator_resolvent μ t (S'.resolvent μ z)]
     have hmem : S' t (S'.resolvent μ z) ∈
         (fun u : ℝ ↦ S' (Real.toNNReal u) (S'.resolvent μ z)) '' Set.Icc (0 : ℝ) (b : ℝ) :=
       ⟨(t : ℝ), ⟨t.coe_nonneg, htb⟩, by simp only [Real.toNNReal_coe]⟩
-    simpa only [ContinuousLinearMap.sub_apply] using hi2 _ hmem
+    simpa only [sub_apply] using hi2 _ hmem
   have htri : ‖(S i) t (S'.resolvent μ (S'.resolvent μ z)) -
       S' t (S'.resolvent μ (S'.resolvent μ z))‖ ≤
       ‖(S i) t (S'.resolvent μ (S'.resolvent μ z)) -

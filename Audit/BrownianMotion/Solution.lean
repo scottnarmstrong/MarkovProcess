@@ -79,7 +79,7 @@ theorem brownianMotion :
   · have h := MarkovProcess.existsUnique_continuousProcess_heatSemigroup
     simpa only [heatFiniteSetKernel_eq, finsetEvaluation_eq] using h
   · intro Q hQ hI x
-    haveI := hQ
+    have := hQ
     have hQ' : Q = MarkovProcess.brownianMotion := by
       refine MarkovProcess.eq_brownianMotion_of_map_finsetEvaluation Q fun I ↦ ?_
       rw [← heatFiniteSetKernel_eq, ← finsetEvaluation_eq]

@@ -39,10 +39,11 @@ theorem exists_norm_yosidaStrongLimit_apply_sub_on_range_le
       tendsto_const_nhds).norm ?_
   exact Eventually.of_forall fun n ↦ by
     have hcontract : ∀ s ∈ Icc (0 : ℝ) (t : ℝ),
-        ‖exp ℝ (s • R.yosidaGenerator (naturalShift n))‖ ≤ 1 := by
+        ‖exp (s • R.yosidaGenerator (naturalShift n))‖ ≤ 1 := by
       intro s hs
-      simpa only [yosidaOperator] using
-        R.norm_yosidaOperator_le_one (naturalShift n) ⟨s, hs.1⟩
+      have h := R.norm_yosidaOperator_le_one (naturalShift n) ⟨s, hs.1⟩
+      simp only [yosidaOperator] at h
+      exact h
     exact (norm_exp_apply_sub_le (R.yosidaGenerator (naturalShift n))
       (NNReal.coe_nonneg t) hcontract (R.operator mu y)).trans
         (mul_le_mul_of_nonneg_left

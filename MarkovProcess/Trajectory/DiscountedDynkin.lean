@@ -210,7 +210,7 @@ theorem IsFellerKernelSemigroup.stronglyMeasurable_discountedDynkinProcess
 theorem IsFellerKernelSemigroup.adapted_discountedDynkinProcess
     (hFeller : P.IsFellerKernelSemigroup) (f : hFeller.c0Semigroup.generatorDomain)
     (lam : ℝ) :
-    Adapted (ContinuousPath.canonicalFiltration (alpha := alpha))
+    StronglyAdapted (ContinuousPath.canonicalFiltration (alpha := alpha))
       (hFeller.discountedDynkinProcess f lam) :=
   fun t ↦ hFeller.stronglyMeasurable_discountedDynkinProcess_canonicalFiltration f lam t
 
@@ -492,9 +492,9 @@ omit [CompleteSpace alpha] [Nonempty alpha] in
 theorem IsFellerKernelSemigroup.progMeasurable_discountedDynkinProcess
     (hFeller : P.IsFellerKernelSemigroup) (f : hFeller.c0Semigroup.generatorDomain)
     (lam : ℝ) :
-    ProgMeasurable (ContinuousPath.canonicalFiltration (alpha := alpha))
+    IsStronglyProgressive (ContinuousPath.canonicalFiltration (alpha := alpha))
       (hFeller.discountedDynkinProcess f lam) :=
-  (hFeller.adapted_discountedDynkinProcess f lam).progMeasurable_of_continuous fun omega ↦
+  (hFeller.adapted_discountedDynkinProcess f lam).isStronglyProgressive_of_continuous fun omega ↦
     hFeller.continuous_discountedDynkinProcess f lam omega
 
 omit [CompleteSpace alpha] [Nonempty alpha] in
@@ -507,7 +507,7 @@ theorem IsFellerKernelSemigroup.measurable_discountedDynkinProcess_stoppingTime
     Measurable fun omega ↦ hFeller.discountedDynkinProcess f lam (T omega) omega := by
   have h := (measurable_stoppedValue (hFeller.progMeasurable_discountedDynkinProcess f lam) hT).mono
     hT.measurableSpace_le le_rfl
-  simpa only [stoppedValue] using h
+  simpa only [stoppedValue] using! h
 
 /-- Optional stopping for the discounted Dynkin process at a bounded finite stopping time. -/
 theorem IsFellerKernelSemigroup.integral_discountedDynkinProcess_stoppingTime

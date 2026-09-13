@@ -109,7 +109,7 @@ private theorem measurable_finConsOne :
   refine Fin.cases ?_ (fun j ↦ ?_) i
   · simpa only [Fin.cons_zero] using
       (measurable_fst : Measurable (Prod.fst : alpha × (Fin 1 → alpha) → alpha))
-  · simpa only [Fin.cons_succ] using
+  · simpa only [Fin.cons_succ] using!
       (measurable_pi_apply j).comp
         (measurable_snd : Measurable (Prod.snd : alpha × (Fin 1 → alpha) → _))
 
@@ -121,10 +121,10 @@ theorem finiteTimeKernel_two_map_pair (P : SubMarkovKernelSemigroup alpha)
     (hP : P.IsConservative) (u : FiniteOrderedTimes 2) :
     (finiteTimeKernel P u).map (fun path ↦ (path 0, path 1)) =
       P (u 0) ⊗ₖ Kernel.prodMkLeft alpha (P (u 1 - u 0)) := by
-  letI : IsFiniteKernel (P (u 0)) := (P.isSubMarkovKernel (u 0)).isFiniteKernel
-  letI : IsFiniteKernel (P (u.relativeTail 0)) :=
+  let : IsFiniteKernel (P (u 0)) := (P.isSubMarkovKernel (u 0)).isFiniteKernel
+  let : IsFiniteKernel (P (u.relativeTail 0)) :=
     (P.isSubMarkovKernel (u.relativeTail 0)).isFiniteKernel
-  letI : IsMarkovKernel (finiteTimeKernel P u.relativeTail) :=
+  let : IsMarkovKernel (finiteTimeKernel P u.relativeTail) :=
     hP.isMarkovKernel_finiteTimeKernel P u.relativeTail
   have hmeasPair : Measurable (fun path : Fin 2 → alpha ↦ (path 0, path 1)) := by fun_prop
   have hcomp :
@@ -189,7 +189,7 @@ private theorem denseTimeTrajectory_map_pair_aux
       intro m
       have hm : m = 0 := Subsingleton.elim m 0
       subst hm
-      simpa only [Fin.castSucc_zero, if_pos rfl, Fin.succ_zero_eq_one] using hab) with hselect
+      simpa only [Fin.castSucc_zero, if_pos rfl, Fin.succ_zero_eq_one] using! hab) with hselect
   have hpair2 : Measurable (fun path : Fin 2 → alpha ↦ (path 0, path 1)) := by fun_prop
   have hstep4 :
       (fun path : Fin 2 → alpha ↦ (path 0, path 1)) ∘
@@ -244,8 +244,8 @@ private theorem lintegral_edist_le_of_lt
   set iota : DenseTime ↪ NNReal := DenseTime.castOrderEmbedding.toEmbedding with hiota
   have hlt : iota s < iota t := DenseTime.castOrderEmbedding.strictMono hst
   set Delta : NNReal := iota t - iota s with hDelta
-  letI : IsFiniteKernel (P (iota s)) := (P.isSubMarkovKernel (iota s)).isFiniteKernel
-  letI : IsFiniteKernel (P Delta) := (P.isSubMarkovKernel Delta).isFiniteKernel
+  let : IsFiniteKernel (P (iota s)) := (P.isSubMarkovKernel (iota s)).isFiniteKernel
+  let : IsFiniteKernel (P Delta) := (P.isSubMarkovKernel Delta).isFiniteKernel
   have hF : Measurable (fun z : alpha × alpha ↦ edist z.1 z.2 ^ p) :=
     measurable_edist.pow_const p
   have hev : Measurable (fun omega : DenseTime → alpha ↦ (omega s, omega t)) := by fun_prop
@@ -296,7 +296,7 @@ theorem isKolmogorovProcess_denseTimeTrajectory
   · exact lintegral_edist_le_of_lt P hP hmom x hst
   · subst hst
     simp only [edist_self, ENNReal.zero_rpow_of_pos hmom.p_pos, lintegral_zero]
-    exact zero_le _
+    exact zero_le
   · have hsym := lintegral_edist_le_of_lt P hP hmom x hst
     have hcongr :
         ∫⁻ omega, edist (omega s) (omega t) ^ p

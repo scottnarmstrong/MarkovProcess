@@ -55,7 +55,7 @@ private theorem apply_eq_sum_indicator {S : Omega → NNReal} {V : Finset NNReal
     (hSV : ∀ omega, S omega ∈ V) (g : NNReal → Omega → ℝ) (omega : Omega) :
     g (S omega) omega = ∑ v ∈ V, Set.indicator {eta | S eta = v} (g v) omega := by
   rw [Finset.sum_eq_single_of_mem (S omega) (hSV omega)]
-  · rw [Set.indicator_of_mem (Set.mem_setOf_eq ▸ rfl)]
+  · rw [Set.indicator_of_mem (Set.mem_ofPred_eq ▸ rfl)]
   · intro v _ hv
     exact Set.indicator_of_notMem (fun h ↦ hv h.symm) _
 
@@ -72,12 +72,12 @@ theorem measurableSet_eq_of_finite_range {S : Omega → NNReal}
   have hset : {omega | S omega = v} =
       {omega | ((S omega : NNReal) : WithTop NNReal) = (v : WithTop NNReal)} := by
     ext omega
-    simp only [Set.mem_setOf_eq, WithTop.coe_eq_coe]
+    simp only [Set.mem_ofPred_eq, WithTop.coe_eq_coe]
   rw [hset]
   exact hS.measurableSet_eq_of_countable_range hcount v
 
 /-- The value of an adapted process at a stopping time with finite range is measurable. -/
-theorem stronglyMeasurable_apply_of_finite_range (hadapted : Adapted ℱ M) {S : Omega → NNReal}
+theorem stronglyMeasurable_apply_of_finite_range (hadapted : StronglyAdapted ℱ M) {S : Omega → NNReal}
     (hS : IsStoppingTime ℱ fun omega ↦ ((S omega : NNReal) : WithTop NNReal))
     (hfin : (Set.range S).Finite) :
     StronglyMeasurable fun omega ↦ M (S omega) omega := by
@@ -115,7 +115,7 @@ theorem integral_apply_eq_of_finite_range (hM : Martingale M ℱ mu)
     have hsum : ∫ omega, g (S omega) omega ∂mu =
         ∫ omega, ∑ v ∈ hfin.toFinset, Set.indicator {eta | S eta = v} (g v) omega ∂mu :=
       integral_congr_ae (Eventually.of_forall fun omega ↦ apply_eq_sum_indicator hSV g omega)
-    rw [hsum, integral_finset_sum _ fun v _ ↦ (hg v).indicator (hmeas' v)]
+    rw [hsum, integral_finsetSum _ fun v _ ↦ (hg v).indicator (hmeas' v)]
     exact Finset.sum_congr rfl fun v _ ↦ integral_indicator (hmeas' v)
   rw [hind M hMint, hind (fun _ ↦ M u) fun _ ↦ hMint u]
   refine Finset.sum_congr rfl fun v hv ↦ ?_
@@ -146,7 +146,7 @@ private theorem isStoppingTime_dyadicCeilingIndex {T : Omega → NNReal}
     {omega | (dyadicCeilingIndex n (T omega) : ℕ∞) ≤ k}
   convert hstop using 1
   ext omega
-  simp only [Set.mem_setOf_eq, ENat.coe_le_coe]
+  simp only [Set.mem_ofPred_eq, ENat.natCast_le_natCast]
   rw [← dyadicGrid_ceilingIndex]
   rw [WithTop.coe_le_coe]
   exact (strictMono_dyadicGrid n).le_iff_le.symm
@@ -221,7 +221,8 @@ theorem integral_stoppedValue_le_of_locallyBounded (hM : Supermartingale M ℱ m
       ∫ omega, -M (dyadicGrid n (dyadicCeilingIndex n (T omega))) omega ∂mu at hoptional
     rw [show dyadicGrid n 0 = 0 by
       apply NNReal.eq
-      simp only [dyadicGrid, NNReal.coe_mk, Nat.cast_zero, zero_div, NNReal.coe_zero]] at hoptional
+      simp only [dyadicGrid, Nat.cast_zero, zero_div, NNReal.coe_zero]
+      rfl] at hoptional
     have hgrid :
         (∫ omega, M (dyadicGrid n (dyadicCeilingIndex n (T omega))) omega ∂mu) ≤
           ∫ omega, M 0 omega ∂mu := by

@@ -187,7 +187,7 @@ private theorem exponentialWeight_le_add_tsum (lam : ℝ) (hlam : 0 ≤ lam) (t0
         _ ≤ _ := ENNReal.tsum_le_tsum hterm
     rw [htop, add_top]
     exact le_top
-  · push_neg at hall
+  · push Not at hall
     obtain ⟨m0, hm0⟩ := hall
     have hex : ∃ m : ℕ, tau ≤ ((m • t0 : NNReal) : ℝ≥0∞) := ⟨m0, hm0⟩
     set m := Nat.find hex with hm
@@ -331,18 +331,18 @@ theorem IsConservative.lintegral_exponentialStoppingWeight_exitTime_le_of_linteg
   have hq : ∀ y, IsConservative.continuousProcess P hP y
       {omega | ((K * M : NNReal) : ℝ≥0∞) < ContinuousPath.exitTime U omega} ≤ (K : ℝ≥0∞)⁻¹ := by
     intro y
-    rcases eq_or_lt_of_le (zero_le M) with hM0 | hM0
+    rcases eq_or_lt_of_le (zero_le : (0 : NNReal) ≤ M) with hM0 | hM0
     · have hzero : ∫⁻ omega, ContinuousPath.exitTime U omega
           ∂(IsConservative.continuousProcess P hP y) = 0 := by
-        refine le_antisymm ?_ (zero_le _)
-        simpa only [← hM0, ENNReal.coe_zero] using hM y
+        refine le_antisymm ?_ zero_le
+        simpa only [← hM0, ENNReal.coe_zero] using! hM y
       have hae : ∀ᵐ omega ∂(IsConservative.continuousProcess P hP y),
           ContinuousPath.exitTime U omega = 0 := (lintegral_eq_zero_iff hExit).mp hzero
       have hnull : IsConservative.continuousProcess P hP y
           {omega | ((K * M : NNReal) : ℝ≥0∞) < ContinuousPath.exitTime U omega} = 0 :=
-        measure_mono_null (fun omega homega ↦ ((zero_le _).trans_lt homega).ne') (ae_iff.mp hae)
+        measure_mono_null (fun omega homega ↦ (zero_le.trans_lt homega).ne') (ae_iff.mp hae)
       rw [hnull]
-      exact zero_le _
+      exact zero_le
     · have hpos : ((K * M : NNReal) : ℝ≥0∞) ≠ 0 := by
         simp only [ne_eq, ENNReal.coe_eq_zero, mul_eq_zero, not_or]
         exact ⟨hKpos.ne', hM0.ne'⟩
@@ -359,7 +359,7 @@ theorem IsConservative.lintegral_exponentialStoppingWeight_exitTime_le_of_linteg
       have hcancel := (ENNReal.mul_le_mul_iff_right hpos ENNReal.coe_ne_top).mp hle
       refine le_trans (measure_mono ?_) hcancel
       intro omega homega
-      exact le_of_lt (Set.mem_setOf_eq ▸ homega)
+      exact le_of_lt (Set.mem_ofPred_eq ▸ homega)
   have hcontr : (K : ℝ≥0∞)⁻¹ * ENNReal.ofReal (Real.exp (lam * ((K : ℝ) * (M : ℝ)))) < 1 := by
     have hlt : ENNReal.ofReal (Real.exp (lam * ((K : ℝ) * (M : ℝ)))) < (K : ℝ≥0∞) := by
       rw [← ENNReal.ofReal_coe_nnreal]

@@ -53,7 +53,7 @@ theorem ae_isLiveAtEveryTime_parameterizedCemeteryDenseTimeTrajectory
     rw [Kernel.map_apply _ (measurable_pi_apply (e n)),
       Measure.map_apply (measurable_pi_apply (e n)) hdelta] at hzero
     rw [ae_iff]
-    simpa only [Set.mem_preimage, Set.mem_singleton_iff, not_ne_iff] using hzero
+    simpa only [Set.mem_preimage, Set.mem_singleton_iff, not_ne_iff] using! hzero
   filter_upwards [ae_all_iff.mpr hcoordinate] with path hpath
   intro d
   simpa only [e.apply_symm_apply] using hpath (e.symm d)

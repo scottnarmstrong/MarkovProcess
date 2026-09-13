@@ -90,7 +90,7 @@ theorem eq_zero_of_generator_eq_smul {μ : ℝ} (hμ : 0 < μ) (f : S.generatorD
     linarith only [hexp, hμ]
   rw [← norm_le_zero_iff]
   by_contra hpos
-  push_neg at hpos
+  push Not at hpos
   have hstrict : 1 * ‖(f : E)‖ < Real.exp μ * ‖(f : E)‖ := by
     exact mul_lt_mul_of_pos_right hone hpos
   rw [one_mul] at hstrict

@@ -216,7 +216,9 @@ private theorem minimalResolvent_add_three (hemb : ∀ m, MeasurableEmbedding (e
     minimalResolvent R emb lam (fun y ↦ u y + v y + w y) x =
       minimalResolvent R emb lam u x + minimalResolvent R emb lam v x +
         minimalResolvent R emb lam w x := by
-  rw [minimalResolvent_add R emb hemb hmono hlam (hu.add hv) hw x,
+  have hfun : (fun y ↦ u y + v y + w y) = fun y ↦ (u + v) y + w y := rfl
+  have hfun' : (u + v) = fun y ↦ u y + v y := rfl
+  rw [hfun, minimalResolvent_add R emb hemb hmono hlam (hu.add hv) hw x, hfun',
     minimalResolvent_add R emb hemb hmono hlam hu hv x]
 
 /-- **The real form is additive** on bounded measurable observables. -/
@@ -279,12 +281,16 @@ theorem minimalResolventReal_sub (hemb : ∀ m, MeasurableEmbedding (emb m))
     (x : alpha) :
     minimalResolventReal R emb lam (fun y ↦ f y - g y) x =
       minimalResolventReal R emb lam f x - minimalResolventReal R emb lam g x := by
-  have hrewrite : (fun y ↦ f y - g y) = fun y ↦ f y + (fun z ↦ -g z) y := by
+  have hrewrite : (fun y ↦ f y - g y) = fun y ↦ f y + (-g) y := by
     funext y
+    show f y - g y = f y + -g y
     ring
+  have hneg : minimalResolventReal R emb lam (-g) x =
+      - minimalResolventReal R emb lam g x := by
+    have h : (-g) = fun y ↦ -g y := rfl
+    rw [h, minimalResolventReal_neg R emb]
   rw [hrewrite, minimalResolventReal_add R emb hemb hmono hlam hf hg.neg hfD
-      (fun y ↦ by rw [abs_neg]; exact hgE y) x,
-    minimalResolventReal_neg R emb]
+      (fun y ↦ by simpa using hgE y) x, hneg]
   ring
 
 end Additive

@@ -75,9 +75,11 @@ private theorem reindex_comp_orderedPathToFiniteSet
       orderedPathToFiniteSet I ∘
         FiniteOrderedTimes.restrictPath (finiteDenseApproximationOrderEmb q) := by
   funext path t
-  simp [Function.comp_apply, finiteDenseApproximationReindex,
+  simp only [Function.comp_apply, finiteDenseApproximationReindex,
     orderedPathToFiniteSet, FiniteOrderedTimes.restrictPath,
-    finiteDenseApproximationOrderEmb]
+    finiteDenseApproximationOrderEmb, RelEmbedding.trans_apply,
+    OrderIso.coe_toOrderEmbedding, OrderIso.apply_symm_apply]
+  rfl
 
 /-- A conservative finite dense-approximation kernel is the finite-time kernel at its canonical
 ordered physical times, mapped by the fixed, `q`-independent reindexing to `I`-indexed paths.

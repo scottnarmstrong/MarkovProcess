@@ -121,7 +121,7 @@ theorem isConservative_of_kernelResolvent_one {lam : ℝ} (hlam : 0 < lam)
     exact absurd hmeasure (by
       simp only [add_sub_add_left_eq_sub, ENNReal.ofReal_eq_zero, tsub_le_iff_right, zero_add,
         Nat.not_ofNat_le_one, not_false_eq_true])
-  haveI : (ae (volume.restrict (Ioo ((t : ℝ) + 1) ((t : ℝ) + 2)))).NeBot :=
+  have : (ae (volume.restrict (Ioo ((t : ℝ) + 1) ((t : ℝ) + 2)))).NeBot :=
     ae_neBot.mpr hne
   obtain ⟨s, hsone, hsmem⟩ := (haeI.and (self_mem_ae_restrict hinterval)).exists
   have hts : t ≤ Real.toNNReal s := by

@@ -55,7 +55,7 @@ variable [CompleteSpace E]
 /-- The exponential of the bounded Yosida generator at nonnegative time. -/
 def yosidaOperator (R : ContractiveResolvent E) (α : PositiveShift) (t : NNReal) :
     E →L[ℝ] E :=
-  exp ℝ ((t : ℝ) • R.yosidaGenerator α)
+  exp ((t : ℝ) • R.yosidaGenerator α)
 
 omit [CompleteSpace E] in
 @[simp]
@@ -123,7 +123,7 @@ theorem yosidaOperator_commute (R : ContractiveResolvent E)
     (α β : PositiveShift) (s t : NNReal) :
     Commute (R.yosidaOperator α s) (R.yosidaOperator β t) := by
   exact (commute_smul_smul_of_comp_eq _ _ (R.yosidaGenerator_commute α β).eq
-    (s : ℝ) (t : ℝ)).exp ℝ
+    (s : ℝ) (t : ℝ)).exp
 
 /-- Exact action of a Yosida generator on the range of a fixed resolvent. -/
 theorem yosidaGenerator_apply_operator (R : ContractiveResolvent E)

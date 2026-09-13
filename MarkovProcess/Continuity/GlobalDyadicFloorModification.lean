@@ -39,7 +39,7 @@ def nnrealUnitCoordinate (n : ℕ) (x : nnrealUnitInterval n) : Set.Icc (0 : ℝ
     constructor
     · exact sub_nonneg.mpr (by exact_mod_cast x.2.1)
     · rw [sub_le_iff_le_add]
-      simpa only [Nat.cast_add, Nat.cast_one, add_comm] using x.2.2⟩
+      simpa only [Nat.cast_add, Nat.cast_one, add_comm] using! x.2.2⟩
 
 /-- The canonical shifted unit path, expressed on the corresponding closed interval of `ℝ≥0`. -/
 def globalDyadicFloorPiece (X : NNRat → Ω → E) (ω : Ω) (n : ℕ) :
@@ -136,12 +136,12 @@ theorem continuous_globalDyadicFloorLimit_of_forall
   apply locallyFinite_nnrealUnitInterval.continuous iUnion_nnrealUnitInterval
   · exact fun n ↦ isClosed_Icc
   · intro n
-    rw [continuousOn_iff_continuous_restrict]
+    rw [continuousOn_iff_continuous_domRestrict]
     have hpiece : Continuous (globalDyadicFloorPiece X ω n) :=
       (h n).comp (continuous_nnrealUnitCoordinate n)
     apply hpiece.congr
     intro x
-    simpa only [Set.restrict_apply] using (globalDyadicFloorLimit_coe X ω n x).symm
+    simpa only [Set.domRestrict_apply] using (globalDyadicFloorLimit_coe X ω n x).symm
 
 omit [MeasurableSpace E] [BorelSpace E] [SecondCountableTopology E] in
 /-- Almost surely, all natural-shift canonical pieces are simultaneously continuous. -/
@@ -219,7 +219,7 @@ theorem IsKolmogorovProcess.ae_eq_continuousGlobalDyadicFloorLimit_nat_add
   rw [continuousGlobalDyadicFloorLimit, if_pos hcont]
   rw [show (↑((n : NNRat) + t) : ℝ≥0) = x by rfl,
     globalDyadicFloorLimit_coe X ω n ⟨x, hx⟩, globalDyadicFloorPiece, hcoord]
-  simpa only [timeShift_apply] using hident
+  simpa only [timeShift_apply] using! hident
 
 /-- The natural part of a nonnegative rational time. -/
 def nnratNatFloor (t : NNRat) : ℕ := ⌊(t : ℝ)⌋₊

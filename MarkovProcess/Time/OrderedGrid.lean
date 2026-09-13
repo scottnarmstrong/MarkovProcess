@@ -65,7 +65,7 @@ def orderedGridStepKernel (grid : OrderedGrid) (n : ℕ) :
 theorem IsConservative.isMarkovKernel_orderedGridStepKernel
     (hP : P.IsConservative) (grid : OrderedGrid) (n : ℕ) :
     IsMarkovKernel (orderedGridStepKernel P grid n) := by
-  letI : IsMarkovKernel (P (grid.increment n)) := hP.isMarkovKernel (grid.increment n)
+  let : IsMarkovKernel (P (grid.increment n)) := hP.isMarkovKernel (grid.increment n)
   rw [orderedGridStepKernel]
   infer_instance
 
@@ -82,7 +82,7 @@ noncomputable def orderedGridTrajectoryKernel
 theorem IsConservative.isMarkovKernel_orderedGridTrajectoryKernel
     (hP : P.IsConservative) (grid : OrderedGrid) :
     IsMarkovKernel (orderedGridTrajectoryKernel P hP grid) := by
-  letI (n : ℕ) : IsMarkovKernel (orderedGridStepKernel P grid n) :=
+  let (n : ℕ) : IsMarkovKernel (orderedGridStepKernel P grid n) :=
     IsConservative.isMarkovKernel_orderedGridStepKernel P hP grid n
   rw [orderedGridTrajectoryKernel]
   infer_instance
@@ -96,7 +96,7 @@ noncomputable def orderedGridTrajectoryLaw
 theorem IsConservative.isProbabilityMeasure_orderedGridTrajectoryLaw
     (hP : P.IsConservative) (grid : OrderedGrid) (x : α) :
     IsProbabilityMeasure (orderedGridTrajectoryLaw P hP grid x) := by
-  letI : IsMarkovKernel (orderedGridTrajectoryKernel P hP grid) :=
+  let : IsMarkovKernel (orderedGridTrajectoryKernel P hP grid) :=
     IsConservative.isMarkovKernel_orderedGridTrajectoryKernel P hP grid
   exact IsMarkovKernel.isProbabilityMeasure x
 
@@ -108,7 +108,7 @@ theorem IsConservative.orderedGridTrajectoryLaw_map_frestrictLe
         (fun path : ℕ → α => fun i : Finset.Iic n => path i) =
       Kernel.partialTraj (X := fun _ => α) (orderedGridStepKernel P grid) 0 n
         (initialHistory x) := by
-  letI (k : ℕ) : IsMarkovKernel (orderedGridStepKernel P grid k) :=
+  let (k : ℕ) : IsMarkovKernel (orderedGridStepKernel P grid k) :=
     IsConservative.isMarkovKernel_orderedGridStepKernel P hP grid k
   exact Kernel.traj_map_frestrictLe_apply
     (X := fun _ => α) (κ := orderedGridStepKernel P grid) 0 n (initialHistory x)

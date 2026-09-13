@@ -88,14 +88,14 @@ private theorem composed_denseRestriction_integral
         Kernel.comap KJ (ContinuousPath.coordinateProcess r) heval ∘ₘ mu := by
     rw [Measure.map_comp mu _ hdense, Measure.map_comp mu _ hrestrict, hkernel]
   rw [hmeasure, Measure.comp_eq_comp_const_apply]
-  letI : IsMarkovKernel KJ := by
+  let : IsMarkovKernel KJ := by
     dsimp only [KJ]
-    letI : IsMarkovKernel (finiteSetKernel P (denseTimePhysicalSet J)) :=
+    let : IsMarkovKernel (finiteSetKernel P (denseTimePhysicalSet J)) :=
       hP.isMarkovKernel_finiteSetKernel P (denseTimePhysicalSet J)
     exact Kernel.IsMarkovKernel.map _ (DenseTimePath.measurable_pullbackPhysicalSet J)
-  letI : IsMarkovKernel
+  let : IsMarkovKernel
       (Kernel.comap KJ (ContinuousPath.coordinateProcess r) heval) := inferInstance
-  letI : IsFiniteMeasure
+  let : IsFiniteMeasure
       ((Kernel.comap KJ (ContinuousPath.coordinateProcess r) heval ∘ₘ mu)) := inferInstance
   have hfint : Integrable f
       (Kernel.comap KJ (ContinuousPath.coordinateProcess r) heval ∘ₘ mu) :=
@@ -165,7 +165,6 @@ theorem IsFellerKernelSemigroup.continuousPathTrajectory_restrict_map_shift
     have hm := congrArg (fun rho : Measure (ContinuousPath alpha) ↦
       (rho.map ContinuousPath.denseRestriction).map J.restrict) (hr n)
     have hi := congrArg (fun rho : Measure (J → alpha) ↦ ∫ z, f z ∂rho) hm
-    dsimp only at hi
     rw [map_denseRestriction_restrict_integral,
       composed_denseRestriction_integral P hP default hK] at hi
     have htest : StronglyMeasurable (fun omega : ContinuousPath alpha ↦
@@ -176,8 +175,8 @@ theorem IsFellerKernelSemigroup.continuousPathTrajectory_restrict_map_shift
       (ContinuousPath.measurable_shift_fixed
         (DenseTime.castOrderEmbedding (q n))).aemeasurable
       htest.aestronglyMeasurable] at hi
-    simpa only [ContinuousPath.denseRestriction_apply,
-      ContinuousPath.shift_apply] using hi
+    simpa only [g, L, ContinuousPath.denseRestriction_apply,
+      ContinuousPath.shift_apply] using! hi
   have hlimits :
       (∫ omega, f (fun j : J ↦ omega (s + DenseTime.castOrderEmbedding j)) ∂mu) =
         ∫ omega, g (omega s) ∂mu :=
@@ -191,7 +190,7 @@ theorem IsFellerKernelSemigroup.continuousPathTrajectory_restrict_map_shift
   rw [integral_map (ContinuousPath.measurable_shift_fixed s).aemeasurable
     htest.aestronglyMeasurable]
   simpa only [ContinuousPath.denseRestriction_apply,
-    ContinuousPath.shift_apply] using hlimits
+    ContinuousPath.shift_apply] using! hlimits
 
 end
 end MarkovProcess.SubMarkovKernelSemigroup

@@ -63,7 +63,7 @@ private theorem hasDerivWithinAt_comparison
       (S' (Real.toNNReal (t - y)) (S'.generator ⟨S'.resolvent μ z, hwmem⟩)) (t - y) :=
     S'.hasDerivAt_operator_toNNReal ⟨S'.resolvent μ z, hwmem⟩ hty
   have h2 : HasDerivAt (fun u : ℝ ↦ t - u) (-1) y := by
-    simpa using (hasDerivAt_const y t).sub (hasDerivAt_id y)
+    simpa using! (hasDerivAt_const y t).sub (hasDerivAt_id y)
   have h3 := h1.scomp (𝕜 := ℝ) y h2
   have hd : HasDerivWithinAt
       (fun u : ℝ ↦ S.resolvent μ (S' (Real.toNNReal (t - u)) (S'.resolvent μ z)))

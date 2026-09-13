@@ -214,14 +214,14 @@ theorem finiteTimeKernel_eq (h : IsRescaledConjugate P P' e c) (hc : 0 < c)
       simp only [finiteTimeKernel_zero]
       rw [Kernel.map_apply _ (FiniteOrderedTimes.measurable_mapPath (ι := Fin 0) e.measurable),
         Kernel.comap_apply, Kernel.const_apply, Kernel.const_apply,
-        Measure.map_dirac (FiniteOrderedTimes.measurable_mapPath (ι := Fin 0) e.measurable)]
+        Measure.map_dirac (FiniteOrderedTimes.emptyPath alpha)]
       congr 1
       exact Subsingleton.elim _ _
   | succ n ih =>
       intro times
-      letI : IsFiniteKernel (P (c * times 0)) :=
+      let : IsFiniteKernel (P (c * times 0)) :=
         (P.isSubMarkovKernel (c * times 0)).isFiniteKernel
-      letI : IsMarkovKernel (finiteTimeKernel P (times.relativeTail.rescale c hc)) :=
+      let : IsMarkovKernel (finiteTimeKernel P (times.relativeTail.rescale c hc)) :=
         hP.isMarkovKernel_finiteTimeKernel P (times.relativeTail.rescale c hc)
       have hmapn : Measurable
           (FiniteOrderedTimes.mapPath e : (Fin n → alpha) → Fin n → beta) :=

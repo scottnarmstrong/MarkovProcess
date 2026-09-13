@@ -101,8 +101,8 @@ theorem canonicalFiltration_apply (n : ℕ) :
 /-- The coordinate process is adapted to its canonical filtration. -/
 theorem adapted_coordinateProcess :
     Adapted (canonicalFiltration (α := α)) (coordinateProcess (α := α)) := by
-  exact Filtration.adapted_natural
-    (u := coordinateProcess (α := α)) stronglyMeasurable_coordinateProcess
+  exact (Filtration.stronglyAdapted_natural
+    (u := coordinateProcess (α := α)) stronglyMeasurable_coordinateProcess).adapted
 
 end NaturalFiltration
 

@@ -132,7 +132,7 @@ theorem IsFellerKernelSemigroup.kernelResolvent_eq_killedResolvent_univ
           have hmap : (IsConservative.continuousProcess P hP).map
               (ContinuousPath.coordinateProcess (alpha := alpha) (Real.toNNReal t)) =
                 P (Real.toNNReal t) := by
-            simpa only [ContinuousPath.coordinateProcess] using
+            simpa only [ContinuousPath.coordinateProcess] using!
               hFeller.continuousProcess_map_eval_nnreal P hP hK (Real.toNNReal t)
           rw [hmap]
         _ = ∫⁻ omega, f (omega (Real.toNNReal t))
@@ -186,12 +186,12 @@ theorem IsConservative.killedResolvent_le_feynmanKacResolvent
             ((ENNReal.coe_le_coe.mpr hsu).trans_lt hsurv))
         _ = 0 := intervalIntegral.integral_zero
     have hsurv' : t ∈ {r : ℝ | ((Real.toNNReal r : NNReal) : ℝ≥0∞) <
-        ContinuousPath.exitTime U omega} := by simpa only [u] using hsurv
+        ContinuousPath.exitTime U omega} := by simpa only [u] using! hsurv
     rw [indicator_of_mem hsurv', show feynmanKacAdditiveFunctional q (Real.toNNReal t) omega = 0
       by simpa only [u] using hA0, neg_zero, Real.exp_zero, ENNReal.ofReal_one,
       one_mul]
   · have hsurv' : t ∉ {r : ℝ | ((Real.toNNReal r : NNReal) : ℝ≥0∞) <
-        ContinuousPath.exitTime U omega} := by simpa only [u] using hsurv
+        ContinuousPath.exitTime U omega} := by simpa only [u] using! hsurv
     simp only [indicator_of_notMem hsurv', mul_zero, zero_le]
 
 /-- Finite-time perturbation formula for the Feynman--Kac operators on bounded real
@@ -313,7 +313,7 @@ theorem IsFellerKernelSemigroup.integral_sub_feynmanKac_eq_integral_of_norm_le
       _ = ∫ omega, q (omega u) * IsConservative.feynmanKac P hP q r f (omega u) ∂mu := by
             rfl
       _ = ∫ y, q y * IsConservative.feynmanKac P hP q r f y ∂(P u x) := by
-            simpa only [mu] using
+            simpa only [mu] using!
               (hFeller.integral_eval_continuousProcess_of_measurable P hP hK u x
                 (hq.mul (IsConservative.measurable_feynmanKac P hP hq r hf)))
       _ = ∫ y, q y * IsConservative.feynmanKac P hP q
@@ -433,7 +433,7 @@ theorem IsFellerKernelSemigroup.lintegral_eq_feynmanKacENNReal_add_lintegral
   have hkpoint (s : ℝ) : ENNReal.ofReal (kR s) = kE s := by
     let u : NNReal := Real.toNNReal s
     let r : NNReal := t - u
-    letI hMarkovU : IsMarkovKernel (P u) := hP.isMarkovKernel u
+    let hMarkovU : IsMarkovKernel (P u) := hP.isMarkovKernel u
     have hterm : Integrable (fun y ↦ q y * IsConservative.feynmanKac P hP q r g y)
         (P u x) := by
       refine Integrable.of_bound
@@ -458,7 +458,7 @@ theorem IsFellerKernelSemigroup.lintegral_eq_feynmanKacENNReal_add_lintegral
       IsConservative.ofReal_feynmanKac_eq_feynmanKacENNReal P hP hq hq0 r hg hg0 hgD y,
       hgf]
   have hkEmeas : Measurable kE := by
-    letI hFiniteJoint : IsFiniteKernel P.jointKernel := ⟨⟨1, ENNReal.one_lt_top, fun p ↦ by
+    let hFiniteJoint : IsFiniteKernel P.jointKernel := ⟨⟨1, ENNReal.one_lt_top, fun p ↦ by
         rw [jointKernel_apply]
         exact P.measure_univ_le_one p.1 p.2⟩⟩
     let K : Kernel ℝ alpha := Kernel.comap P.jointKernel
@@ -481,7 +481,7 @@ theorem IsFellerKernelSemigroup.lintegral_eq_feynmanKacENNReal_add_lintegral
   have hkRle (s : ℝ) : kR s ≤ C * D := by
     let u : NNReal := Real.toNNReal s
     let r : NNReal := t - u
-    letI hMarkovU : IsMarkovKernel (P u) := hP.isMarkovKernel u
+    let hMarkovU : IsMarkovKernel (P u) := hP.isMarkovKernel u
     dsimp only [kR]
     calc
       (∫ y, q y * IsConservative.feynmanKac P hP q r g y ∂(P u x)) ≤
@@ -503,7 +503,7 @@ theorem IsFellerKernelSemigroup.lintegral_eq_feynmanKacENNReal_add_lintegral
     rw [Real.norm_eq_abs, abs_of_nonneg (hkR0 s)]
     exact hkRle s
   have hplainInt : Integrable g (P t x) := by
-    letI hMarkovT : IsMarkovKernel (P t) := hP.isMarkovKernel t
+    let hMarkovT : IsMarkovKernel (P t) := hP.isMarkovKernel t
     refine Integrable.of_bound hg.stronglyMeasurable.aestronglyMeasurable D ?_
     exact Eventually.of_forall fun y ↦ by
       rw [Real.norm_eq_abs, abs_of_nonneg (hg0 y)]
@@ -544,7 +544,7 @@ theorem IsFellerKernelSemigroup.kernelResolvent_eq_feynmanKacResolvent_add
     IsConservative.feynmanKacENNReal P hP q (Real.toNNReal p.2) f y
     ∂(P (Real.toNNReal p.1) x)
   let H : ℝ × ℝ → ℝ≥0∞ := fun p ↦ W (p.1 + p.2) * B p
-  letI hFiniteJoint : IsFiniteKernel P.jointKernel := ⟨⟨1, ENNReal.one_lt_top, fun p ↦ by
+  let hFiniteJoint : IsFiniteKernel P.jointKernel := ⟨⟨1, ENNReal.one_lt_top, fun p ↦ by
     rw [jointKernel_apply]
     exact P.measure_univ_le_one p.1 p.2⟩⟩
   let K : Kernel (ℝ × ℝ) alpha := Kernel.comap P.jointKernel
@@ -616,7 +616,7 @@ theorem IsFellerKernelSemigroup.kernelResolvent_eq_feynmanKacResolvent_add
     unfold SubMarkovKernelSemigroup.kernelResolvent
     apply setLIntegral_congr_fun measurableSet_Ioi
     intro s _hs
-    letI hMarkovS : IsMarkovKernel (P (Real.toNNReal s)) :=
+    let hMarkovS : IsMarkovKernel (P (Real.toNNReal s)) :=
       hP.isMarkovKernel (Real.toNNReal s)
     have hG : Measurable fun p : ℝ × alpha ↦ W p.1 *
         (ENNReal.ofReal (q p.2) *
@@ -700,7 +700,7 @@ theorem IsConservative.kernelResolvent_lt_top (hP : P.IsConservative) (lam : ℝ
     {f : alpha → ℝ≥0∞} {D : NNReal} (hfD : ∀ y, f y ≤ (D : ℝ≥0∞)) (x : alpha) :
     P.kernelResolvent lam f x < ∞ := by
   have hinner (t : ℝ) : (∫⁻ y, f y ∂(P (Real.toNNReal t) x)) ≤ (D : ℝ≥0∞) := by
-    letI hMarkovT : IsMarkovKernel (P (Real.toNNReal t)) :=
+    let hMarkovT : IsMarkovKernel (P (Real.toNNReal t)) :=
       hP.isMarkovKernel (Real.toNNReal t)
     calc
       (∫⁻ y, f y ∂(P (Real.toNNReal t) x)) ≤ ∫⁻ _y, (D : ℝ≥0∞)

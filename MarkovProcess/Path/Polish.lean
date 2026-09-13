@@ -29,8 +29,8 @@ instance instPolishSpace : PolishSpace (ContinuousPath alpha) := inferInstance
 /-- With the Borel sigma-algebra, continuous-path space is a standard Borel space. -/
 theorem standardBorelSpace_borel :
     @StandardBorelSpace (ContinuousPath alpha) (borel (ContinuousPath alpha)) := by
-  letI : MeasurableSpace (ContinuousPath alpha) := borel (ContinuousPath alpha)
-  haveI : BorelSpace (ContinuousPath alpha) := ⟨rfl⟩
+  let : MeasurableSpace (ContinuousPath alpha) := borel (ContinuousPath alpha)
+  have : BorelSpace (ContinuousPath alpha) := ⟨rfl⟩
   infer_instance
 
 end ContinuousPath

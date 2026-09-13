@@ -67,13 +67,13 @@ theorem continuousPathTrajectory_integral_map_denseRestriction_map_restrict_comp
         Kernel.comap KJ e he ∘ₘ mu := by
     rw [Measure.map_comp mu _ hdense, Measure.map_comp mu _ hrestrict, hkernel]
   rw [hmeasure, Measure.comp_eq_comp_const_apply]
-  letI : IsMarkovKernel KJ := by
+  let : IsMarkovKernel KJ := by
     dsimp only [KJ]
-    letI : IsMarkovKernel (finiteSetKernel P (denseTimePhysicalSet J)) :=
+    let : IsMarkovKernel (finiteSetKernel P (denseTimePhysicalSet J)) :=
       hP.isMarkovKernel_finiteSetKernel P (denseTimePhysicalSet J)
     exact Kernel.IsMarkovKernel.map _ (DenseTimePath.measurable_pullbackPhysicalSet J)
-  letI : IsMarkovKernel (Kernel.comap KJ e he) := inferInstance
-  letI : IsFiniteMeasure ((Kernel.comap KJ e he ∘ₘ mu)) := inferInstance
+  let : IsMarkovKernel (Kernel.comap KJ e he) := inferInstance
+  let : IsFiniteMeasure ((Kernel.comap KJ e he ∘ₘ mu)) := inferInstance
   have hfint : Integrable f (Kernel.comap KJ e he ∘ₘ mu) := f.integrable
   rw [Measure.comp_eq_comp_const_apply] at hfint
   have hi := Kernel.integral_comp hfint

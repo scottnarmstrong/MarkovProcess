@@ -51,7 +51,7 @@ noncomputable def augmentedKernel (t : NNReal) : Kernel (Theta × alpha) (Theta 
 theorem isMarkovKernel_augmentedKernel
     (hP : ∀ theta, (P.toSubMarkovKernelSemigroup theta).IsConservative) (t : NNReal) :
     IsMarkovKernel (P.augmentedKernel t) := by
-  letI : IsMarkovKernel (P.parameterStateKernel t) :=
+  let : IsMarkovKernel (P.parameterStateKernel t) :=
     ⟨fun q ↦ by
       rw [parameterStateKernel_apply]
       exact ⟨hP q.1 t q.2⟩⟩
@@ -70,7 +70,7 @@ theorem isMarkovKernel_parameterizedOrderedGridStepKernel
     (hP : ∀ theta, (P.toSubMarkovKernelSemigroup theta).IsConservative)
     (grid : OrderedGrid) (n : ℕ) :
     IsMarkovKernel (P.parameterizedOrderedGridStepKernel grid n) := by
-  letI : IsMarkovKernel (P.augmentedKernel (grid.increment n)) :=
+  let : IsMarkovKernel (P.augmentedKernel (grid.increment n)) :=
     P.isMarkovKernel_augmentedKernel hP (grid.increment n)
   rw [parameterizedOrderedGridStepKernel]
   infer_instance
@@ -91,7 +91,7 @@ theorem isMarkovKernel_parameterizedOrderedGridTrajectoryKernel
     (hP : ∀ theta, (P.toSubMarkovKernelSemigroup theta).IsConservative)
     (grid : OrderedGrid) :
     IsMarkovKernel (P.parameterizedOrderedGridTrajectoryKernel hP grid) := by
-  letI (n : ℕ) : IsMarkovKernel (P.parameterizedOrderedGridStepKernel grid n) :=
+  let (n : ℕ) : IsMarkovKernel (P.parameterizedOrderedGridStepKernel grid n) :=
     P.isMarkovKernel_parameterizedOrderedGridStepKernel hP grid n
   rw [parameterizedOrderedGridTrajectoryKernel]
   apply Kernel.IsMarkovKernel.map
@@ -102,7 +102,7 @@ theorem isProbabilityMeasure_parameterizedOrderedGridTrajectoryKernel_apply
     (hP : ∀ theta, (P.toSubMarkovKernelSemigroup theta).IsConservative)
     (grid : OrderedGrid) (theta : Theta) (x : alpha) :
     IsProbabilityMeasure (P.parameterizedOrderedGridTrajectoryKernel hP grid (theta, x)) := by
-  letI : IsMarkovKernel (P.parameterizedOrderedGridTrajectoryKernel hP grid) :=
+  let : IsMarkovKernel (P.parameterizedOrderedGridTrajectoryKernel hP grid) :=
     P.isMarkovKernel_parameterizedOrderedGridTrajectoryKernel hP grid
   exact IsMarkovKernel.isProbabilityMeasure (theta, x)
 

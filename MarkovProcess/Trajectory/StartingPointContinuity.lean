@@ -66,7 +66,7 @@ theorem IsFellerKernelSemigroup.continuous_integral_boundedContinuous_finiteSetK
     {P : SubMarkovKernelSemigroup alpha} (hFeller : P.IsFellerKernelSemigroup)
     (hP : P.IsConservative) (I : Finset NNReal) (f : (I → alpha) →ᵇ ℝ) :
     Continuous fun x ↦ ∫ path, f path ∂finiteSetKernel P I x := by
-  letI : IsMarkovKernel (finiteSetKernel P I) := hP.isMarkovKernel_finiteSetKernel P I
+  let : IsMarkovKernel (finiteSetKernel P I) := hP.isMarkovKernel_finiteSetKernel P I
   have hcompact : ∀ g : C_c(I → alpha, ℝ),
       Continuous fun x ↦ ∫ path, g path ∂finiteSetKernel P I x :=
     fun g ↦ hFeller.continuous_integral_compactlySupported_finiteSetKernel hP I g
@@ -87,7 +87,7 @@ theorem IsFellerKernelSemigroup.continuous_integral_boundedContinuous_finiteSetK
     simpa only [Real.dist_eq] using h
   have hmass : ∀ᶠ x in nhds x0,
       1 - (∫ path, g path ∂finiteSetKernel P I x) < eps / (3 * (‖f‖ + 1)) :=
-    Tendsto.eventually_lt_const (by linarith only [hgint])
+    Tendsto.eventually_lt_const (by simp only [Pi.sub_apply]; linarith only [hgint])
       ((continuous_const.sub (hcompact g)).continuousAt (x := x0))
   filter_upwards [htrunc, hmass] with x hxtrunc hxmass
   rw [Real.dist_eq]

@@ -48,7 +48,7 @@ theorem isClosed_nonnegativeSet : IsClosed (nonnegativeSet (X := X)) := by
   rw [show {f : C₀(X, ℝ) | ∀ x, 0 ≤ f x} =
       ⋂ x : X, {f : C₀(X, ℝ) | f x ∈ Set.Ici 0} by
     ext f
-    simp only [mem_setOf_eq, mem_iInter, mem_Ici]]
+    simp only [mem_ofPred_eq, mem_iInter, mem_Ici]]
   apply isClosed_iInter
   intro x
   exact isClosed_Ici.preimage

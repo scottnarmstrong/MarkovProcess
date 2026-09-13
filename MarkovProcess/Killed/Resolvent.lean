@@ -91,7 +91,7 @@ theorem IsConservative.killedResolvent_eq_lintegral (lam : ℝ) {f : alpha → �
             ((Real.toNNReal p.1 : NNReal) : ℝ≥0∞) < ContinuousPath.exitTime U p.2}.indicator
             (fun p ↦ f (p.2 (Real.toNNReal p.1))) p := by
       funext p
-      simp only [Function.uncurry, Set.indicator_apply, Set.mem_setOf_eq]
+      simp only [Function.uncurry, Set.indicator_apply, Set.mem_ofPred_eq]
     rw [hrw]
     refine Measurable.mul ?_ ((hf.comp heval).indicator hS)
     exact ENNReal.measurable_ofReal.comp
@@ -114,7 +114,7 @@ theorem IsConservative.killedResolvent_eq_lintegral (lam : ℝ) {f : alpha → �
   refine lintegral_congr fun omega ↦ ?_
   refine setLIntegral_congr_fun measurableSet_Ioi ?_
   intro t _
-  simp only [Set.indicator_apply, Set.mem_setOf_eq]
+  simp only [Set.indicator_apply, Set.mem_ofPred_eq]
 
 /-- **The killed resolvent is antitone in the shift.**  A larger shift discounts the future more,
 so it produces a smaller resolvent. -/

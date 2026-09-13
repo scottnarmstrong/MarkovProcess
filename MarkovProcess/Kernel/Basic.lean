@@ -46,8 +46,8 @@ theorem isFiniteKernel (hκ : IsSubMarkovKernel κ) : IsFiniteKernel κ :=
 /-- The zero kernel is sub-Markov. -/
 theorem zero : IsSubMarkovKernel (0 : Kernel α β) := by
   intro x
-  rw [Kernel.zero_apply]
-  exact zero_le 1
+  rw [zero_apply]
+  exact zero_le
 
 /-- The identity kernel is sub-Markov. -/
 theorem id : IsSubMarkovKernel (Kernel.id : Kernel α α) := by

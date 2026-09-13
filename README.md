@@ -26,7 +26,7 @@ is Mathlib.
   contains its single intentional statement-level `sorry`, filled by the solution file.)
 - **No custom `axiom`.** Every public theorem reduces to Mathlib's three standard foundational
   axioms `propext`, `Classical.choice`, `Quot.sound`.
-- Pinned to Lean `v4.26.0` and `mathlib` `v4.26.0`. Builds warning-free under the Lean core
+- Pinned to Lean `v4.33.1` and `mathlib` `v4.33.1`. Builds warning-free under the Lean core
   linters enabled in the lakefile (unused variables and section variables, unused simp arguments,
   unnecessary `simpa`, deprecations); no heartbeat overrides anywhere.
 

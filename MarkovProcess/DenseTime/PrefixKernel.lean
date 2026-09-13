@@ -84,7 +84,7 @@ theorem isMarkovKernel_denseTimePrefixKernel (P : SubMarkovKernelSemigroup α)
     (hP : P.IsConservative) (e : ℕ ≃ D) (ι : D ↪ NNReal) (n : ℕ) :
     IsMarkovKernel (denseTimePrefixKernel P e ι n) := by
   rw [denseTimePrefixKernel_eq_map]
-  letI : IsMarkovKernel (finiteSetKernel P (denseTimePhysicalPrefix e ι n)) :=
+  let : IsMarkovKernel (finiteSetKernel P (denseTimePhysicalPrefix e ι n)) :=
     hP.isMarkovKernel_finiteSetKernel P _
   exact Kernel.IsMarkovKernel.map _ (measurable_denseTimePrefixReindex e ι n)
 
@@ -93,7 +93,7 @@ starting state. -/
 theorem isProbabilityMeasure_denseTimePrefixKernel (P : SubMarkovKernelSemigroup α)
     (hP : P.IsConservative) (e : ℕ ≃ D) (ι : D ↪ NNReal) (n : ℕ) (x : α) :
     IsProbabilityMeasure (denseTimePrefixKernel P e ι n x) := by
-  letI : IsMarkovKernel (denseTimePrefixKernel P e ι n) :=
+  let : IsMarkovKernel (denseTimePrefixKernel P e ι n) :=
     hP.isMarkovKernel_denseTimePrefixKernel P e ι n
   exact IsMarkovKernel.isProbabilityMeasure x
 

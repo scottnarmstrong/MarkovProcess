@@ -63,7 +63,7 @@ theorem isMarkovKernel_augmentedPrefixKernel (P : SubMarkovKernelSemigroup α)
     (hP : P.IsConservative) (e : ℕ ≃ D) (ι : D ↪ NNReal) (n : ℕ) :
     IsMarkovKernel (augmentedPrefixKernel P e ι n) := by
   rw [augmentedPrefixKernel, Kernel.mapOfMeasurable_eq_map]
-  letI : IsMarkovKernel (denseTimePrefixKernel P e ι n) :=
+  let : IsMarkovKernel (denseTimePrefixKernel P e ι n) :=
     hP.isMarkovKernel_denseTimePrefixKernel P e ι n
   exact Kernel.IsMarkovKernel.map _ (DenseTimeHistory.historyEquiv n).symm.measurable
 
@@ -97,7 +97,7 @@ def observationCondKernel (P : SubMarkovKernelSemigroup α) (hP : P.IsConservati
     (e : ℕ ≃ D) (ι : D ↪ NNReal) (n : ℕ) : Kernel (α × (Fin n → α)) α := by
   letI : IsMarkovKernel (nextObservationJoint P e ι n) := by
     rw [nextObservationJoint, Kernel.mapOfMeasurable_eq_map]
-    letI : IsMarkovKernel (denseTimePrefixKernel P e ι (n + 1)) :=
+    let : IsMarkovKernel (denseTimePrefixKernel P e ι (n + 1)) :=
       hP.isMarkovKernel_denseTimePrefixKernel P e ι (n + 1)
     exact Kernel.IsMarkovKernel.map _ (DenseTimeHistory.splitLast n).measurable
   exact (nextObservationJoint P e ι n).condKernel
@@ -129,7 +129,7 @@ theorem isMarkovKernel_denseStep (P : SubMarkovKernelSemigroup α)
     (hP : P.IsConservative) (e : ℕ ≃ D) (ι : D ↪ NNReal) (n : ℕ) :
     IsMarkovKernel (denseStep P hP e ι n) := by
   rw [denseStep]
-  letI : IsMarkovKernel (observationCondKernel P hP e ι n) :=
+  let : IsMarkovKernel (observationCondKernel P hP e ι n) :=
     isMarkovKernel_observationCondKernel P hP e ι n
   infer_instance
 

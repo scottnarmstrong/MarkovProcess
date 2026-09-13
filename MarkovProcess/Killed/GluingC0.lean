@@ -194,9 +194,9 @@ theorem kernelResolvent_minimalC0Resolvent {lam : ℝ} (hlam : 0 < lam) {f : alp
     (hf : Measurable f) (x : alpha) :
     (minimalC0Resolvent R emb T hemb hmono hT hdense).kernelSemigroup.kernelResolvent lam f x =
       minimalResolvent R emb lam f x := by
-  haveI := (minimalC0Resolvent R emb T hemb hmono hT
+  have := (minimalC0Resolvent R emb T hemb hmono hT
     hdense).kernelSemigroup.isFiniteMeasure_resolventPotential hlam x
-  haveI := isFiniteMeasure_minimalPotential R emb hemb hmono hlam x
+  have := isFiniteMeasure_minimalPotential R emb hemb hmono hlam x
   have hc0 : ∀ g : C₀(alpha, ℝ), (∀ y, 0 ≤ g y) →
       ∫⁻ z, Function.extend (id : alpha → alpha) (fun y ↦ ENNReal.ofReal (g y)) 0 z
           ∂(minimalC0Resolvent R emb T hemb hmono hT hdense).kernelSemigroup.resolventPotential

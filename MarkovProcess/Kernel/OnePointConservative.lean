@@ -46,8 +46,8 @@ theorem OnePointRegular.ae_exitTime_eq_top (h : R.OnePointRegular) {lam : ℝ} (
     ∀ᵐ omega ∂IsConservative.continuousProcess R.onePointKernelSemigroup
         R.isConservative_onePointKernelSemigroup (x : OnePoint X),
       ContinuousPath.exitTime (Set.range ((↑) : X → OnePoint X)) omega = ⊤ := by
-  letI := h.metricSpace
-  letI := h.completeSpace
+  let := h.metricSpace
+  let := h.completeSpace
   have hlaplace := R.lintegral_exp_neg_onePoint_exitTime h.rho h.continuous_rho h.rho_pos
     h.lipschitz_rho h.isCompact_superlevel h.kolmogorovRegular lam hlam x
   rw [hone, tsub_self] at hlaplace

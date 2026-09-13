@@ -81,7 +81,7 @@ theorem localResolvent_mono_of_le {m : ℕ} (hemb : Function.Injective (emb m)) 
     rw [localResolvent_apply R emb hemb lam f y, localResolvent_apply R emb hemb lam g y]
     exact (R m).kernelSemigroup.kernelResolvent_mono lam (fun z ↦ hfg (emb m z)) y
   · rw [localResolvent_of_notMem R emb m lam f hx]
-    exact zero_le _
+    exact zero_le
 
 /-- The transported resolvent is measurable in the starting point. -/
 theorem measurable_localResolvent {m : ℕ} (hemb : MeasurableEmbedding (emb m)) (lam : ℝ)
@@ -138,7 +138,7 @@ theorem localResolvent_le_succ (hemb : ∀ m, MeasurableEmbedding (emb m))
       rw [hcomm m z]
     rwa [hgf] at hdom
   · rw [localResolvent_of_notMem R emb m lam f hx]
-    exact zero_le _
+    exact zero_le
 
 /-- The transported resolvents form a monotone family. -/
 theorem monotone_localResolvent (hemb : ∀ m, MeasurableEmbedding (emb m))
@@ -200,7 +200,7 @@ theorem minimalResolvent_one_le (hemb : ∀ m, Function.Injective (emb m))
     rw [localResolvent_apply R emb (hemb m) lam _ y]
     exact (R m).kernelSemigroup.kernelResolvent_one_le hlam y
   · rw [localResolvent_of_notMem R emb m lam _ hx]
-    exact zero_le _
+    exact zero_le
 
 omit [MeasurableSpace alpha] in
 /-- **The minimal resolvent is sub-Markov.**  At a positive shift, `lam` times the minimal

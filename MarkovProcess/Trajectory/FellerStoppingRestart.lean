@@ -107,7 +107,6 @@ theorem IsFellerKernelSemigroup.continuousPathTrajectory_restrict_map_shift_stop
     have hm := congrArg (fun rho : Measure (ContinuousPath alpha) ↦
       (rho.map ContinuousPath.denseRestriction).map J.restrict) (hstep n)
     have hi := congrArg (fun rho : Measure (J → alpha) ↦ ∫ z, f z ∂rho) hm
-    dsimp only at hi
     rw [ContinuousPath.integral_map_denseRestriction_map_restrict,
       continuousPathTrajectory_integral_map_denseRestriction_map_restrict_comp_comap
         P hP default hK] at hi
@@ -115,7 +114,7 @@ theorem IsFellerKernelSemigroup.continuousPathTrajectory_restrict_map_shift_stop
       (ContinuousPath.measurable_shift_of_measurable (Tn n) (hTnMeas n)).aemeasurable
       htest.aestronglyMeasurable] at hi
     simpa only [ContinuousPath.denseRestriction_apply, ContinuousPath.shift_apply, hg, hL]
-      using hi
+      using! hi
   have hlimits :
       (∫ omega, f (fun j : J ↦ omega (T omega + DenseTime.castOrderEmbedding j)) ∂mu) =
         ∫ omega, g (omega (T omega)) ∂mu :=
@@ -127,7 +126,7 @@ theorem IsFellerKernelSemigroup.continuousPathTrajectory_restrict_map_shift_stop
     (ContinuousPath.measurable_shift_stoppingTime T hT).aemeasurable
     htest.aestronglyMeasurable]
   simpa only [ContinuousPath.denseRestriction_apply, ContinuousPath.shift_apply, hg, hL]
-    using hlimits
+    using! hlimits
 
 end
 end MarkovProcess.SubMarkovKernelSemigroup

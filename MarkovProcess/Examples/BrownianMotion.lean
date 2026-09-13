@@ -61,9 +61,9 @@ private theorem map_prodMk_eq_compProd_of_restrict_map
     (hrestrict : ∀ C : Set beta, MeasurableSet C →
       (mu.restrict (X ⁻¹' C)).map Y = kappa.comap X hX ∘ₘ (mu.restrict (X ⁻¹' C))) :
     mu.map (fun omega ↦ (X omega, Y omega)) = (mu.map X) ⊗ₘ kappa := by
-  haveI : IsProbabilityMeasure (mu.map (fun omega ↦ (X omega, Y omega))) :=
+  have : IsProbabilityMeasure (mu.map (fun omega ↦ (X omega, Y omega))) :=
     Measure.isProbabilityMeasure_map (hX.prodMk hY).aemeasurable
-  haveI : IsProbabilityMeasure (mu.map X) := Measure.isProbabilityMeasure_map hX.aemeasurable
+  have : IsProbabilityMeasure (mu.map X) := Measure.isProbabilityMeasure_map hX.aemeasurable
   refine MeasureTheory.ext_of_generate_finite _ generateFrom_prod.symm
     isPiSystem_prod ?_ ?_
   · rintro _ ⟨C, hC, B, hB, rfl⟩
@@ -202,7 +202,7 @@ theorem brownianMotion_map_incrementsMap : ∀ {n : ℕ} {s : Fin n → NNReal},
   induction n with
   | zero =>
     intro s _ x
-    haveI : IsProbabilityMeasure ((brownianMotion x).map
+    have : IsProbabilityMeasure ((brownianMotion x).map
         (fun omega ↦ incrementsMap x (fun i ↦ omega (s i)))) :=
       Measure.isProbabilityMeasure_map (measurable_incrementsMap_eval s x).aemeasurable
     exact (Measure.pi_eq fun A _ ↦ by simp).symm
@@ -350,11 +350,10 @@ theorem brownianMotion_map_increment (x : ℝ) (a b : NNReal) (hab : a ≤ b) :
       (ContinuousPath.measurable_coordinateProcess _).sub
         (ContinuousPath.measurable_coordinateProcess _)
   have hproj := congrArg (fun mu : Measure (Fin 1 → ℝ) ↦ mu.map (Function.eval (0 : Fin 1))) h
-  simp only [] at hproj
   have hpres := measurePreserving_eval (fun i : Fin 1 ↦ gaussianReal 0
     ((![a, b] : Fin 2 → NNReal) i.succ - (![a, b] : Fin 2 → NNReal) i.castSucc)) 0
   rw [Measure.map_map (measurable_pi_apply _) hmeas, hpres.map_eq] at hproj
-  simpa using hproj
+  exact hproj
 
 /-- A process has independent increments when, for every finite monotone family of times, the
 increments over the consecutive intervals of that family are independent. -/

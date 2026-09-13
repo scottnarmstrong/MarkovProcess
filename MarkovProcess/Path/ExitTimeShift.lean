@@ -96,7 +96,7 @@ theorem measurableSet_lt_exitTime_canonicalFiltration (U : Set alpha) (hU : IsOp
   have hcompl : {omega : ContinuousPath alpha | (t : ℝ≥0∞) < exitTime U omega} =
       {omega : ContinuousPath alpha | exitTimeTop U omega ≤ (t : WithTop NNReal)}ᶜ := by
     ext omega
-    simp only [Set.mem_setOf_eq, Set.mem_compl_iff, not_le]
+    simp only [Set.mem_ofPred_eq, Set.mem_compl_iff, not_le]
     exact Iff.rfl
   rw [hcompl]
   exact (isStoppingTime_exitTime U hU t).compl

@@ -201,9 +201,9 @@ theorem measurableSet_stoppingTime_lt_top (htau : IsStoppingTime f tau) :
   refine ⟨?_, fun i ↦ ?_⟩
   · have h : {omega | tau omega < ⊤} = {omega | tau omega = ⊤}ᶜ := by
       ext omega
-      simp only [Set.mem_setOf_eq, Set.mem_compl_iff, lt_top_iff_ne_top]
+      simp only [Set.mem_ofPred_eq, Set.mem_compl_iff, lt_top_iff_ne_top]
     rw [h]
-    exact htau.measurableSet_eq_top.compl
+    exact htau.measurableSet_eq_top'.compl
   · have h : {omega | tau omega < ⊤} ∩ {omega | tau omega ≤ (i : WithTop NNReal)} =
         {omega | tau omega ≤ (i : WithTop NNReal)} :=
       Set.inter_eq_right.mpr fun omega homega ↦ lt_of_le_of_lt homega (WithTop.coe_lt_top i)
@@ -215,7 +215,7 @@ every stopping time. -/
 theorem filtration_zero_le_measurableSpace_stoppingTime (htau : IsStoppingTime f tau) :
     f 0 ≤ htau.measurableSpace := by
   intro s hs
-  exact ⟨f.le 0 s hs, fun i ↦ (f.mono (zero_le i) s hs).inter (htau i)⟩
+  exact ⟨le_iSup f 0 s hs, fun i ↦ (f.mono zero_le s hs).inter (htau i)⟩
 
 /-- The `K`-th slice of an event `A` of the stopped sigma-algebra of `tau`: the part of `A` on
 which `tau` is at most `K` but larger than every smaller natural number.  These slices are
@@ -252,7 +252,7 @@ theorem pairwise_disjoint_stoppingTimeSlice (A : Set Omega) :
     have h1 : tau omega ≤ ((K : NNReal) : WithTop NNReal) := hK.2
     have h2 : ((K : NNReal) : WithTop NNReal) < tau omega := by
       have hmem := hL.1.2
-      simp only [Set.mem_iInter, Set.mem_setOf_eq] at hmem
+      simp only [Set.mem_iInter, Set.mem_ofPred_eq] at hmem
       exact hmem K (Set.mem_Iio.mpr h)
     exact absurd h1 (not_le_of_gt h2)
   intro K L hKL
@@ -362,7 +362,7 @@ theorem measurable_eval_untopD_stoppingTime_stopped
           {omega | tau omega < ⊤}) ∪
         ((coordinateProcess (alpha := alpha) 0) ⁻¹' B ∩ {omega | tau omega < ⊤}ᶜ) := by
     ext omega
-    simp only [Set.mem_union, Set.mem_inter_iff, Set.mem_preimage, Set.mem_setOf_eq,
+    simp only [Set.mem_union, Set.mem_inter_iff, Set.mem_preimage, Set.mem_ofPred_eq,
       Set.mem_compl_iff, stoppedValue, coordinateProcess]
     by_cases h : tau omega = ⊤
     · rw [h]
@@ -419,6 +419,7 @@ theorem setIntegral_integral_kernel_of_restrict_map
     ∫ omega in A, (∫ y, F y ∂kappa omega) ∂mu =
         ∫ omega, (∫ y, F y ∂kappa omega) ∂(mu.restrict A) := rfl
     _ = ∫ y, F y ∂(kappa ∘ₘ (mu.restrict A)) := by
+      rw [Measure.comp_eq_comp_const_apply]
       simpa only [Kernel.const_apply] using hIntegralComp.symm
     _ = ∫ y, F y ∂((mu.restrict A).map Y) := by rw [hJoint]
     _ = ∫ omega, F (Y omega) ∂(mu.restrict A) := by

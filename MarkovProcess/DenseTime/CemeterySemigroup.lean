@@ -56,7 +56,7 @@ theorem cemeteryExtension_comp_alive_image (η κ : Kernel α α)
     lintegral_map ((cemeteryExtension η).measurable_coe hs.inl_image) measurable_inl]
   have hnot : Cemetery.delta ∉ Cemetery.alive '' s := by
     rintro ⟨a, -, h⟩
-    exact Sum.noConfusion h
+    exact Sum.inl_ne_inr h
   simp only [cemeteryExtension_alive_image _ _ hs, lintegral_smul_measure]
   rw [MeasureTheory.lintegral_dirac' Cemetery.delta
     ((cemeteryExtension η).measurable_coe hs.inl_image)]
@@ -73,8 +73,8 @@ theorem cemeteryExtension_comp (η κ : Kernel α α)
   have hleft : IsMarkovKernel (cemeteryExtension (η.comp κ)) :=
     isMarkovKernel_cemeteryExtension _ hηκ
   have hright : IsMarkovKernel ((cemeteryExtension η).comp (cemeteryExtension κ)) := by
-    letI : IsMarkovKernel (cemeteryExtension η) := isMarkovKernel_cemeteryExtension _ hη
-    letI : IsMarkovKernel (cemeteryExtension κ) := isMarkovKernel_cemeteryExtension _ hκ
+    let : IsMarkovKernel (cemeteryExtension η) := isMarkovKernel_cemeteryExtension _ hη
+    let : IsMarkovKernel (cemeteryExtension κ) := isMarkovKernel_cemeteryExtension _ hκ
     infer_instance
   ext z u hu
   cases z with
@@ -101,7 +101,7 @@ theorem cemeteryExtension_comp (η κ : Kernel α α)
         | inr v =>
             cases v
             simp only [live, Cemetery.alive, Cemetery.delta, Set.mem_image,
-              Set.mem_preimage, Set.mem_diff, Set.mem_singleton_iff,
+              Set.mem_preimage, Set.mem_sdiff, Set.mem_singleton_iff,
               not_true_eq_false, and_false, Sum.inl_ne_inr, exists_false]
       have hlive_agree :
           cemeteryExtension (η.comp κ) (Cemetery.alive x) live =
@@ -111,7 +111,7 @@ theorem cemeteryExtension_comp (η κ : Kernel α α)
       by_cases hδ : Cemetery.delta ∈ u
       · have hu_union : u = live ∪ {Cemetery.delta} := by
           rw [hlive_eq]
-          exact (Set.diff_union_of_subset (Set.singleton_subset_iff.mpr hδ)).symm
+          exact (Set.sdiff_union_of_subset (Set.singleton_subset_iff.mpr hδ)).symm
         have hdisj : Disjoint live ({Cemetery.delta} : Set (Cemetery α)) := by
           rw [hlive_eq]
           exact Set.disjoint_sdiff_left
@@ -179,7 +179,7 @@ noncomputable def cemeterySemigroup (P : SubMarkovKernelSemigroup α) :
     exact Kernel.cemeteryExtension_comp (P t) (P s) (P.isSubMarkovKernel t)
       (P.isSubMarkovKernel s)
   isSubMarkovKernel t := by
-    letI : IsMarkovKernel (Kernel.cemeteryExtension (P t)) :=
+    let : IsMarkovKernel (Kernel.cemeteryExtension (P t)) :=
       Kernel.isMarkovKernel_cemeteryExtension (P t) (P.isSubMarkovKernel t)
     exact IsSubMarkovKernel.of_isMarkovKernel _
 

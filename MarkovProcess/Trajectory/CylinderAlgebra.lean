@@ -190,7 +190,7 @@ theorem exists_boundedCylinder_approx (F : ContinuousPath alpha →ᵇ ℝ)
     exact hclampabs _
   · intro omega homega
     have hnear : |G0 omega - F omega| < eps := by
-      simpa only [Real.norm_eq_abs] using hG0approx omega homega
+      simpa only [Real.norm_eq_abs] using! hG0approx omega homega
     have hFbound : |F omega| ≤ ‖F‖ := by
       simpa only [Real.norm_eq_abs] using F.norm_coe_le_norm omega
     have hG0bound : |G0 omega| ≤ C := by

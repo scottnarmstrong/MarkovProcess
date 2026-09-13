@@ -36,7 +36,7 @@ private noncomputable def compactSet (U : Set X) (hU : IsOpen U) (n : ℕ) : Set
 omit [T2Space X] [MeasurableSpace X] [BorelSpace X] in
 private lemma compactSet_isCompact (U : Set X) (hU : IsOpen U) (n : ℕ) :
     IsCompact (compactSet U hU n) := by
-  letI := hU.locallyCompactSpace
+  let := hU.locallyCompactSpace
   exact (CompactExhaustion.choice U).isCompact n |>.image continuous_subtype_val
 
 omit [T2Space X] [MeasurableSpace X] [BorelSpace X] in
@@ -47,7 +47,7 @@ private lemma compactSet_subset (U : Set X) (hU : IsOpen U) (n : ℕ) :
 omit [T2Space X] [MeasurableSpace X] [BorelSpace X] in
 private lemma iUnion_compactSet (U : Set X) (hU : IsOpen U) :
     ⋃ n, compactSet U hU n = U := by
-  letI := hU.locallyCompactSpace
+  let := hU.locallyCompactSpace
   ext x
   simp only [compactSet, mem_iUnion, mem_image]
   constructor
@@ -61,7 +61,7 @@ private lemma iUnion_compactSet (U : Set X) (hU : IsOpen U) :
 omit [T2Space X] [MeasurableSpace X] [BorelSpace X] in
 private lemma compactSet_mono (U : Set X) (hU : IsOpen U) :
     Monotone (compactSet U hU) := by
-  letI := hU.locallyCompactSpace
+  let := hU.locallyCompactSpace
   intro m n hmn
   exact image_mono ((CompactExhaustion.choice U).subset hmn)
 

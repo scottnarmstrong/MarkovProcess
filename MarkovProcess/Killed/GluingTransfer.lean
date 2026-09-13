@@ -101,7 +101,7 @@ theorem lintegral_extend_eq_of_forall_zeroAtInfty {i : X → Y} (hi : Measurable
         ∫⁻ y, ENNReal.ofReal (f y) ∂mu)
     {g : X → ℝ≥0∞} (hg : Measurable g) :
     ∫⁻ z, Function.extend i g 0 z ∂nu = ∫⁻ y, g y ∂mu := by
-  haveI : IsFiniteMeasure (nu.comap i) := isFiniteMeasure_comap hi nu
+  have : IsFiniteMeasure (nu.comap i) := isFiniteMeasure_comap hi nu
   have hpull : nu.comap i = mu := by
     refine Measure.ext_of_integral_eq_on_compactlySupported_nnreal fun f ↦ ?_
     set F : C₀(X, ℝ) := compactlySupportedToZeroAtInfty f.toReal with hF

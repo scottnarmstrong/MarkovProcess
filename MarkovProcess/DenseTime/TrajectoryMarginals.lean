@@ -44,7 +44,7 @@ private theorem finiteTimeKernel_map_eval
     rfl
   rw [← hfun, Kernel.map_comp_right]
   · rw [hP.finiteTimeKernel_map_restrictPath P times select]
-    simpa only using finiteTimeKernel_one_map_eval P (times.restrict select)
+    simpa only using! finiteTimeKernel_one_map_eval P (times.restrict select)
   · exact FiniteOrderedTimes.measurable_restrictPath select
   · exact measurable_pi_apply 0
 

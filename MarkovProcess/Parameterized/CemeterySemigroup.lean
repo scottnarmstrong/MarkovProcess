@@ -54,7 +54,7 @@ def cemeterySemigroup (P : ParameterizedSubMarkovKernelSemigroup Theta alpha) :
     exact Kernel.cemeteryExtension_comp (P theta t) (P theta s)
       (P.isSubMarkovKernel theta t) (P.isSubMarkovKernel theta s)
   isSubMarkovKernel theta t := by
-    letI : IsMarkovKernel (Kernel.cemeteryExtension (P theta t)) :=
+    let : IsMarkovKernel (Kernel.cemeteryExtension (P theta t)) :=
       Kernel.isMarkovKernel_cemeteryExtension (P theta t) (P.isSubMarkovKernel theta t)
     exact IsSubMarkovKernel.of_isMarkovKernel _
 

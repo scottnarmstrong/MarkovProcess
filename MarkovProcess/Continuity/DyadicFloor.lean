@@ -223,7 +223,7 @@ theorem unitDyadicAncestorIndex_floorIndex
       have hparent :
           unitDyadicParentIndex (n + r) (unitDyadicFloorIndex (n + (r + 1)) t) =
             unitDyadicFloorIndex (n + r) t := by
-        simpa only [Nat.add_assoc] using unitDyadicParentIndex_floorIndex (n + r) t
+        simpa only [Nat.add_assoc] using! unitDyadicParentIndex_floorIndex (n + r) t
       rw [unitDyadicAncestorIndex_succ, hparent]
       exact ihr
 
@@ -421,7 +421,7 @@ theorem tendsto_dyadicFloorLimitModulus_zero {γ : ℝ} (hγ : 0 < γ) :
       exact dyadicIncrementThreshold_eq_ratio_pow γ n]
     exact ENNReal.tendsto_pow_atTop_nhds_zero_of_lt_one hratio
   have htail := tendsto_dyadicIncrementThreshold_ancestor_tail_zero hγ
-  simpa only [dyadicFloorLimitModulus, zero_add] using
+  simpa only [dyadicFloorLimitModulus, zero_add] using!
     (htail.add hthreshold).add htail
 
 /-- A uniform ancestor-tail bound and a same-level comparison bound pass to arbitrary limits of
@@ -668,7 +668,7 @@ theorem tendsto_edist_unitDyadicFloorValue_unitIccOfNNRat
       rw [inv_pow]
     · simp only [ENNReal.ofReal_zero]
   exact tendsto_of_tendsto_of_tendsto_of_le_of_le tendsto_const_nhds hbound
-    (fun _ ↦ zero_le')
+    (fun _ ↦ zero_le)
     (fun n ↦ edist_unitDyadicFloorValue_unitIccOfNNRat_le n t ht)
 
 /-- At a fixed nonnegative rational time in `[0, 1]`, samples of a Kolmogorov process at the left
@@ -700,7 +700,7 @@ theorem IsKolmogorovProcess.tendstoInMeasure_unitDyadicFloorValue
       (Or.inr (ENNReal.inv_ne_top.mpr hdenom0))
     simpa only [mul_zero, div_eq_mul_inv, mul_comm] using hscaled
   exact tendsto_of_tendsto_of_tendsto_of_le_of_le tendsto_const_nhds hrhs
-    (fun _ ↦ zero_le') (fun n ↦
+    (fun _ ↦ zero_le) (fun n ↦
       measure_edist_ge_le_of_isKolmogorovProcess hX _ _ ε hε.ne' hεtop)
 
 end DyadicFloorConvergenceInMeasure

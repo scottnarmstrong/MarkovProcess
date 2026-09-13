@@ -46,7 +46,7 @@ theorem condExp_shift_ae_eq_integral_pathKernel_of_restrict_map
   let kappa : Kernel (ContinuousPath alpha) (ContinuousPath alpha) :=
     Kernel.comap Q (coordinateProcess (alpha := alpha) S)
       (measurable_coordinateProcess S)
-  letI : IsMarkovKernel kappa := by
+  let : IsMarkovKernel kappa := by
     dsimp only [kappa]
     infer_instance
   have hFm : StronglyMeasurable[canonicalFiltration (alpha := alpha) S]

@@ -71,7 +71,7 @@ theorem lintegral_enorm_kernelIntegral_rpow_le
     (hp : 1 ≤ p) (hf : MemLp f p μ) :
     ∫⁻ x, ‖kernelIntegral κ f x‖ₑ ^ (p : ℝ) ∂μ
       ≤ ∫⁻ y, ‖f y‖ₑ ^ (p : ℝ) ∂μ := by
-  letI : IsFiniteKernel κ := hκ.isFiniteKernel
+  let : IsFiniteKernel κ := hκ.isFiniteKernel
   have hfComp : MemLp f p (κ ∘ₘ μ) := hf.mono_measure hκμ
   have hfFiber : ∀ᵐ x ∂μ, MemLp f p (κ x) := by
     have hFiberEq := Measure.ae_ae_of_ae_comp hfComp.1.ae_eq_mk

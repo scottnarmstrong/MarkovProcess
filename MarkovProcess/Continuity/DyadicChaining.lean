@@ -51,7 +51,7 @@ theorem edist_unitDyadicGrid_le_natCast_mul_of_adjacent_le
       have hkpow : k < 2 ^ n := lt_of_lt_of_le hkj (Nat.le_of_lt_succ j.isLt)
       have hksucc : k + 1 < 2 ^ n + 1 := Nat.add_lt_add_right hkpow 1
       rw [hf k (lt_trans hkpow (Nat.lt_succ_self _)), hf (k + 1) hksucc]
-      simpa only [Fin.coe_castSucc, Fin.val_succ] using hadj ⟨k, hkpow⟩
+      simpa only [Fin.val_castSucc, Fin.val_succ] using! hadj ⟨k, hkpow⟩
     _ = (j.val - i.val : ℕ) * ε := by
       simp only [Finset.sum_const, Nat.card_Ico, nsmul_eq_mul]
 

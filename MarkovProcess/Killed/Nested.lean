@@ -96,7 +96,7 @@ theorem measurable_killedCoordinate (W : Set beta) (hW : IsOpen W) (t : NNReal) 
         ({eta : LifetimePath beta | (t : ℝ≥0∞) < exitTime W eta} ∩ coordinate t ⁻¹' S) ∪
           {eta : LifetimePath beta | (t : ℝ≥0∞) < exitTime W eta}ᶜ := by
       ext eta
-      simp only [Set.mem_preimage, Set.mem_union, Set.mem_inter_iff, Set.mem_setOf_eq,
+      simp only [Set.mem_preimage, Set.mem_union, Set.mem_inter_iff, Set.mem_ofPred_eq,
         Set.mem_compl_iff, killedCoordinate]
       by_cases hlt : (t : ℝ≥0∞) < exitTime W eta
       · rw [if_pos hlt]
@@ -108,7 +108,7 @@ theorem measurable_killedCoordinate (W : Set beta) (hW : IsOpen W) (t : NNReal) 
   · have hpre : killedCoordinate W t ⁻¹' S =
         {eta : LifetimePath beta | (t : ℝ≥0∞) < exitTime W eta} ∩ coordinate t ⁻¹' S := by
       ext eta
-      simp only [Set.mem_preimage, Set.mem_inter_iff, Set.mem_setOf_eq, killedCoordinate]
+      simp only [Set.mem_preimage, Set.mem_inter_iff, Set.mem_ofPred_eq, killedCoordinate]
       by_cases hlt : (t : ℝ≥0∞) < exitTime W eta
       · rw [if_pos hlt]
         exact ⟨fun h ↦ ⟨hlt, h⟩, fun h ↦ h.2⟩

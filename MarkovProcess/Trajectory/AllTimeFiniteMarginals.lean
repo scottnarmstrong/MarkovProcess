@@ -58,7 +58,7 @@ theorem exists_denseTime_finiteOrderEmbedding_seq_tendsto
       exact hN (k + N) (Nat.le_add_left N k) i j hij
   refine ⟨qOrdered, fun i ↦ ?_⟩
   have hshift := (hq i).comp (Filter.tendsto_add_atTop_nat N)
-  simpa only [qOrdered, Function.comp_apply] using hshift
+  simpa only [qOrdered, Function.comp_apply] using! hshift
 
 /-- Every finite strictly ordered family of nonnegative real times admits strictly ordered
 rational approximations converging coordinatewise. -/
@@ -75,7 +75,7 @@ theorem exists_denseTime_finset_seq_tendsto (I : Finset NNReal) :
     ∃ q : ℕ → I ↪o DenseTime,
       ∀ t, Tendsto (fun k ↦ DenseTime.castOrderEmbedding (q k t))
         atTop (nhds (t : NNReal)) := by
-  simpa only using exists_denseTime_finiteOrderEmbedding_seq_tendsto
+  simpa only using! exists_denseTime_finiteOrderEmbedding_seq_tendsto
     (OrderEmbedding.subtype (fun t : NNReal ↦ t ∈ I))
 
 namespace ContinuousPath
@@ -136,7 +136,7 @@ theorem tendsto_integral_continuousPath_finiteEvaluation
       (fun k ↦ ∫ path, f (ContinuousPath.finiteEvaluation (α := α) (q k) path) ∂K x)
       atTop
       (nhds (∫ path, f (ContinuousPath.finiteEvaluation (α := α) τ path) ∂K x)) := by
-  letI : IsMarkovKernel K := hK
+  let : IsMarkovKernel K := hK
   let f0 : ZeroAtInftyContinuousMap (ι → α) ℝ :=
     PositiveC0OperatorMeasure.compactlySupportedToC0LinearMap f
   apply tendsto_integral_filter_of_norm_le_const
@@ -146,7 +146,7 @@ theorem tendsto_integral_continuousPath_finiteEvaluation
   · refine ⟨‖f0‖, Filter.Eventually.of_forall fun k ↦ ?_⟩
     filter_upwards [] with path
     simpa only [f0, PositiveC0OperatorMeasure.compactlySupportedToC0LinearMap_apply,
-      Real.norm_eq_abs] using f0.toBCF.norm_coe_le_norm
+      Real.norm_eq_abs] using! f0.toBCF.norm_coe_le_norm
       (ContinuousPath.finiteEvaluation (α := α) (q k) path)
   · filter_upwards [] with path
     exact Filter.Tendsto.comp f.continuous.continuousAt
@@ -168,8 +168,8 @@ theorem Kernel.map_finiteEvaluation_eq_of_integral_tendsto
     (hfinite : ∀ (x : β) (f : CompactlySupportedContinuousMap (ι → α) ℝ),
       Tendsto (fun k ↦ ∫ y, f y ∂Lseq k x) atTop (nhds (∫ y, f y ∂L x))) :
     K.map (ContinuousPath.finiteEvaluation τ) = L := by
-  letI : IsMarkovKernel K := hK
-  letI : IsMarkovKernel L := hL
+  let : IsMarkovKernel K := hK
+  let : IsMarkovKernel L := hL
   apply Kernel.ext
   intro x
   apply Measure.ext_of_integral_eq_on_compactlySupported

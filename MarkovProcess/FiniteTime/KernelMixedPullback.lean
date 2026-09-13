@@ -47,10 +47,10 @@ theorem measurable_pullbackSplitFinitePath {m n : ℕ}
   · exact (measurable_pi_apply (pastIndex i)).comp measurable_fst
   · cases h : futureIndex j with
     | none =>
-        simpa only [pullbackSplitFinitePath, h] using
+        simpa only [pullbackSplitFinitePath, h] using!
           ((measurable_pi_apply (Fin.last m)).comp measurable_fst)
     | some k =>
-        simpa only [pullbackSplitFinitePath, h] using
+        simpa only [pullbackSplitFinitePath, h] using!
           ((measurable_pi_apply k).comp measurable_snd)
 
 namespace IsConservative

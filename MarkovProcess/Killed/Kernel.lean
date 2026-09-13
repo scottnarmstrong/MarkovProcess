@@ -54,7 +54,7 @@ theorem mem_killedEvent_iff (U : Set alpha) (t : NNReal) (B : Set alpha)
 theorem killedEvent_univ (U : Set alpha) (t : NNReal) :
     killedEvent U t Set.univ = {omega | (t : ℝ≥0∞) < exitTime U omega} := by
   ext omega
-  simp only [mem_killedEvent_iff, Set.mem_univ, and_true, Set.mem_setOf_eq]
+  simp only [mem_killedEvent_iff, Set.mem_univ, and_true, Set.mem_ofPred_eq]
 
 /-- The killed event at time `s + t` is the survival event at time `s` intersected with the
 killed event at time `t` of the path shifted by `s`. -/
@@ -62,7 +62,7 @@ theorem killedEvent_add (U : Set alpha) (s t : NNReal) (B : Set alpha) :
     killedEvent U (s + t) B =
       shift s ⁻¹' killedEvent U t B ∩ {omega | (s : ℝ≥0∞) < exitTime U omega} := by
   ext omega
-  simp only [mem_killedEvent_iff, Set.mem_inter_iff, Set.mem_preimage, Set.mem_setOf_eq,
+  simp only [mem_killedEvent_iff, Set.mem_inter_iff, Set.mem_preimage, Set.mem_ofPred_eq,
     shift_apply]
   constructor
   · rintro ⟨hlt, hmem⟩
@@ -91,7 +91,7 @@ theorem exitTime_pos_iff (U : Set alpha) (hU : IsOpen U) (omega : ContinuousPath
     by_contra hle
     rw [not_lt, ← ENNReal.coe_zero, exitTime_le_iff_mem_hitsSetBy U hU 0 omega] at hle
     obtain ⟨s, hs⟩ := hle
-    have hs0 : (s : NNReal) = 0 := le_antisymm (Set.mem_Iic.mp s.2) (zero_le _)
+    have hs0 : (s : NNReal) = 0 := le_antisymm (Set.mem_Iic.mp s.2) zero_le
     rw [hs0] at hs
     exact hs h
 
@@ -134,7 +134,7 @@ theorem IsConservative.killedKernel_apply (t : NNReal) (x : alpha) {B : Set alph
     Measure.restrict_apply (hmeas hB)]
   congr 1
   ext omega
-  simp only [Set.mem_inter_iff, Set.mem_preimage, Set.mem_setOf_eq,
+  simp only [Set.mem_inter_iff, Set.mem_preimage, Set.mem_ofPred_eq,
     ContinuousPath.mem_killedEvent_iff]
   exact and_comm
 
@@ -181,7 +181,6 @@ theorem IsConservative.killedKernel_apply_of_notMem (hK : P.KolmogorovRegular hP
     have h := congrArg (fun mu : Measure alpha ↦ mu U)
       (IsConservative.continuousProcess_map_eval_zero P hP hK ▸ rfl :
         (IsConservative.continuousProcess P hP).map (fun omega ↦ omega 0) x = Kernel.id x)
-    simp only at h
     rw [Kernel.map_apply _ hmeas0, Measure.map_apply hmeas0 hU.measurableSet, Kernel.id_apply,
       Measure.dirac_apply' x hU.measurableSet, Set.indicator_of_notMem hx] at h
     exact h
@@ -189,7 +188,7 @@ theorem IsConservative.killedKernel_apply_of_notMem (hK : P.KolmogorovRegular hP
   rw [IsConservative.killedKernel_apply P hP U hU t x hB, Measure.coe_zero, Pi.zero_apply]
   refine measure_mono_null (fun omega homega ↦ ?_) hzero
   obtain ⟨hlt, -⟩ := (ContinuousPath.mem_killedEvent_iff U t B omega).mp homega
-  exact (ContinuousPath.exitTime_pos_iff U hU omega).mp (lt_of_le_of_lt (zero_le _) hlt)
+  exact (ContinuousPath.exitTime_pos_iff U hU omega).mp (lt_of_le_of_lt zero_le hlt)
 
 /-- At time zero the killed kernel is the identity kernel restricted to `U`: the Dirac mass at the
 starting point if it lies in `U`, and zero otherwise. -/
@@ -226,7 +225,6 @@ theorem IsConservative.killedKernel_add (hFeller : P.IsFellerKernelSemigroup)
   have hrestart := congrArg (fun mu : Measure (ContinuousPath alpha) ↦
       mu (ContinuousPath.killedEvent U t B))
     (hFeller.continuousProcess_restrict_map_shift P hP hK x s _ hA)
-  simp only at hrestart
   rw [Measure.map_apply (ContinuousPath.measurable_shift_fixed s) hE,
     Measure.restrict_apply ((ContinuousPath.measurable_shift_fixed s) hE),
     Measure.bind_apply hE (Kernel.aemeasurable _)] at hrestart

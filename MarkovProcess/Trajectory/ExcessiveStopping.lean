@@ -166,7 +166,7 @@ def discountedValueProcess (lam : ℝ) (v : C₀(alpha, ℝ))
 omit [CompleteSpace alpha] [Nonempty alpha] [LocallyCompactSpace alpha] in
 /-- The discounted value process is adapted to the canonical filtration. -/
 theorem adapted_discountedValueProcess (lam : ℝ) (v : C₀(alpha, ℝ)) :
-    Adapted (ContinuousPath.canonicalFiltration (alpha := alpha))
+    StronglyAdapted (ContinuousPath.canonicalFiltration (alpha := alpha))
       (discountedValueProcess lam v) := by
   intro t
   exact ((v.continuous.comp_stronglyMeasurable
@@ -279,11 +279,12 @@ private theorem exitTimeTrunc_eq_untopD_of_le (U : Set alpha) (omega : Continuou
     (hle : (ContinuousPath.exitTime U omega).toNNReal ≤ K) :
     ContinuousPath.exitTimeTrunc U K omega =
       (ContinuousPath.exitTime U omega).untopD 0 := by
-  rw [ContinuousPath.exitTimeTrunc, ContinuousPath.exitTimeTop_apply,
-    ← ENNReal.coe_toNNReal hfinite]
-  rw [min_eq_left]
-  · rfl
-  · exact WithTop.coe_le_coe.mpr hle
+  have hexit : ContinuousPath.exitTime U omega ≤ (K : ℝ≥0∞) := by
+    rw [← ENNReal.coe_toNNReal hfinite]
+    exact ENNReal.coe_le_coe.mpr hle
+  apply ENNReal.coe_injective
+  rw [ContinuousPath.coe_exitTimeTrunc_ennreal, min_eq_left hexit]
+  exact (ENNReal.coe_toNNReal hfinite).symm
 
 /-- **Exit inequality for an excessive function.**  The discounted value at the finite exit time
 from an open set has `ℝ≥0∞` expectation at most the initial value.  Together with
@@ -393,7 +394,7 @@ theorem IsLambdaExcessive.lintegral_discountedValue_exitTime_le
       exact le_of_eq htend.liminf_eq.symm
     · simp only [Set.indicator_of_notMem (show omega ∉
           {omega | ContinuousPath.exitTime U omega < ⊤} from hfinite)]
-      exact zero_le _
+      exact zero_le
   calc
     ∫⁻ omega, ({omega | ContinuousPath.exitTime U omega < ⊤} : Set _).indicator
           (fun omega ↦

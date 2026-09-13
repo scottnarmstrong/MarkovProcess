@@ -108,7 +108,7 @@ private theorem hasDerivWithinAt_transferOrbit
   rw [hasDerivWithinAt_iff_tendsto_slope]
   have hdiff : Ici s \ {s} = Ioi s := by
     ext y
-    simp only [mem_diff, mem_Ici, mem_singleton_iff, mem_Ioi]
+    simp only [Set.mem_sdiff, Set.mem_Ici, Set.mem_singleton_iff, Set.mem_Ioi]
     exact ⟨fun hy ↦ lt_of_le_of_ne hy.1 (Ne.symm hy.2), fun hy ↦ ⟨hy.le, hy.ne'⟩⟩
   rw [hdiff]
   refine squeeze_zero_norm' ?_ hbound
