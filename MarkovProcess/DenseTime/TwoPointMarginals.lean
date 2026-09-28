@@ -189,7 +189,7 @@ private theorem denseTimeTrajectory_map_pair_aux
       intro m
       have hm : m = 0 := Subsingleton.elim m 0
       subst hm
-      simpa only [Fin.castSucc_zero, if_pos rfl, Fin.succ_zero_eq_one] using! hab) with hselect
+      simpa only [Fin.castSucc_zero, ite_eq_left rfl, Fin.succ_zero_eq_one] using! hab) with hselect
   have hpair2 : Measurable (fun path : Fin 2 → alpha ↦ (path 0, path 1)) := by fun_prop
   have hstep4 :
       (fun path : Fin 2 → alpha ↦ (path 0, path 1)) ∘

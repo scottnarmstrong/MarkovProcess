@@ -178,7 +178,7 @@ private theorem rawTrajAppend_apply_cast (n : ℕ) (z) (i : ↑(Finset.Iic n)) :
     rawTrajAppend (Theta := Theta) (alpha := alpha) n z
       ⟨i, Finset.mem_Iic.mpr ((Finset.mem_Iic.mp i.2).trans n.le_succ)⟩ = z.1 i := by
   simp only [rawTrajAppend, Function.comp_apply, IicProdIoc_def]
-  rw [dif_pos (Finset.mem_Iic.mp i.2)]
+  rw [dite_eq_left (Finset.mem_Iic.mp i.2)]
   rfl
 
 omit [StandardBorelSpace alpha] [Nonempty alpha] in
@@ -186,7 +186,7 @@ private theorem rawTrajAppend_apply_last (n : ℕ) (z) :
     rawTrajAppend (Theta := Theta) (alpha := alpha) n z
       ⟨n + 1, Finset.mem_Iic.mpr (Nat.le_refl (n + 1))⟩ = z.2 := by
   simp only [rawTrajAppend, Function.comp_apply, IicProdIoc_def]
-  rw [dif_neg (Nat.not_succ_le_self n)]
+  rw [dite_eq_right (Nat.not_succ_le_self n)]
   change (MeasurableEquiv.piSingleton
     (X := trajectoryCoordinate (Theta := Theta) (alpha := alpha)) n).symm
       (MeasurableEquiv.piSingleton n z.2) = z.2

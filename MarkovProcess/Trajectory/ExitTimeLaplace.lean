@@ -88,7 +88,7 @@ private theorem ofReal_mul_lintegral_exp_neg_mul_indicator (lam : ℝ) (hlam : 0
     · simp only [neg_mul, Set.indicator_of_notMem ht, mul_zero]
   rw [hfun, setLIntegral_indicator hS]
   by_cases htau : tau = ⊤
-  · rw [ContinuousPath.survivalSet tau, if_pos htau,
+  · rw [ContinuousPath.survivalSet tau, ite_eq_left htau,
       lintegral_exp_neg_mul_Ioi_zero lam hlam]
     subst tau
     have hnot : (⊤ : ℝ≥0∞) ∉ {tau | tau < ⊤} := by
@@ -96,7 +96,7 @@ private theorem ofReal_mul_lintegral_exp_neg_mul_indicator (lam : ℝ) (hlam : 0
     rw [Set.indicator_of_notMem hnot, tsub_zero]
     rw [← ENNReal.ofReal_mul hlam.le]
     simp only [mul_inv_cancel₀ hlam.ne', ENNReal.ofReal_one]
-  · rw [ContinuousPath.survivalSet tau, if_neg htau]
+  · rw [ContinuousPath.survivalSet tau, ite_eq_right htau]
     rw [show volume.restrict (Set.Ioo (0 : ℝ) tau.toReal) =
         volume.restrict (Set.Ioc 0 tau.toReal) from
       Measure.restrict_congr_set Ioo_ae_eq_Ioc]

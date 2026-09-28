@@ -171,11 +171,11 @@ automation:
         - "gpt-5.6-sol"
       framework: "Claude Code (Anthropic) and Codex (OpenAI) agentic coding harnesses"
       tool_setup: >-
-        Lake builds under leanprover/lean4:v4.33.0 with Mathlib v4.33.0 (commit
-        db584cd6d46c92f209a44c0f1c829460d327499d). The Lean comparator was run
-        locally on the audit pair (comparator commit
-        575674928e239f5bc452aab72d1dd7b0f1326494, lean4export tag v4.33.0 built
-        under the v4.33.0 toolchain, landrun 0.1.18); the .github/workflows/comparator.yml workflow
+        Lake builds under leanprover/lean4:v4.35.0-rc2 with Mathlib v4.35.0-rc2 (commit
+        065356127b1dc0016f66b7283ce0ce2c4055aa55). The Lean comparator was run
+        locally on the audit pairs (comparator commit
+        32bd61da1d68fbaa310234964e9b820b03a0f82f, lean4export tag v4.35.0-rc2 built
+        under the v4.35.0-rc2 toolchain, landrun 0.1.18); the .github/workflows/comparator.yml workflow
         additionally enables the independent nanoda kernel on every push.
         Read-only subagents were used for independent statement audits,
         non-vacuity probes on the example semigroups, and documentation checks.

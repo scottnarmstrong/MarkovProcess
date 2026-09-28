@@ -143,7 +143,7 @@ private theorem denseTimeHistoryMeasurableEquiv_rawTrajAppend (n : ℕ) :
       let j : Set.Iic n := ⟨i, hil⟩
       simp only [rawTrajAppend, Function.comp_apply, IicProdIoc_def,
         MeasurableEquiv.piSingleton]
-      rw [dif_pos hil]
+      rw [dite_eq_left hil]
       rw [DenseTimeHistory.append_apply_castSucc n
         (denseTimeHistoryMeasurableEquiv n z.1) z.2 j]
       rfl

@@ -158,7 +158,7 @@ theorem measurableSet_hitsSetBetween
         exact hu
       · exact Or.inl (Or.inr (by simpa only [B] using! ht))
       · refine Or.inr ⟨k, ?_⟩
-        simp only [C, dif_pos hkt, Set.mem_inter_iff, Set.mem_ofPred_eq]
+        simp only [C, dite_eq_left hkt, Set.mem_inter_iff, Set.mem_ofPred_eq]
         exact ⟨huEq.symm ▸ huk, hk⟩
     · rintro ⟨hTt, hdetect⟩
       have hTne : T omega ≠ ⊤ := ne_top_of_le_ne_top (WithTop.coe_ne_top) hTt

@@ -47,12 +47,12 @@ def coordinate (t : NNReal) (ω : LifetimePath α) : Cemetery α :=
 theorem coordinate_of_lt (ω : LifetimePath α) (t : NNReal)
     (ht : (t : ENNReal) < ω.lifetime) :
     coordinate t ω = Cemetery.alive (ω.livePath ⟨t, ht⟩) := by
-  rw [coordinate, dif_pos ht]
+  rw [coordinate, dite_eq_left ht]
 
 @[simp]
 theorem coordinate_of_le (ω : LifetimePath α) (t : NNReal)
     (ht : ω.lifetime ≤ (t : ENNReal)) : coordinate t ω = Cemetery.delta := by
-  rw [coordinate, dif_neg (not_lt_of_ge ht)]
+  rw [coordinate, dite_eq_right (not_lt_of_ge ht)]
 
 /-- Coordinates strictly before the lifetime are live. -/
 theorem coordinate_ne_delta_of_lt (ω : LifetimePath α) (t : NNReal)

@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Scott Armstrong
 -/
 import Mathlib.Algebra.Order.Sub.Basic
-import Mathlib.Data.NNReal.Defs
+import Mathlib.Basic.NNReal.Defs
 import Mathlib.MeasureTheory.MeasurableSpace.Constructions
 import Mathlib.Order.Fin.Basic
 

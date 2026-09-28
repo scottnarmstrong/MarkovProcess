@@ -95,8 +95,8 @@ theorem IsConservative.lintegral_exitTime_eq_killedResolvent_zero (U : Set alpha
       Measure.restrict_apply hS]
   rw [hinner, ContinuousPath.survivalSet tau]
   by_cases htop : tau = ⊤
-  · rw [if_pos htop, htop, Real.volume_Ioi]
-  · rw [if_neg htop, Real.volume_Ioo, sub_zero, ENNReal.ofReal_toReal htop]
+  · rw [ite_eq_left htop, htop, Real.volume_Ioi]
+  · rw [ite_eq_right htop, Real.volume_Ioo, sub_zero, ENNReal.ofReal_toReal htop]
 
 /-- The killed resolvent at the shift zero is the increasing limit of the killed resolvents at the
 positive shifts `1 / (n + 1)`. -/

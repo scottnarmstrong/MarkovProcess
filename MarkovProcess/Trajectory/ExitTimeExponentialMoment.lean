@@ -61,13 +61,13 @@ theorem exponentialStoppingWeight_of_ne_top (lam : ℝ) (sigma : ContinuousPath 
     {omega : ContinuousPath alpha} (h : sigma omega ≠ ⊤) :
     exponentialStoppingWeight lam sigma omega =
       ENNReal.ofReal (Real.exp (lam * (sigma omega).toReal)) :=
-  if_neg h
+  ite_eq_right h
 
 /-- On the infinite branch the exponential weight is `⊤`. -/
 theorem exponentialStoppingWeight_of_eq_top (lam : ℝ) (sigma : ContinuousPath alpha → ℝ≥0∞)
     {omega : ContinuousPath alpha} (h : sigma omega = ⊤) :
     exponentialStoppingWeight lam sigma omega = ⊤ :=
-  if_pos h
+  ite_eq_left h
 
 /-- At a nonnegative rate the exponential weight is at least one. -/
 theorem one_le_exponentialStoppingWeight (lam : ℝ) (hlam : 0 ≤ lam)
@@ -193,7 +193,7 @@ private theorem exponentialWeight_le_add_tsum (lam : ℝ) (hlam : 0 ≤ lam) (t0
     set m := Nat.find hex with hm
     have hmspec : tau ≤ ((m • t0 : NNReal) : ℝ≥0∞) := Nat.find_spec hex
     have hne : tau ≠ ⊤ := ne_top_of_le_ne_top ENNReal.coe_ne_top hmspec
-    rw [if_neg hne]
+    rw [ite_eq_right hne]
     have hle : ENNReal.ofReal (Real.exp (lam * tau.toReal)) ≤ a ^ m := by
       rw [← hpow m]
       refine ENNReal.ofReal_le_ofReal (Real.exp_le_exp.mpr ?_)

@@ -117,9 +117,9 @@ theorem stronglyMeasurable_feynmanKacAdditiveFunctional_joint {q : alpha → ℝ
     exact Eventually.of_forall fun s ↦ by
       by_cases hs : s ∈ Ioc (0 : ℝ) (p.1 : ℝ)
       · have hs' : 0 < s ∧ s ≤ (p.1 : ℝ) := hs
-        simp only [indicator_of_mem hs, phi, if_pos hs']
+        simp only [indicator_of_mem hs, phi, ite_eq_left hs']
       · have hs' : ¬(0 < s ∧ s ≤ (p.1 : ℝ)) := hs
-        simp only [indicator_of_notMem hs, phi, if_neg hs']
+        simp only [indicator_of_notMem hs, phi, ite_eq_right hs']
   rw [heq]
   exact hint
 

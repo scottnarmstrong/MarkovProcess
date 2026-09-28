@@ -320,7 +320,7 @@ private theorem rationalRestart_map_restrict_eq_cutPullback
     Kernel.compProd_apply (hA.preimage hH)]
   congr with history
   rw [Kernel.prodMkLeft_apply', Kernel.prodMkLeft_apply']
-  apply Filter.EventuallyEq.measure_eq
+  apply Filter.EventuallyEqSet.measure_eq
   filter_upwards [hzero (ContinuousPath.densePastTerminal S history)] with path hpath
   apply congrArg (fun z ↦ z ∈ A)
   funext i

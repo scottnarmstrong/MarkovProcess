@@ -69,9 +69,9 @@ theorem survivalSet (tau : ℝ≥0∞) :
     {t : ℝ | ((Real.toNNReal t : NNReal) : ℝ≥0∞) < tau} ∩ Set.Ioi 0 =
       if tau = ⊤ then Set.Ioi 0 else Set.Ioo 0 tau.toReal := by
   by_cases htau : tau = ⊤
-  · rw [if_pos htau, htau]
+  · rw [ite_eq_left htau, htau]
     exact survivalSet_top
-  · rw [if_neg htau]
+  · rw [ite_eq_right htau]
     exact survivalSet_ne_top tau htau
 
 end SurvivalSets

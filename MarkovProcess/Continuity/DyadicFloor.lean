@@ -756,8 +756,8 @@ theorem continuous_continuousUnitDyadicFloorLimit
     (X : NNRat → Ω → E) (ω : Ω) :
     Continuous (continuousUnitDyadicFloorLimit X ω) := by
   by_cases h : Continuous (unitDyadicFloorLimit X ω)
-  · simpa only [continuousUnitDyadicFloorLimit, if_pos h] using h
-  · simp only [continuousUnitDyadicFloorLimit, if_neg h]
+  · simpa only [continuousUnitDyadicFloorLimit, ite_eq_left h] using h
+  · simp only [continuousUnitDyadicFloorLimit, ite_eq_right h]
     exact continuous_const
 
 /-- At each fixed unit-interval rational time, the totalized continuous path remains a
@@ -772,7 +772,7 @@ theorem IsKolmogorovProcess.ae_eq_continuousUnitDyadicFloorLimit
     [IsKolmogorovProcess.ae_eq_unitDyadicFloorLimit hX hγ hγq t ht,
       IsKolmogorovProcess.ae_continuous_unitDyadicFloorLimit hX hγ hγq]
       with ω hident hcont
-  simpa only [continuousUnitDyadicFloorLimit, if_pos hcont] using hident
+  simpa only [continuousUnitDyadicFloorLimit, ite_eq_left hcont] using hident
 
 end
 

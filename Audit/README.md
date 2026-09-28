@@ -25,7 +25,7 @@ Presentation deltas between each challenge and the library statement are enumera
 module docstring of that `Challenge.lean`.
 
 **Status.** Passing. With the comparator built from
-[`leanprover/comparator`](https://github.com/leanprover/comparator) at commit `5756749`
+[`leanprover/comparator`](https://github.com/leanprover/comparator) at commit `32bd61d`
 (`lake build` in its checkout; `landrun` and `lean4export` on the path), the run
 
 ```bash
