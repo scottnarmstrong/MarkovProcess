@@ -3,11 +3,13 @@ Copyright (c) 2026 Scott Armstrong. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Scott Armstrong
 -/
-import Mathlib.Analysis.SpecialFunctions.ImproperIntegrals
-import MarkovProcess.Kernel.Resolvent
-import MarkovProcess.Killed.Resolvent
-import MarkovProcess.Trajectory.FeynmanKacFunctional
-import MarkovProcess.Trajectory.ResolventExitDecomposition
+module
+
+public import Mathlib.Analysis.SpecialFunctions.ImproperIntegrals
+public import MarkovProcess.Kernel.Resolvent
+public import MarkovProcess.Killed.Resolvent
+public import MarkovProcess.Trajectory.FeynmanKacFunctional
+public import MarkovProcess.Trajectory.ResolventExitDecomposition
 
 /-!
 # Feynman--Kac resolvents
@@ -25,6 +27,8 @@ Main results: `IsConservative.feynmanKacResolvent`,
 
 No uniqueness statement for the associated resolvent equation is asserted.
 -/
+
+@[expose] public section
 
 open Filter MeasureTheory ProbabilityTheory Set
 open scoped ENNReal NNReal

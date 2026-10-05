@@ -3,12 +3,14 @@ Copyright (c) 2026 Scott Armstrong. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Scott Armstrong
 -/
-import MarkovProcess.Feller.FiniteSetCompactTestContinuity
-import MarkovProcess.Kernel.WeakConvergence
-import MarkovProcess.Main
-import MarkovProcess.Parameterized.ContinuousProcessProperties
-import Mathlib.MeasureTheory.Integral.BoundedContinuousFunction
-import Mathlib.MeasureTheory.Measure.Tight
+module
+
+public import MarkovProcess.Feller.FiniteSetCompactTestContinuity
+public import MarkovProcess.Kernel.WeakConvergence
+public import MarkovProcess.Main
+public import MarkovProcess.Parameterized.ContinuousProcessProperties
+public import Mathlib.MeasureTheory.Integral.BoundedContinuousFunction
+public import Mathlib.MeasureTheory.Measure.Tight
 
 /-!
 # Measurable and continuous dependence on the starting point
@@ -39,6 +41,8 @@ Nothing here asserts weak continuity of the full path law `x ↦ continuousProce
 space; that needs tightness on path space itself, which is not proved here.  No statement covers
 a stopping time that can be infinite.
 -/
+
+@[expose] public section
 
 open Filter MeasureTheory ProbabilityTheory
 open scoped BoundedContinuousFunction CompactlySupported NNReal

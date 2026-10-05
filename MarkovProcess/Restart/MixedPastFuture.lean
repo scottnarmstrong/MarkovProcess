@@ -3,11 +3,13 @@ Copyright (c) 2026 Scott Armstrong. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Scott Armstrong
 -/
-import MarkovProcess.Path.DenseFiltration
-import MarkovProcess.FiniteTime.DenseTimeFiniteShift
-import MarkovProcess.DenseTime.PhysicalReindex
-import Mathlib.Data.Finset.Sum
-import MarkovProcess.FiniteTime.KernelMixedPullback
+module
+
+public import MarkovProcess.Path.DenseFiltration
+public import MarkovProcess.FiniteTime.DenseTimeFiniteShift
+public import MarkovProcess.DenseTime.PhysicalReindex
+public import Mathlib.Data.Finset.Sum
+public import MarkovProcess.FiniteTime.KernelMixedPullback
 
 /-!
 # Mixed past-future coordinates and the cut factorization
@@ -18,6 +20,8 @@ This file merges the following former modules, one section each:
 * `MixedPastFutureCutCoordinates`: Finite mixed coordinates split at their rational terminal time
 * `MixedPastFutureCutFactorization`: Factoring finite mixed past/future coordinates at a rational cut
 -/
+
+@[expose] public section
 
 namespace MarkovProcess
 

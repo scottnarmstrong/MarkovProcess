@@ -3,7 +3,9 @@ Copyright (c) 2026 Scott Armstrong. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Scott Armstrong
 -/
-import MarkovProcess.Continuity.DyadicIncrements
+module
+
+public import MarkovProcess.Continuity.DyadicIncrements
 
 /-!
 # Chaining across unit dyadic grids
@@ -15,6 +17,8 @@ This file merges the following former modules, one section each:
 * `DyadicAncestorChaining`: Finite chains of dyadic ancestors
 * `DyadicAncestorTail`: Uniform tail bounds for finite dyadic ancestor chains
 -/
+
+@[expose] public section
 
 namespace MarkovProcess
 

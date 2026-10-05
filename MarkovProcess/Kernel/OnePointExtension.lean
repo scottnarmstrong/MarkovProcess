@@ -3,11 +3,13 @@ Copyright (c) 2026 Scott Armstrong. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Scott Armstrong
 -/
-import Mathlib.Topology.Compactification.OnePoint.Basic
-import Mathlib.Topology.Compactness.SigmaCompact
-import Mathlib.Topology.Metrizable.Urysohn
-import MarkovProcess.Kernel.PositiveC0Resolvent
-import MarkovProcess.Semigroup.ResolventGeneration
+module
+
+public import Mathlib.Topology.Compactification.OnePoint.Basic
+public import Mathlib.Topology.Compactness.SigmaCompact
+public import Mathlib.Topology.Metrizable.Urysohn
+public import MarkovProcess.Kernel.PositiveC0Resolvent
+public import MarkovProcess.Semigroup.ResolventGeneration
 
 /-!
 # One-point extension of a positive `C₀` resolvent
@@ -27,6 +29,8 @@ This construction does not assert a Kolmogorov moment bound or construct a conti
 process.
 -/
 
+@[expose] public section
+
 open Filter Set Topology TopologicalSpace
 
 noncomputable section
@@ -36,7 +40,7 @@ namespace OnePoint
 variable {X : Type*} [TopologicalSpace X] [T2Space X] [LocallyCompactSpace X]
   [SecondCountableTopology X]
 
-private def basis : Set (Set (OnePoint X)) :=
+def basis : Set (Set (OnePoint X)) :=
   ((fun s : Set X => ((↑) '' s : Set (OnePoint X))) '' TopologicalSpace.countableBasis X) ∪
     Set.range (fun n : ℕ => OnePoint.opensOfCompl
       (CompactExhaustion.choice X n)
@@ -190,14 +194,14 @@ omit [LocallyCompactSpace X] [SecondCountableTopology X] in
   simp only [onePointRemainder_apply, ZeroAtInftyContinuousMap.smul_apply, smul_eq_mul]
   ring
 
-private noncomputable def onePointRemainderLinearMap :
+noncomputable def onePointRemainderLinearMap :
     C₀(OnePoint X, ℝ) →ₗ[ℝ] C₀(X, ℝ) where
   toFun := onePointRemainder
   map_add' := onePointRemainder_add
   map_smul' := onePointRemainder_smul
 
 omit [LocallyCompactSpace X] [SecondCountableTopology X] in
-private theorem norm_onePointRemainder_le (g : C₀(OnePoint X, ℝ)) :
+theorem norm_onePointRemainder_le (g : C₀(OnePoint X, ℝ)) :
     ‖onePointRemainder g‖ ≤ 2 * ‖g‖ := by
   rw [← ZeroAtInftyContinuousMap.norm_toBCF_eq_norm]
   refine (BoundedContinuousFunction.norm_le (mul_nonneg (by norm_num) (norm_nonneg g))).2 fun x ↦ ?_
@@ -210,7 +214,7 @@ private theorem norm_onePointRemainder_le (g : C₀(OnePoint X, ℝ)) :
       (g.toBCF.norm_coe_le_norm OnePoint.infty)
     _ = 2 * ‖g‖ := by ring
 
-private noncomputable def onePointRemainderCLM :
+noncomputable def onePointRemainderCLM :
     C₀(OnePoint X, ℝ) →L[ℝ] C₀(X, ℝ) :=
   onePointRemainderLinearMap.mkContinuous 2 norm_onePointRemainder_le
 
@@ -296,7 +300,7 @@ private theorem norm_onePointSemigroupAction_le (t : NNReal) (g : C₀(OnePoint 
             (g.toBCF.norm_coe_le_norm OnePoint.infty) (sub_nonneg.mpr hmass1)
         _ = ‖g‖ := by ring
 
-private noncomputable def onePointSemigroupLinearMap (t : NNReal) :
+noncomputable def onePointSemigroupLinearMap (t : NNReal) :
     C₀(OnePoint X, ℝ) →ₗ[ℝ] C₀(OnePoint X, ℝ) where
   toFun := R.onePointSemigroupAction t
   map_add' g h := by
@@ -329,7 +333,7 @@ noncomputable def onePointSemigroupOperator (t : NNReal) :
 @[simp] theorem onePointSemigroupOperator_apply (t : NNReal) (g : C₀(OnePoint X, ℝ)) :
     R.onePointSemigroupOperator t g = R.onePointSemigroupAction t g := rfl
 
-private noncomputable def onePointEmbedLinearMap : C₀(X, ℝ) →ₗ[ℝ] C₀(OnePoint X, ℝ) where
+noncomputable def onePointEmbedLinearMap : C₀(X, ℝ) →ₗ[ℝ] C₀(OnePoint X, ℝ) where
   toFun := fun f ↦ onePointAssemble f 0
   map_add' f g := by
     apply ZeroAtInftyContinuousMap.ext
@@ -361,7 +365,7 @@ private theorem norm_onePointEmbed_le (f : C₀(X, ℝ)) :
       rw [onePointAssemble_coe, add_zero]
       exact f.toBCF.norm_coe_le_norm x
 
-private noncomputable def onePointEmbed : C₀(X, ℝ) →L[ℝ] C₀(OnePoint X, ℝ) :=
+noncomputable def onePointEmbed : C₀(X, ℝ) →L[ℝ] C₀(OnePoint X, ℝ) :=
   onePointEmbedLinearMap.mkContinuous 1 fun f ↦ by
     simpa only [one_mul] using! norm_onePointEmbed_le f
 
@@ -446,7 +450,7 @@ theorem isPositive_onePointSemigroup (t : NNReal) :
             (ENNReal.toReal_le_toReal hfin ENNReal.one_ne_top).mpr hmassE
         · exact hg OnePoint.infty
 
-private noncomputable def onePointEvaluation (z : OnePoint X) :
+noncomputable def onePointEvaluation (z : OnePoint X) :
     C₀(OnePoint X, ℝ) →L[ℝ] ℝ :=
   LinearMap.mkContinuous
     { toFun := fun g ↦ g z
@@ -456,7 +460,7 @@ private noncomputable def onePointEvaluation (z : OnePoint X) :
       rw [one_mul]
       exact g.toBCF.norm_coe_le_norm z
 
-private theorem isPositive_onePointResolventOperator (mu : Semigroup.PositiveShift) :
+theorem isPositive_onePointResolventOperator (mu : Semigroup.PositiveShift) :
     PositiveC0OperatorMeasure.IsPositive (R.onePointSemigroup.resolvent mu) := by
   intro g hg z
   change 0 ≤ (R.onePointSemigroup.resolvent mu g) z
@@ -481,7 +485,7 @@ theorem generatedSemigroup_onePointResolvent :
     R.onePointResolvent.toContractiveResolvent.generatedSemigroup = R.onePointSemigroup :=
   R.onePointSemigroup.generatedSemigroup_toContractiveResolvent
 
-private theorem onePointResolvent_remainder (mu : Semigroup.PositiveShift)
+theorem onePointResolvent_remainder (mu : Semigroup.PositiveShift)
     (g : C₀(OnePoint X, ℝ)) :
     onePointRemainder (R.onePointResolvent.toContractiveResolvent.operator mu g) =
       R.toContractiveResolvent.operator mu (onePointRemainder g) := by
@@ -503,7 +507,7 @@ private theorem onePointResolvent_remainder (mu : Semigroup.PositiveShift)
     map_smul, onePointRemainderCLM_apply, onePointSemigroup_apply,
     onePointSemigroupAction, onePointRemainder_assemble]
 
-private theorem onePointResolvent_infty (mu : Semigroup.PositiveShift)
+theorem onePointResolvent_infty (mu : Semigroup.PositiveShift)
     (g : C₀(OnePoint X, ℝ)) :
     R.onePointResolvent.toContractiveResolvent.operator mu g OnePoint.infty =
       (mu : ℝ)⁻¹ * g OnePoint.infty := by
@@ -546,7 +550,7 @@ theorem integral_onePointKernelSemigroup (t : NNReal) (g : C₀(OnePoint X, ℝ)
   rw [onePointKernelSemigroup, R.onePointResolvent.integral_kernelSemigroup,
     R.generatedSemigroup_onePointResolvent]
 
-private noncomputable def onePointConstant (c : ℝ) : C₀(OnePoint X, ℝ) :=
+noncomputable def onePointConstant (c : ℝ) : C₀(OnePoint X, ℝ) :=
   onePointAssemble 0 c
 
 omit [MeasurableSpace X] [BorelSpace X] [LocallyCompactSpace X] [SecondCountableTopology X] in

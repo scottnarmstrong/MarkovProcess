@@ -3,10 +3,12 @@ Copyright (c) 2026 Scott Armstrong. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Scott Armstrong
 -/
-import MarkovProcess.Kernel.Basic
-import MarkovProcess.Kernel.MeasurableRadonFamily
-import MarkovProcess.Kernel.PositiveC0OperatorMass
-import Mathlib.MeasureTheory.Integral.BoundedContinuousFunction
+module
+
+public import MarkovProcess.Kernel.Basic
+public import MarkovProcess.Kernel.MeasurableRadonFamily
+public import MarkovProcess.Kernel.PositiveC0OperatorMass
+public import Mathlib.MeasureTheory.Integral.BoundedContinuousFunction
 
 /-!
 # Kernels represented by positive operators on `C₀`
@@ -14,6 +16,8 @@ import Mathlib.MeasureTheory.Integral.BoundedContinuousFunction
 A positive contraction on real continuous functions vanishing at infinity determines a
 sub-Markov kernel.  Its values are the pointwise Riesz measures of the evaluation functionals.
 -/
+
+@[expose] public section
 
 open CompactlySupported Filter MeasureTheory ProbabilityTheory Set
 open scoped ZeroAtInfty

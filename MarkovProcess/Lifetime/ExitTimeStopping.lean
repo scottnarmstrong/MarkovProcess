@@ -3,11 +3,15 @@ Copyright (c) 2026 Scott Armstrong. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Scott Armstrong
 -/
-import MarkovProcess.Path.ClosedSetDetection
-import MarkovProcess.Lifetime.ExitTime
-import MarkovProcess.Lifetime.Filtration
+module
+
+public import MarkovProcess.Path.ClosedSetDetection
+public import MarkovProcess.Lifetime.ExitTime
+public import MarkovProcess.Lifetime.Filtration
 
 /-! # Exit times as stopping times -/
+
+@[expose] public section
 
 open MeasureTheory Set
 open scoped ENNReal

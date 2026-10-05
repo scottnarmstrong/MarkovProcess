@@ -3,8 +3,10 @@ Copyright (c) 2026 Scott Armstrong. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Scott Armstrong
 -/
-import MarkovProcess.Semigroup.PositiveShift
-import MarkovProcess.Semigroup.DenseCoreConvergence
+module
+
+public import MarkovProcess.Semigroup.PositiveShift
+public import MarkovProcess.Semigroup.DenseCoreConvergence
 
 /-!
 # Contractive resolvent families
@@ -12,6 +14,8 @@ import MarkovProcess.Semigroup.DenseCoreConvergence
 This module packages the elementary resolvent identity, the Hille--Yosida
 bound, and dense range, then derives normalization at large positive shifts.
 -/
+
+@[expose] public section
 
 open Filter Topology
 

@@ -1,5 +1,7 @@
-import MarkovProcess.Main
-import Audit.ContinuousMarkovProcess.SolutionBasic
+module
+
+public import MarkovProcess.Main
+public import Audit.ContinuousMarkovProcess.SolutionBasic
 
 /-!
 # Continuous Markov process — comparator solution
@@ -11,6 +13,8 @@ bridge is definitional or a structural induction, and the theorem itself is the 
 `IsFellerKernelSemigroup.existsUnique_continuousProcess_of_hasKolmogorovMoments` transported
 along those bridges.
 -/
+
+@[expose] public section
 
 open MeasureTheory ProbabilityTheory Filter Topology
 open scoped ENNReal NNReal ZeroAtInfty ProbabilityTheory

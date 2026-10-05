@@ -3,9 +3,11 @@ Copyright (c) 2026 Scott Armstrong. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Scott Armstrong
 -/
-import MarkovProcess.Killed.Resolvent
-import MarkovProcess.Semigroup.Resolvent
-import MarkovProcess.Trajectory.ExitLaw
+module
+
+public import MarkovProcess.Killed.Resolvent
+public import MarkovProcess.Semigroup.Resolvent
+public import MarkovProcess.Trajectory.ExitLaw
 
 /-!
 # The Laplace transform of an exit time
@@ -20,6 +22,8 @@ Main results: `IsConservative.lintegral_exp_neg_exitTime` and
 
 No moment bound or almost-sure finiteness of the exit time is asserted.
 -/
+
+@[expose] public section
 
 open Filter MeasureTheory ProbabilityTheory Set
 open scoped ENNReal NNReal

@@ -18,47 +18,49 @@ Conventions used throughout (details in [`CONVENTIONS.md`](CONVENTIONS.md)):
 ## 0. Set-up
 
 ```lean
-import MarkovProcess.Main
-import MarkovProcess.Analysis.PaleyZygmund
-import MarkovProcess.Path.ExitTime
-import MarkovProcess.Path.Sampling
-import MarkovProcess.Killed.Kernel
-import MarkovProcess.Killed.Marginals
-import MarkovProcess.Killed.Nested
-import MarkovProcess.Killed.ExitTimeIdentification
-import MarkovProcess.Trajectory.DiscountedDynkin
-import MarkovProcess.Trajectory.Dynkin
-import MarkovProcess.Trajectory.DynkinStopping
-import MarkovProcess.Trajectory.ExitTimeExponentialMoment
-import MarkovProcess.Trajectory.ExitTimeLaplace
-import MarkovProcess.Trajectory.ExcessiveStopping
-import MarkovProcess.Trajectory.FeynmanKac
-import MarkovProcess.Trajectory.ResolventExitDecomposition
-import MarkovProcess.Trajectory.PathModulus
-import MarkovProcess.Trajectory.PathTightness
-import MarkovProcess.Trajectory.WeakContinuity
-import MarkovProcess.Trajectory.StartingPointContinuity
-import MarkovProcess.Trajectory.StoppingLtTop
-import MarkovProcess.Trajectory.Equivariance
-import MarkovProcess.Parameterized.Equivariance
-import MarkovProcess.Parameterized.ContinuousProcessProperties
-import MarkovProcess.Parameterized.Annealed
-import MarkovProcess.Examples.BrownianMotion
-import MarkovProcess.Examples.HeatSemigroup
-import MarkovProcess.Examples.HeatGenerator
-import MarkovProcess.Examples.Identity
-import MarkovProcess.Kernel.PositiveC0Resolvent
-import MarkovProcess.Kernel.OnePointExtension
-import MarkovProcess.Kernel.OnePointKilled
-import MarkovProcess.Kernel.OnePointKolmogorov
-import MarkovProcess.Semigroup.GeneratorResolvent
-import MarkovProcess.Semigroup.GeneratorUniqueness
-import MarkovProcess.Semigroup.ExponentialComparison
-import MarkovProcess.Semigroup.ResolventGeneration
-import MarkovProcess.Feller.Resolvent
-import MarkovProcess.Semigroup.TrotterKato
-import MarkovProcess.Trajectory.Convergence
-import MarkovProcess.Trajectory.WeakConvergence
+module
+
+public import MarkovProcess.Main
+public import MarkovProcess.Analysis.PaleyZygmund
+public import MarkovProcess.Path.ExitTime
+public import MarkovProcess.Path.Sampling
+public import MarkovProcess.Killed.Kernel
+public import MarkovProcess.Killed.Marginals
+public import MarkovProcess.Killed.Nested
+public import MarkovProcess.Killed.ExitTimeIdentification
+public import MarkovProcess.Trajectory.DiscountedDynkin
+public import MarkovProcess.Trajectory.Dynkin
+public import MarkovProcess.Trajectory.DynkinStopping
+public import MarkovProcess.Trajectory.ExitTimeExponentialMoment
+public import MarkovProcess.Trajectory.ExitTimeLaplace
+public import MarkovProcess.Trajectory.ExcessiveStopping
+public import MarkovProcess.Trajectory.FeynmanKac
+public import MarkovProcess.Trajectory.ResolventExitDecomposition
+public import MarkovProcess.Trajectory.PathModulus
+public import MarkovProcess.Trajectory.PathTightness
+public import MarkovProcess.Trajectory.WeakContinuity
+public import MarkovProcess.Trajectory.StartingPointContinuity
+public import MarkovProcess.Trajectory.StoppingLtTop
+public import MarkovProcess.Trajectory.Equivariance
+public import MarkovProcess.Parameterized.Equivariance
+public import MarkovProcess.Parameterized.ContinuousProcessProperties
+public import MarkovProcess.Parameterized.Annealed
+public import MarkovProcess.Examples.BrownianMotion
+public import MarkovProcess.Examples.HeatSemigroup
+public import MarkovProcess.Examples.HeatGenerator
+public import MarkovProcess.Examples.Identity
+public import MarkovProcess.Kernel.PositiveC0Resolvent
+public import MarkovProcess.Kernel.OnePointExtension
+public import MarkovProcess.Kernel.OnePointKilled
+public import MarkovProcess.Kernel.OnePointKolmogorov
+public import MarkovProcess.Semigroup.GeneratorResolvent
+public import MarkovProcess.Semigroup.GeneratorUniqueness
+public import MarkovProcess.Semigroup.ExponentialComparison
+public import MarkovProcess.Semigroup.ResolventGeneration
+public import MarkovProcess.Feller.Resolvent
+public import MarkovProcess.Semigroup.TrotterKato
+public import MarkovProcess.Trajectory.Convergence
+public import MarkovProcess.Trajectory.WeakConvergence
 ```
 
 ```lean

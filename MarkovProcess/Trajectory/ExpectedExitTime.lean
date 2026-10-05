@@ -3,9 +3,11 @@ Copyright (c) 2026 Scott Armstrong. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Scott Armstrong
 -/
-import MarkovProcess.Path.ExitTimeShift
-import MarkovProcess.Trajectory.DynkinStopping
-import MarkovProcess.Trajectory.StoppingLtTop
+module
+
+public import MarkovProcess.Path.ExitTimeShift
+public import MarkovProcess.Trajectory.DynkinStopping
+public import MarkovProcess.Trajectory.StoppingLtTop
 
 /-!
 # The expected exit time, untruncated
@@ -24,6 +26,8 @@ It also records that the truncated exit time of `Path/ExitTime.lean` is the gene
 (`ContinuousPath.exitTimeTrunc_eq_truncTime`), and the monotone limit
 `ContinuousPath.iSup_exitTimeTrunc : ⨆ n, exitTimeTrunc U n ω = exitTime U ω`.
 -/
+
+@[expose] public section
 
 open MeasureTheory ProbabilityTheory Filter
 open scoped ENNReal NNReal ZeroAtInfty

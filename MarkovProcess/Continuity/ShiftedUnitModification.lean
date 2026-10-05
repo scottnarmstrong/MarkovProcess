@@ -3,8 +3,10 @@ Copyright (c) 2026 Scott Armstrong. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Scott Armstrong
 -/
-import MarkovProcess.Continuity.KolmogorovTimeShift
-import MarkovProcess.Continuity.DyadicFloor
+module
+
+public import MarkovProcess.Continuity.KolmogorovTimeShift
+public import MarkovProcess.Continuity.DyadicFloor
 
 /-!
 # Continuous modifications on shifted unit intervals
@@ -16,6 +18,8 @@ eventual constancy of dyadic approximations at dyadic grid times.
 No global path is glued here, and no path-space measurability, law, or Hunt-process property is
 asserted.
 -/
+
+@[expose] public section
 
 open Filter MeasureTheory ProbabilityTheory Topology
 open scoped ENNReal NNReal

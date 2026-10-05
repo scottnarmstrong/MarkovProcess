@@ -3,8 +3,10 @@ Copyright (c) 2026 Scott Armstrong. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Scott Armstrong
 -/
-import MarkovProcess.Continuity.DenseTimeContinuousExtension
-import MarkovProcess.Lifetime.Basic
+module
+
+public import MarkovProcess.Continuity.DenseTimeContinuousExtension
+public import MarkovProcess.Lifetime.Basic
 
 /-!
 # Countable separation of lifetime paths
@@ -12,6 +14,8 @@ import MarkovProcess.Lifetime.Basic
 Lifetime and the coordinates at the fixed countable dense time set separate continuous lifetime
 paths.  Their measurable coding therefore gives a countable separating family.
 -/
+
+@[expose] public section
 
 open MeasureTheory Set
 open scoped ENNReal

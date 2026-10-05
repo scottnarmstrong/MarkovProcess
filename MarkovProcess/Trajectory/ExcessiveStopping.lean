@@ -3,10 +3,12 @@ Copyright (c) 2026 Scott Armstrong. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Scott Armstrong
 -/
-import MarkovProcess.Feller.Resolvent
-import MarkovProcess.Path.OptionalStopping
-import MarkovProcess.Trajectory.DynkinMartingale
-import MarkovProcess.Trajectory.ExpectedExitTime
+module
+
+public import MarkovProcess.Feller.Resolvent
+public import MarkovProcess.Path.OptionalStopping
+public import MarkovProcess.Trajectory.DynkinMartingale
+public import MarkovProcess.Trajectory.ExpectedExitTime
 
 /-!
 # Excessive functions and stopping
@@ -27,6 +29,8 @@ Main results: `IsFellerKernelSemigroup.resolvent_isLambdaExcessive`,
 
 No converse characterization of excessive functions is asserted.
 -/
+
+@[expose] public section
 
 open Filter MeasureTheory ProbabilityTheory Set Topology
 open scoped ENNReal NNReal ZeroAtInfty

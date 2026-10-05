@@ -3,8 +3,10 @@ Copyright (c) 2026 Scott Armstrong. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Scott Armstrong
 -/
-import MarkovProcess.Trajectory.ExitTimeLaplace
-import MarkovProcess.Trajectory.StoppingLtTop
+module
+
+public import MarkovProcess.Trajectory.ExitTimeLaplace
+public import MarkovProcess.Trajectory.StoppingLtTop
 
 /-!
 # Resolvent decomposition at an exit time
@@ -22,6 +24,8 @@ Main definitions and results: `ContinuousPath.pathResolvent`,
 
 No integrability or almost-sure finiteness of the exit time is asserted.
 -/
+
+@[expose] public section
 
 open Filter MeasureTheory ProbabilityTheory Set
 open scoped ENNReal NNReal

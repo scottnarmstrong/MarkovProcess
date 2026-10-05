@@ -3,7 +3,9 @@ Copyright (c) 2026 Scott Armstrong. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Scott Armstrong
 -/
-import MarkovProcess.Kernel.Basic
+module
+
+public import MarkovProcess.Kernel.Basic
 
 /-!
 # Sub-Markov transition-kernel semigroups
@@ -15,6 +17,8 @@ and then `η`; consequently the law below is `K (s + t) = (K t).comp (K s)`.
 Conservativity is deliberately a separate predicate.  A killed transition
 family has mass at most one, while a conservative family has mass exactly one.
 -/
+
+@[expose] public section
 
 open Set
 open scoped ENNReal ProbabilityTheory

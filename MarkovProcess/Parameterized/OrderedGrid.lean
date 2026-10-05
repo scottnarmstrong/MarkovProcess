@@ -3,8 +3,10 @@ Copyright (c) 2026 Scott Armstrong. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Scott Armstrong
 -/
-import MarkovProcess.Time.OrderedGrid
-import MarkovProcess.Parameterized.Semigroup
+module
+
+public import MarkovProcess.Time.OrderedGrid
+public import MarkovProcess.Parameterized.Semigroup
 
 /-!
 # Parameterized trajectory laws on a fixed ordered time grid
@@ -18,6 +20,8 @@ The result is a path-law kernel on `Theta × alpha` with values in measures on `
 It is not a continuous-time path law and does not assert measurability in the grid.
 -/
 
+@[expose] public section
+
 open MeasureTheory
 open ProbabilityTheory
 open scoped ProbabilityTheory
@@ -30,7 +34,7 @@ variable {Theta alpha : Type*} [MeasurableSpace Theta] [MeasurableSpace alpha]
 
 variable (P : ParameterizedSubMarkovKernelSemigroup Theta alpha)
 
-private def lastIndex (n : ℕ) : Finset.Iic n :=
+def lastIndex (n : ℕ) : Finset.Iic n :=
   ⟨n, Finset.mem_Iic.mpr le_rfl⟩
 
 /-- The jointly measurable transition kernel at one fixed time increment. -/

@@ -3,8 +3,10 @@ Copyright (c) 2026 Scott Armstrong. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Scott Armstrong
 -/
-import Mathlib.Probability.Kernel.IonescuTulcea.Traj
-import MarkovProcess.Kernel.KernelSemigroup
+module
+
+public import Mathlib.Probability.Kernel.IonescuTulcea.Traj
+public import MarkovProcess.Kernel.KernelSemigroup
 
 /-!
 # Trajectory laws on a fixed ordered time grid
@@ -13,6 +15,8 @@ This file applies the Ionescu--Tulcea theorem to a conservative sub-Markov
 kernel semigroup on one fixed nondecreasing `NNReal`-valued time grid.  The
 result is only a discrete trajectory law on `ℕ → α` for that grid.
 -/
+
+@[expose] public section
 
 open MeasureTheory
 open ProbabilityTheory
@@ -48,7 +52,7 @@ namespace SubMarkovKernelSemigroup
 
 variable (P : SubMarkovKernelSemigroup α)
 
-private def lastIndex (n : ℕ) : Finset.Iic n :=
+def lastIndex (n : ℕ) : Finset.Iic n :=
   ⟨n, Finset.mem_Iic.mpr le_rfl⟩
 
 /-- The history-dependent Ionescu--Tulcea step kernel on `grid`.

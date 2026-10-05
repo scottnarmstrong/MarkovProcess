@@ -3,13 +3,15 @@ Copyright (c) 2026 Scott Armstrong. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Scott Armstrong
 -/
-import MarkovProcess.Kernel.OnePointKolmogorov
-import MarkovProcess.Killed.Semigroup
-import MarkovProcess.Feller.Resolvent
-import MarkovProcess.Trajectory.ExitLaw
-import MarkovProcess.Trajectory.ExitTimeLaplace
-import Mathlib.Topology.Homeomorph.Lemmas
-import Mathlib.MeasureTheory.Measure.RegularityCompacts
+module
+
+public import MarkovProcess.Kernel.OnePointKolmogorov
+public import MarkovProcess.Killed.Semigroup
+public import MarkovProcess.Feller.Resolvent
+public import MarkovProcess.Trajectory.ExitLaw
+public import MarkovProcess.Trajectory.ExitTimeLaplace
+public import Mathlib.Topology.Homeomorph.Lemmas
+public import Mathlib.MeasureTheory.Measure.RegularityCompacts
 
 /-!
 # Killing the one-point process at infinity
@@ -17,6 +19,8 @@ import Mathlib.MeasureTheory.Measure.RegularityCompacts
 This file identifies the continuous process of the one-point extension of a positive
 `C₀`-contractive resolvent with the process killed on leaving its live part.
 -/
+
+@[expose] public section
 
 open Filter MeasureTheory ProbabilityTheory Set Topology
 open scoped ENNReal NNReal ZeroAtInfty
@@ -227,7 +231,7 @@ topology coincides with the canonical one-point topology (which is always compac
 typeclass-search cache in the same spirit as `OnePoint.instCompleteSpaceOnePointExhaustion`: it
 lets the `isCompact_univ` calls that build `CompleteSpace (OnePoint X)` (via
 `completeSpace_of_isComplete_univ`) inside this file's `letI` chains resolve automatically. -/
-private instance instCompactSpaceOnePointExhaustion
+instance instCompactSpaceOnePointExhaustion
     (rho : X → ℝ) (hrho_cont : Continuous rho) (hrho_pos : ∀ x, 0 < rho x)
     (hrho_lipschitz : LipschitzWith 1 rho)
     (hrho_compact : ∀ epsilon > 0, IsCompact {x | epsilon ≤ rho x}) :

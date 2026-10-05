@@ -3,8 +3,10 @@ Copyright (c) 2026 Scott Armstrong. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Scott Armstrong
 -/
-import MarkovProcess.Path.Basic
-import Mathlib.Probability.Process.Stopping
+module
+
+public import MarkovProcess.Path.Basic
+public import Mathlib.Probability.Process.Stopping
 
 /-!
 # Measurability of the state at a stopping time
@@ -19,6 +21,8 @@ This is ordinary measurability infrastructure.  It proves no restart identity an
 expectation formula; those are in `Trajectory/FellerStoppingRestart.lean` and
 `Trajectory/FellerStoppingConditional.lean`.
 -/
+
+@[expose] public section
 
 open MeasureTheory
 

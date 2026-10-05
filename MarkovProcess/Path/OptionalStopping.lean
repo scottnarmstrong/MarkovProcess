@@ -3,9 +3,11 @@ Copyright (c) 2026 Scott Armstrong. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Scott Armstrong
 -/
-import MarkovProcess.Path.StoppingTimeDyadicCeiling
-import Mathlib.MeasureTheory.Integral.DominatedConvergence
-import Mathlib.Probability.Martingale.OptionalStopping
+module
+
+public import MarkovProcess.Path.StoppingTimeDyadicCeiling
+public import Mathlib.MeasureTheory.Integral.DominatedConvergence
+public import Mathlib.Probability.Martingale.OptionalStopping
 
 /-!
 # Optional stopping in continuous time, at a bounded finite stopping time
@@ -34,6 +36,8 @@ Nothing here is specific to path space: the statements are for an arbitrary meas
 a filtration indexed by `ℝ≥0`.  No optional-stopping result for unbounded stopping times is
 asserted.
 -/
+
+@[expose] public section
 
 open Filter MeasureTheory Topology
 open scoped NNReal

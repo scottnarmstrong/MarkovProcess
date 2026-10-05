@@ -3,9 +3,11 @@ Copyright (c) 2026 Scott Armstrong. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Scott Armstrong
 -/
-import MarkovProcess.Parameterized.DenseTimePrefixKernel
-import MarkovProcess.Time.DenseTimeHistory
-import Mathlib.Probability.Kernel.Disintegration.StandardBorel
+module
+
+public import MarkovProcess.Parameterized.DenseTimePrefixKernel
+public import MarkovProcess.Time.DenseTimeHistory
+public import Mathlib.Probability.Kernel.Disintegration.StandardBorel
 
 /-!
 # Conditional kernels for parameterized finite dense-time prefixes
@@ -14,6 +16,8 @@ This file disintegrates the jointly parameterized law of a finite dense-time pre
 observation. The resulting conditional kernel is one jointly measurable version. No comparison
 with separately chosen fixed-parameter conditional versions is asserted.
 -/
+
+@[expose] public section
 
 open MeasureTheory ProbabilityTheory
 

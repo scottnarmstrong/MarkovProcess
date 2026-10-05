@@ -3,9 +3,11 @@ Copyright (c) 2026 Scott Armstrong. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Scott Armstrong
 -/
-import MarkovProcess.Trajectory.Dynkin
-import MarkovProcess.Feller.Resolvent
-import Mathlib.Probability.Distributions.Gaussian.Real
+module
+
+public import MarkovProcess.Trajectory.Dynkin
+public import MarkovProcess.Feller.Resolvent
+public import Mathlib.Probability.Distributions.Gaussian.Real
 
 /-!
 # The one-dimensional heat semigroup and its continuous-path process
@@ -33,6 +35,8 @@ Only one space dimension is treated: the multidimensional heat semigroup is not 
 Nothing in this file asserts independence of increments; that is proved in
 `MarkovProcess.Examples.BrownianMotion`.
 -/
+
+@[expose] public section
 
 open Filter MeasureTheory ProbabilityTheory Topology
 open scoped ENNReal NNReal ZeroAtInfty

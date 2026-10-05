@@ -3,9 +3,11 @@ Copyright (c) 2026 Scott Armstrong. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Scott Armstrong
 -/
-import MarkovProcess.Feller.FiniteSetConvergence
-import MarkovProcess.Main
-import MarkovProcess.Parameterized.ContinuousProcessProperties
+module
+
+public import MarkovProcess.Feller.FiniteSetConvergence
+public import MarkovProcess.Main
+public import MarkovProcess.Parameterized.ContinuousProcessProperties
 
 /-!
 # Convergence of the finite-dimensional distributions of Feller processes
@@ -28,6 +30,8 @@ Main results: `tendsto_integral_finsetEvaluation_continuousProcess`,
 Convergence of the finite-dimensional distributions is not convergence on path space, which needs
 in addition a tightness estimate for the family of laws; that is not asserted here.
 -/
+
+@[expose] public section
 
 open Filter MeasureTheory ProbabilityTheory Topology
 open scoped BoundedContinuousFunction NNReal ZeroAtInfty

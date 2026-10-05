@@ -3,8 +3,10 @@ Copyright (c) 2026 Scott Armstrong. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Scott Armstrong
 -/
-import MarkovProcess.Killed.GluingLocal
-import MarkovProcess.Killed.GluingResolventEquation
+module
+
+public import MarkovProcess.Killed.GluingLocal
+public import MarkovProcess.Killed.GluingResolventEquation
 
 /-!
 # The supremum resolvent (the minimal process of Blumenthal--Getoor, in name only)
@@ -37,6 +39,8 @@ continuous-path process.
 No transition semigroup, no process on the ambient space, and no conservativity are constructed
 here.
 -/
+
+@[expose] public section
 
 open Filter MeasureTheory ProbabilityTheory Set Topology
 open scoped ENNReal NNReal ZeroAtInfty

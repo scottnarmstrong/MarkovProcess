@@ -3,9 +3,11 @@ Copyright (c) 2026 Scott Armstrong. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Scott Armstrong
 -/
-import MarkovProcess.Semigroup.ContractiveResolvent
-import MarkovProcess.Semigroup.ExponentialBounds
-import MarkovProcess.Semigroup.Basic
+module
+
+public import MarkovProcess.Semigroup.ContractiveResolvent
+public import MarkovProcess.Semigroup.ExponentialBounds
+public import MarkovProcess.Semigroup.Basic
 
 /-!
 # Bounded Yosida approximations
@@ -14,6 +16,8 @@ For a contractive resolvent `R`, this file defines the bounded generator
 `G_α = α (α R_α - I)` and its exponential contraction semigroup.  It also
 records commutation and the exact formula on the range of a fixed resolvent.
 -/
+
+@[expose] public section
 
 open Filter Topology
 open NormedSpace
@@ -34,6 +38,8 @@ private instance cacheSMulCLM : SMul ℝ (E →L[ℝ] E) := inferInstance
 private instance cacheModuleCLM : Module ℝ (E →L[ℝ] E) := inferInstance
 private instance cacheAlgebraCLM : Algebra ℝ (E →L[ℝ] E) := inferInstance
 private instance cacheIsTopologicalRingCLM : IsTopologicalRing (E →L[ℝ] E) := inferInstance
+private noncomputable instance cacheNormedAlgebraRatCLM : NormedAlgebra ℚ (E →L[ℝ] E) :=
+  NormedAlgebra.restrictScalars ℚ ℝ (E →L[ℝ] E)
 
 /-- The bounded Yosida generator `G_α = α (α R_α - I)`. -/
 def yosidaGenerator (R : ContractiveResolvent E) (α : PositiveShift) : E →L[ℝ] E :=

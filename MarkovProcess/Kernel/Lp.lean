@@ -3,9 +3,11 @@ Copyright (c) 2026 Scott Armstrong. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Scott Armstrong
 -/
-import MarkovProcess.Kernel.LpFinite
-import MarkovProcess.Kernel.LpTop
-import Mathlib.MeasureTheory.Function.LpSpace.Basic
+module
+
+public import MarkovProcess.Kernel.LpFinite
+public import MarkovProcess.Kernel.LpTop
+public import Mathlib.MeasureTheory.Function.LpSpace.Basic
 
 /-!
 # Kernel integral operators on real `Lᵖ`
@@ -13,6 +15,8 @@ import Mathlib.MeasureTheory.Function.LpSpace.Basic
 This file packages the raw kernel integral as continuous linear contractions on
 finite-exponent and infinite-exponent real `Lᵖ` spaces.
 -/
+
+@[expose] public section
 
 open MeasureTheory
 open ProbabilityTheory
@@ -22,22 +26,22 @@ namespace MarkovProcess
 
 variable {α : Type*} [MeasurableSpace α]
 
-private instance fact_one_le_coe_nnreal (p : NNReal) [Fact (1 ≤ p)] :
+instance fact_one_le_coe_nnreal (p : NNReal) [Fact (1 ≤ p)] :
     Fact (1 ≤ (p : ℝ≥0∞)) := ⟨by exact_mod_cast Fact.out⟩
 
 /- Head-class caches for the `Lᵖ` carrier.  Without them every normed-group
 class search on `↥(Lp ℝ p μ)` first tries `AddSubgroup.seminormedAddCommGroup`
 and burns a failing search for `SeminormedAddCommGroup (α →ₘ[μ] ℝ)`. -/
-private noncomputable instance cacheSeminormedLp (p : ℝ≥0∞) [Fact (1 ≤ p)]
+noncomputable instance cacheSeminormedLp (p : ℝ≥0∞) [Fact (1 ≤ p)]
     (μ : Measure α) : SeminormedAddCommGroup (Lp ℝ p μ) := inferInstance
 
-private noncomputable instance cacheAddCommMonoidLp (p : ℝ≥0∞) [Fact (1 ≤ p)]
+noncomputable instance cacheAddCommMonoidLp (p : ℝ≥0∞) [Fact (1 ≤ p)]
     (μ : Measure α) : AddCommMonoid (Lp ℝ p μ) := inferInstance
 
-private noncomputable instance cacheModuleLp (p : ℝ≥0∞) [Fact (1 ≤ p)]
+noncomputable instance cacheModuleLp (p : ℝ≥0∞) [Fact (1 ≤ p)]
     (μ : Measure α) : Module ℝ (Lp ℝ p μ) := inferInstance
 
-private noncomputable instance cacheTopologicalSpaceLp (p : ℝ≥0∞) [Fact (1 ≤ p)]
+noncomputable instance cacheTopologicalSpaceLp (p : ℝ≥0∞) [Fact (1 ≤ p)]
     (μ : Measure α) : TopologicalSpace (Lp ℝ p μ) := inferInstance
 
 private theorem ae_integrable_kernel_finite {μ : Measure α} {κ : Kernel α α}

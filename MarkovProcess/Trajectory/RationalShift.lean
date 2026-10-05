@@ -3,11 +3,13 @@ Copyright (c) 2026 Scott Armstrong. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Scott Armstrong
 -/
-import MarkovProcess.Path.KernelIdentification
-import MarkovProcess.Trajectory.DenseRestrictionMarginals
-import MarkovProcess.FiniteTime.DenseTimeFiniteSetKernelShift
-import MarkovProcess.FiniteTime.DenseTimeFiniteShift
-import MarkovProcess.Kernel.FiniteRestrictionIdentification
+module
+
+public import MarkovProcess.Path.KernelIdentification
+public import MarkovProcess.Trajectory.DenseRestrictionMarginals
+public import MarkovProcess.FiniteTime.DenseTimeFiniteSetKernelShift
+public import MarkovProcess.FiniteTime.DenseTimeFiniteShift
+public import MarkovProcess.Kernel.FiniteRestrictionIdentification
 
 /-!
 # Rational-time shifts of continuous trajectory laws
@@ -17,6 +19,8 @@ proof first identifies all finite rational-coordinate marginals of the shifted p
 uniqueness on the dense product path space and injectivity of dense restriction.  This is an
 unconditional law identity; conditional and strong Markov statements require additional work.
 -/
+
+@[expose] public section
 
 open MeasureTheory ProbabilityTheory
 open scoped NNReal

@@ -3,11 +3,13 @@ Copyright (c) 2026 Scott Armstrong. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Scott Armstrong
 -/
-import MarkovProcess.Kernel.C0SemigroupJoint
-import MarkovProcess.Kernel.PositiveC0OperatorKernel
-import MarkovProcess.Kernel.KernelSemigroup
-import Mathlib.Probability.Kernel.Composition.IntegralCompProd
-import Mathlib.Topology.Metrizable.Urysohn
+module
+
+public import MarkovProcess.Kernel.C0SemigroupJoint
+public import MarkovProcess.Kernel.PositiveC0OperatorKernel
+public import MarkovProcess.Kernel.KernelSemigroup
+public import Mathlib.Probability.Kernel.Composition.IntegralCompProd
+public import Mathlib.Topology.Metrizable.Urysohn
 
 /-!
 # Kernel semigroups represented by positive contraction semigroups on `C₀`
@@ -15,6 +17,8 @@ import Mathlib.Topology.Metrizable.Urysohn
 A strongly continuous semigroup of positive contractions on real continuous functions vanishing
 at infinity determines a jointly measurable sub-Markov kernel semigroup.
 -/
+
+@[expose] public section
 
 open CompactlySupported MeasureTheory ProbabilityTheory
 open scoped ENNReal ZeroAtInfty

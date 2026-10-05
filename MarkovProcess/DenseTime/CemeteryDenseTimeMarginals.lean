@@ -3,8 +3,10 @@ Copyright (c) 2026 Scott Armstrong. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Scott Armstrong
 -/
-import MarkovProcess.DenseTime.CemeterySemigroup
-import MarkovProcess.DenseTime.TrajectoryMarginals
+module
+
+public import MarkovProcess.DenseTime.CemeterySemigroup
+public import MarkovProcess.DenseTime.TrajectoryMarginals
 
 /-!
 # Cemetery marginals of dense-time trajectories
@@ -13,6 +15,8 @@ For a conservative live semigroup, the trajectory of its cemetery extension has 
 at any dense-time coordinate when started from a live state.  This is a finite-coordinate statement;
 it does not assert that a dense-time path has a continuous lifetime-path extension.
 -/
+
+@[expose] public section
 
 open MeasureTheory ProbabilityTheory
 open scoped ENNReal

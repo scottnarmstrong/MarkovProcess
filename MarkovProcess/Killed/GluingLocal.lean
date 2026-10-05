@@ -3,8 +3,10 @@ Copyright (c) 2026 Scott Armstrong. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Scott Armstrong
 -/
-import MarkovProcess.Kernel.OnePointKilled
-import MarkovProcess.Killed.GluingTransfer
+module
+
+public import MarkovProcess.Kernel.OnePointKilled
+public import MarkovProcess.Killed.GluingTransfer
 
 /-!
 # Comparing two local resolvents through the part-process identity
@@ -26,6 +28,8 @@ potential measures.
 The regularity data are an explicit hypothesis: positivity, contractivity and the resolvent
 identity do not by themselves give the compactified semigroup a continuous-path process.
 -/
+
+@[expose] public section
 
 open Filter MeasureTheory ProbabilityTheory Set Topology
 open scoped ENNReal NNReal ZeroAtInfty
@@ -77,7 +81,7 @@ noncomputable def metricSpace (h : R.OnePointRegular) : MetricSpace (OnePoint X)
 `CompactSpace (OnePoint X)` obligation without re-deriving compactness at each call site (the
 exhaustion metric's topology coincides with the canonical one-point topology, which is always
 compact). -/
-private instance instCompactSpaceMetricSpace (h : R.OnePointRegular) :
+instance instCompactSpaceMetricSpace (h : R.OnePointRegular) :
     @CompactSpace (OnePoint X) h.metricSpace.toPseudoMetricSpace.toUniformSpace.toTopologicalSpace := by
   unfold OnePointRegular.metricSpace
   rw [OnePoint.exhaustionMetricSpace_toTopologicalSpace]
@@ -85,7 +89,7 @@ private instance instCompactSpaceMetricSpace (h : R.OnePointRegular) :
 
 /-- Typeclass-search cache, in the same spirit as `instCompactSpaceMetricSpace`: lets
 `letI := h.metricSpace` discharge an ambient `BorelSpace (OnePoint X)` obligation. -/
-private instance instBorelSpaceMetricSpace (h : R.OnePointRegular) :
+instance instBorelSpaceMetricSpace (h : R.OnePointRegular) :
     @BorelSpace (OnePoint X) h.metricSpace.toPseudoMetricSpace.toUniformSpace.toTopologicalSpace
       OnePoint.instMeasurableSpace := by
   unfold OnePointRegular.metricSpace
@@ -95,7 +99,7 @@ private instance instBorelSpaceMetricSpace (h : R.OnePointRegular) :
 /-- Typeclass-search cache, in the same spirit as `instCompactSpaceMetricSpace`: lets
 `letI := h.metricSpace` discharge an ambient `SecondCountableTopology (OnePoint X)`
 obligation. -/
-private instance instSecondCountableTopologyMetricSpace (h : R.OnePointRegular) :
+instance instSecondCountableTopologyMetricSpace (h : R.OnePointRegular) :
     @SecondCountableTopology (OnePoint X)
       h.metricSpace.toPseudoMetricSpace.toUniformSpace.toTopologicalSpace := by
   unfold OnePointRegular.metricSpace

@@ -3,8 +3,10 @@ Copyright (c) 2026 Scott Armstrong. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Scott Armstrong
 -/
-import MarkovProcess.Feller.Semigroup
-import MarkovProcess.Kernel.C0SemigroupJoint
+module
+
+public import MarkovProcess.Feller.Semigroup
+public import MarkovProcess.Kernel.C0SemigroupJoint
 
 /-!
 # Continuity tools for finite-time Feller kernels
@@ -17,6 +19,8 @@ integrals when both the transition time and the test function vary.
 The extension from product tests to arbitrary compactly supported tests on a finite product is
 not asserted here.
 -/
+
+@[expose] public section
 
 open Filter MeasureTheory Topology
 open scoped NNReal ZeroAtInfty

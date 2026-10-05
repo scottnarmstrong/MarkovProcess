@@ -3,8 +3,10 @@ Copyright (c) 2026 Scott Armstrong. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Scott Armstrong
 -/
-import MarkovProcess.Trajectory.DynkinStopping
-import MarkovProcess.Trajectory.ExpectedExitTime
+module
+
+public import MarkovProcess.Trajectory.DynkinStopping
+public import MarkovProcess.Trajectory.ExpectedExitTime
 
 /-!
 # Harmonic and Poisson representations, and the localized Dynkin formula
@@ -26,6 +28,8 @@ semigroup and `f` in the generator domain of its `C₀` semigroup, with generato
 The integrand of Dynkin's formula is only ever evaluated strictly before the exit time, where the
 path is inside `U`; this is the observation behind all three statements.
 -/
+
+@[expose] public section
 
 open MeasureTheory ProbabilityTheory Filter
 open scoped ENNReal NNReal ZeroAtInfty

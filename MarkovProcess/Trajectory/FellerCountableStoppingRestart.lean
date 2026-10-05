@@ -3,8 +3,10 @@ Copyright (c) 2026 Scott Armstrong. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Scott Armstrong
 -/
-import MarkovProcess.Trajectory.FellerRestrictedRestart
-import MarkovProcess.Restart.CountableStoppingRestart
+module
+
+public import MarkovProcess.Trajectory.FellerRestrictedRestart
+public import MarkovProcess.Restart.CountableStoppingRestart
 
 /-!
 # Conditional restart of the Feller trajectory at countable-range stopping times
@@ -19,6 +21,8 @@ The stopping time here has countable range.  An arbitrary finite stopping time i
 `Trajectory/FellerStoppingConditional.lean`, and a `WithTop`-valued time that can be infinite in
 `Trajectory/StoppingLtTop.lean`.
 -/
+
+@[expose] public section
 
 open MeasureTheory ProbabilityTheory
 open scoped NNReal

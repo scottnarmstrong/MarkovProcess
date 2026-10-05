@@ -1,4 +1,6 @@
-import Mathlib
+module
+
+public import Mathlib
 
 /-!
 # Continuous Markov process — solution vocabulary (verbatim copy of the challenge)
@@ -39,6 +41,8 @@ statement-level copy of the library's (`MarkovProcess/Kernel/Basic.lean`,
 3. **The Markov clause.** `IsMarkovKernel Q` inside the unique-existence predicate is implied by
    the empty-set marginal; it is kept for readability.
 -/
+
+@[expose] public section
 
 open MeasureTheory ProbabilityTheory Filter Topology
 open scoped ENNReal NNReal ZeroAtInfty ProbabilityTheory

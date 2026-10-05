@@ -3,8 +3,10 @@ Copyright (c) 2026 Scott Armstrong. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Scott Armstrong
 -/
-import MarkovProcess.DenseTime.TrajectoryMarginals
-import MarkovProcess.Continuity.KolmogorovDenseTimeContinuousSupport
+module
+
+public import MarkovProcess.DenseTime.TrajectoryMarginals
+public import MarkovProcess.Continuity.KolmogorovDenseTimeContinuousSupport
 
 /-!
 # Continuous-path trajectory kernels
@@ -17,6 +19,8 @@ that fallback irrelevant and transports the proved rational-time marginal identi
 No continuous-time Markov property, strong Markov property, Hunt-process assertion, or PDE
 increment estimate is claimed.
 -/
+
+@[expose] public section
 
 open MeasureTheory ProbabilityTheory
 open scoped NNReal

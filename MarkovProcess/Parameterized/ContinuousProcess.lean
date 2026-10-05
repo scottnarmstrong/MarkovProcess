@@ -3,9 +3,11 @@ Copyright (c) 2026 Scott Armstrong. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Scott Armstrong
 -/
-import MarkovProcess.FiniteTime.MeasureFiniteRestrictionIdentification
-import MarkovProcess.Main
-import MarkovProcess.Parameterized.DenseTimeTrajectory
+module
+
+public import MarkovProcess.FiniteTime.MeasureFiniteRestrictionIdentification
+public import MarkovProcess.Main
+public import MarkovProcess.Parameterized.DenseTimeTrajectory
 
 /-!
 # The continuous-path process of a measurably parameterized semigroup
@@ -29,6 +31,8 @@ predicates on the parameterized family, so that consumers state hypotheses once.
 No Markov, strong Markov, Feller, equivariance, annealed or killed statement is proved here; each
 of those is a separate transport through the fibre identity.
 -/
+
+@[expose] public section
 
 open MeasureTheory ProbabilityTheory
 open scoped NNReal

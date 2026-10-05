@@ -3,7 +3,9 @@ Copyright (c) 2026 Scott Armstrong. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Scott Armstrong
 -/
-import MarkovProcess.Main
+module
+
+public import MarkovProcess.Main
 
 /-!
 # The strong Markov property at a stopping time that may be infinite
@@ -33,6 +35,8 @@ generic indicator bridge, `condExp_indicator_ae_eq_integral_kernel_of_restrict_m
 Nothing is asserted about the event `{tau = ⊤}`: on it the shifted path is the path itself, and
 neither statement constrains it.  No Hunt-process property is claimed.
 -/
+
+@[expose] public section
 
 open MeasureTheory ProbabilityTheory
 open scoped ENNReal NNReal Function

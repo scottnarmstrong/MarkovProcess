@@ -3,9 +3,11 @@ Copyright (c) 2026 Scott Armstrong. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Scott Armstrong
 -/
-import MarkovProcess.Restart.RationalRestart
-import MarkovProcess.Restart.RationalRestrictedRestart
-import MarkovProcess.Restart.ConditionalMarkov
+module
+
+public import MarkovProcess.Restart.RationalRestart
+public import MarkovProcess.Restart.RationalRestrictedRestart
+public import MarkovProcess.Restart.ConditionalMarkov
 
 /-!
 # Rational-time conditional Markov identities for the continuous trajectory
@@ -19,6 +21,8 @@ corresponding conditional-expectation formula.
 The times here are rational.  The strong Markov property at an arbitrary finite stopping time
 is in `Trajectory/FellerStoppingRestart.lean`.
 -/
+
+@[expose] public section
 
 open MeasureTheory ProbabilityTheory
 open scoped NNReal

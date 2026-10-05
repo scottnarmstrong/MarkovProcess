@@ -3,8 +3,10 @@ Copyright (c) 2026 Scott Armstrong. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Scott Armstrong
 -/
-import MarkovProcess.Trajectory.AllTimeMarginals
-import MarkovProcess.Trajectory.FiniteMarginals
+module
+
+public import MarkovProcess.Trajectory.AllTimeMarginals
+public import MarkovProcess.Trajectory.FiniteMarginals
 
 /-!
 # Arbitrary-time finite marginals of continuous-path trajectories
@@ -20,6 +22,8 @@ recursively composed finite-time kernels have that convergence under simultaneou
 their strictly ordered time coordinates.  No continuous-time Markov or Hunt property is assumed
 or asserted.
 -/
+
+@[expose] public section
 
 open Filter MeasureTheory ProbabilityTheory Topology
 open scoped NNReal
@@ -223,7 +227,7 @@ def finiteDenseApproximationPhysicalSet {I : Finset NNReal} (q : I ↪o DenseTim
     Finset NNReal :=
   denseTimePhysicalSet (finiteDenseApproximationIndexSet q)
 
-private theorem finiteDenseApproximation_mem {I : Finset NNReal} (q : I ↪o DenseTime)
+theorem finiteDenseApproximation_mem {I : Finset NNReal} (q : I ↪o DenseTime)
     (t : I) :
     DenseTime.castOrderEmbedding (q t) ∈ finiteDenseApproximationPhysicalSet q := by
   rw [finiteDenseApproximationPhysicalSet, denseTimePhysicalSet, Finset.mem_map]

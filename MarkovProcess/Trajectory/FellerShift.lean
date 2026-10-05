@@ -3,11 +3,13 @@ Copyright (c) 2026 Scott Armstrong. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Scott Armstrong
 -/
-import MarkovProcess.Path.KernelIdentification
-import MarkovProcess.Trajectory.DenseRestrictionMarginals
-import MarkovProcess.Trajectory.FellerFiniteMarginals
-import MarkovProcess.FiniteTime.FiniteSetKernelShift
-import MarkovProcess.Kernel.FiniteRestrictionIdentification
+module
+
+public import MarkovProcess.Path.KernelIdentification
+public import MarkovProcess.Trajectory.DenseRestrictionMarginals
+public import MarkovProcess.Trajectory.FellerFiniteMarginals
+public import MarkovProcess.FiniteTime.FiniteSetKernelShift
+public import MarkovProcess.Kernel.FiniteRestrictionIdentification
 
 /-!
 # Deterministic shifts of Feller trajectory laws
@@ -20,6 +22,8 @@ This is an unconditional kernel-law identity. The conditional form is in
 `Trajectory/FellerConditional.lean` and the strong Markov property in
 `Trajectory/FellerStoppingRestart.lean`; no Hunt-process property is asserted.
 -/
+
+@[expose] public section
 
 open MeasureTheory ProbabilityTheory
 open scoped NNReal

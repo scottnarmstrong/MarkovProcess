@@ -3,9 +3,11 @@ Copyright (c) 2026 Scott Armstrong. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Scott Armstrong
 -/
-import MarkovProcess.Trajectory.ClampedCoordinate
-import MarkovProcess.Trajectory.Dynkin
-import Mathlib.Probability.Martingale.Basic
+module
+
+public import MarkovProcess.Trajectory.ClampedCoordinate
+public import MarkovProcess.Trajectory.Dynkin
+public import Mathlib.Probability.Martingale.Basic
 
 /-!
 # The Dynkin martingale
@@ -40,6 +42,8 @@ parameter.
 The exponentially discounted extension is developed in `Trajectory/DiscountedDynkin.lean`;
 its zero-discount process is identified with this one by `discountedDynkinProcess_zero`.
 -/
+
+@[expose] public section
 
 open MeasureTheory ProbabilityTheory Filter
 open scoped ENNReal NNReal ZeroAtInfty

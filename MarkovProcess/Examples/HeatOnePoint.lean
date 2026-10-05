@@ -3,9 +3,11 @@ Copyright (c) 2026 Scott Armstrong. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Scott Armstrong
 -/
-import MarkovProcess.Examples.HeatSemigroup
-import MarkovProcess.Kernel.OnePointConservative
-import MarkovProcess.Killed.GluingLocal
+module
+
+public import MarkovProcess.Examples.HeatSemigroup
+public import MarkovProcess.Kernel.OnePointConservative
+public import MarkovProcess.Killed.GluingLocal
 
 /-!
 # The compactified heat process
@@ -24,6 +26,8 @@ available for a genuine example.  Because the heat semigroup is conservative, th
 process started at a live point almost surely never reaches the added point
 (`ae_exitTime_eq_top_heatResolvent`).
 -/
+
+@[expose] public section
 
 open MeasureTheory ProbabilityTheory Set Topology
 open scoped ENNReal NNReal ZeroAtInfty

@@ -3,9 +3,11 @@ Copyright (c) 2026 Scott Armstrong. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Scott Armstrong
 -/
-import MarkovProcess.Semigroup.TrotterKato
-import MarkovProcess.Trajectory.Convergence
-import MarkovProcess.Trajectory.WeakContinuity
+module
+
+public import MarkovProcess.Semigroup.TrotterKato
+public import MarkovProcess.Trajectory.Convergence
+public import MarkovProcess.Trajectory.WeakContinuity
 
 /-!
 # Weak convergence of Feller processes on path space
@@ -39,6 +41,8 @@ assumed with the same exponents and constant for every member of the family; not
 when the constants are allowed to vary, nor for a family whose limit is not itself the process of
 a Feller semigroup.
 -/
+
+@[expose] public section
 
 open Filter MeasureTheory ProbabilityTheory Topology
 open scoped BoundedContinuousFunction ENNReal NNReal ZeroAtInfty

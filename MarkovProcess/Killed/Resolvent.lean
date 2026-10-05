@@ -3,7 +3,9 @@ Copyright (c) 2026 Scott Armstrong. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Scott Armstrong
 -/
-import MarkovProcess.Killed.Kernel
+module
+
+public import MarkovProcess.Killed.Kernel
 
 /-!
 # The killed resolvent
@@ -28,6 +30,8 @@ statement about that operator.  One order fact is recorded alongside: the killed
 antitone in the shift (`IsConservative.killedResolvent_antitone`), because a larger shift
 discounts the future more.
 -/
+
+@[expose] public section
 
 open MeasureTheory ProbabilityTheory Filter
 open scoped ENNReal NNReal

@@ -3,8 +3,10 @@ Copyright (c) 2026 Scott Armstrong. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Scott Armstrong
 -/
-import MarkovProcess.Examples.HeatSemigroup
-import Mathlib.Probability.HasLaw
+module
+
+public import MarkovProcess.Examples.HeatSemigroup
+public import Mathlib.Probability.HasLaw
 
 /-!
 # The process of the heat semigroup is a Brownian motion
@@ -37,6 +39,8 @@ Neither is available at the pinned revision, and `IsBrownianReal` here is stated
 marginals and independent increments, not through a projective family.  Only one space dimension is treated, and no
 Levy characterization, quadratic variation, or stochastic integral is asserted.
 -/
+
+@[expose] public section
 
 open Filter MeasureTheory ProbabilityTheory Topology
 open scoped ENNReal NNReal

@@ -3,11 +3,13 @@ Copyright (c) 2026 Scott Armstrong. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Scott Armstrong
 -/
-import Mathlib.Analysis.SpecialFunctions.Pow.Integral
-import Mathlib.MeasureTheory.Integral.Lebesgue.Markov
-import Mathlib.Topology.MetricSpace.Lipschitz
-import MarkovProcess.Kernel.OnePointExtension
-import MarkovProcess.Main
+module
+
+public import Mathlib.Analysis.SpecialFunctions.Pow.Integral
+public import Mathlib.MeasureTheory.Integral.Lebesgue.Markov
+public import Mathlib.Topology.MetricSpace.Lipschitz
+public import MarkovProcess.Kernel.OnePointExtension
+public import MarkovProcess.Main
 
 /-!
 # Kolmogorov bounds on a one-point compactification
@@ -23,6 +25,8 @@ Main results: `OnePoint.exhaustionMetricSpace`,
 The tail bounds and their scalar integral budget remain hypotheses for the consumer; no analytic
 estimate for a particular semigroup is asserted here.
 -/
+
+@[expose] public section
 
 open Filter MeasureTheory ProbabilityTheory Set Topology
 open scoped ENNReal NNReal ZeroAtInfty
@@ -59,7 +63,7 @@ two exhaustion levels. -/
     exhaustionDist rho (x : OnePoint X) (y : OnePoint X) =
       min (dist x y) (rho x + rho y) := rfl
 
-private theorem exhaustionDist_self (rho : X → ℝ) (hrho_pos : ∀ x, 0 < rho x)
+theorem exhaustionDist_self (rho : X → ℝ) (hrho_pos : ∀ x, 0 < rho x)
     (z : OnePoint X) :
     exhaustionDist rho z z = 0 := by
   induction z using OnePoint.rec with
@@ -68,7 +72,7 @@ private theorem exhaustionDist_self (rho : X → ℝ) (hrho_pos : ∀ x, 0 < rho
       rw [exhaustionDist_coe_coe, dist_self, min_eq_left]
       exact add_nonneg (hrho_pos x).le (hrho_pos x).le
 
-private theorem exhaustionDist_comm (rho : X → ℝ) (z w : OnePoint X) :
+theorem exhaustionDist_comm (rho : X → ℝ) (z w : OnePoint X) :
     exhaustionDist rho z w = exhaustionDist rho w z := by
   induction z using OnePoint.rec with
   | infty => induction w using OnePoint.rec <;> rfl
@@ -77,7 +81,7 @@ private theorem exhaustionDist_comm (rho : X → ℝ) (z w : OnePoint X) :
       | infty => rfl
       | coe y => simp only [exhaustionDist_coe_coe, dist_comm, add_comm]
 
-private theorem exhaustionDist_triangle (rho : X → ℝ) (hrho_pos : ∀ x, 0 < rho x)
+theorem exhaustionDist_triangle (rho : X → ℝ) (hrho_pos : ∀ x, 0 < rho x)
     (hrho_lipschitz : LipschitzWith 1 rho) (z w u : OnePoint X) :
     exhaustionDist rho z u ≤ exhaustionDist rho z w + exhaustionDist rho w u := by
   induction z using OnePoint.rec with
@@ -145,7 +149,7 @@ private theorem exhaustionDist_triangle (rho : X → ℝ) (hrho_pos : ∀ x, 0 <
                   _ ≤ (rho x + rho y) + (rho y + rho u) := by
                     linarith only [(hrho_pos y).le]
 
-private theorem exhaustionDist_eq_zero (rho : X → ℝ) (hrho_pos : ∀ x, 0 < rho x)
+theorem exhaustionDist_eq_zero (rho : X → ℝ) (hrho_pos : ∀ x, 0 < rho x)
     (z w : OnePoint X) (hzw : exhaustionDist rho z w = 0) : z = w := by
   induction z using OnePoint.rec with
   | infty =>
@@ -166,7 +170,7 @@ private theorem exhaustionDist_eq_zero (rho : X → ℝ) (hrho_pos : ∀ x, 0 < 
           · rw [exhaustionDist_coe_coe, min_eq_right hle] at hzw
             exact (ne_of_gt (add_pos (hrho_pos x) (hrho_pos y)) hzw).elim
 
-private theorem isOpen_iff_exhaustionDist {rho : X → ℝ} (hrho_cont : Continuous rho)
+theorem isOpen_iff_exhaustionDist {rho : X → ℝ} (hrho_cont : Continuous rho)
     (hrho_pos : ∀ x, 0 < rho x)
     (hrho_compact : ∀ epsilon > 0, IsCompact {x | epsilon ≤ rho x})
     (s : Set (OnePoint X)) :
@@ -336,7 +340,7 @@ omit [LocallyCompactSpace X] [SecondCountableTopology X] in
 compact under that metric's (canonical) topology. This is a typeclass-search cache: it lets
 `letI := OnePoint.exhaustionMetricSpace …` discharge the ambient `[CompleteSpace (OnePoint X)]`
 hypothesis of `KolmogorovRegular` without re-deriving compactness at each call site. -/
-private instance instCompleteSpaceOnePointExhaustion :
+instance instCompleteSpaceOnePointExhaustion :
     @CompleteSpace (OnePoint X)
       (OnePoint.exhaustionMetricSpace rho hrho_cont hrho_pos hrho_lipschitz
         hrho_compact).toPseudoMetricSpace.toUniformSpace := by
@@ -354,7 +358,7 @@ private instance instCompleteSpaceOnePointExhaustion :
 `MeasurableSpace` (the canonical Borel structure fixed at `OnePoint.instMeasurableSpace`) agrees
 with the exhaustion metric's Borel sets, since the two topologies coincide. This is a
 typeclass-search cache in the same spirit as `instCompleteSpaceOnePointExhaustion`. -/
-private instance instBorelSpaceOnePointExhaustion :
+instance instBorelSpaceOnePointExhaustion :
     @BorelSpace (OnePoint X)
       (OnePoint.exhaustionMetricSpace rho hrho_cont hrho_pos hrho_lipschitz
         hrho_compact).toPseudoMetricSpace.toUniformSpace.toTopologicalSpace
@@ -364,7 +368,7 @@ private instance instBorelSpaceOnePointExhaustion :
 
 /-- The one-point compactification is second countable under the exhaustion metric's topology,
 since that topology coincides with the canonical one. Typeclass-search cache, as above. -/
-private instance instSecondCountableTopologyOnePointExhaustion :
+instance instSecondCountableTopologyOnePointExhaustion :
     @SecondCountableTopology (OnePoint X)
       (OnePoint.exhaustionMetricSpace rho hrho_cont hrho_pos hrho_lipschitz
         hrho_compact).toPseudoMetricSpace.toUniformSpace.toTopologicalSpace := by

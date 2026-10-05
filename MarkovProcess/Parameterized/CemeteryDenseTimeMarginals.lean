@@ -3,8 +3,10 @@ Copyright (c) 2026 Scott Armstrong. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Scott Armstrong
 -/
-import MarkovProcess.Parameterized.CemeterySemigroup
-import MarkovProcess.Parameterized.DenseTimeTrajectoryMarginals
+module
+
+public import MarkovProcess.Parameterized.CemeterySemigroup
+public import MarkovProcess.Parameterized.DenseTimeTrajectoryMarginals
 
 /-!
 # Cemetery marginals of parameterized dense-time trajectories
@@ -12,6 +14,8 @@ import MarkovProcess.Parameterized.DenseTimeTrajectoryMarginals
 This file proves a one-time marginal identity.  It makes no simultaneous path-support or
 lifetime claim.
 -/
+
+@[expose] public section
 
 open MeasureTheory ProbabilityTheory
 

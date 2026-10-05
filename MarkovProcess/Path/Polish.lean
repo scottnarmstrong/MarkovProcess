@@ -3,9 +3,11 @@ Copyright (c) 2026 Scott Armstrong. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Scott Armstrong
 -/
-import MarkovProcess.Path.Basic
-import Mathlib.Topology.ContinuousMap.SecondCountableSpace
-import Mathlib.MeasureTheory.Constructions.Polish.Basic
+module
+
+public import MarkovProcess.Path.Basic
+public import Mathlib.Topology.ContinuousMap.SecondCountableSpace
+public import Mathlib.MeasureTheory.Constructions.Polish.Basic
 
 /-!
 # Polish structure of continuous-path space
@@ -17,6 +19,8 @@ With the Borel sigma-algebra the path space is therefore a standard Borel space.
 
 This is ordinary topological infrastructure.  It proves no probabilistic statement.
 -/
+
+@[expose] public section
 
 namespace MarkovProcess
 namespace ContinuousPath

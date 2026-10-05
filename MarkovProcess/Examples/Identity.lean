@@ -3,7 +3,9 @@ Copyright (c) 2026 Scott Armstrong. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Scott Armstrong
 -/
-import MarkovProcess.Main
+module
+
+public import MarkovProcess.Main
 
 /-!
 # The identity semigroup and its continuous-path process
@@ -18,6 +20,8 @@ This file witnesses that the hypotheses of the main theorem are jointly satisfia
 nothing about any other semigroup, and it makes no claim about a semigroup that actually moves
 (see `MarkovProcess.Examples.Drift` for that).
 -/
+
+@[expose] public section
 
 open MeasureTheory ProbabilityTheory
 open scoped ENNReal NNReal ZeroAtInfty

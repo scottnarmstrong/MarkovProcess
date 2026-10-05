@@ -3,8 +3,10 @@ Copyright (c) 2026 Scott Armstrong. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Scott Armstrong
 -/
-import MarkovProcess.FiniteTime.KernelEquivariance
-import MarkovProcess.Main
+module
+
+public import MarkovProcess.FiniteTime.KernelEquivariance
+public import MarkovProcess.Main
 
 /-!
 # Equivariance of the continuous-path process
@@ -34,6 +36,8 @@ time rescaling (`continuousProcess_eq_map_timeRescale`) and pure conjugation
 No scaling limit is asserted: `c` is a fixed positive factor and both semigroups are given in
 advance.  The two state spaces may coincide; the degenerate corollaries are stated on one space.
 -/
+
+@[expose] public section
 
 open MeasureTheory ProbabilityTheory
 open scoped NNReal

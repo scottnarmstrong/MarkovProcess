@@ -3,11 +3,15 @@ Copyright (c) 2026 Scott Armstrong. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Scott Armstrong
 -/
-import MarkovProcess.Path.Basic
-import MarkovProcess.Time.CountableDenseTime
-import Mathlib.Topology.MetricSpace.HausdorffDistance
+module
+
+public import MarkovProcess.Path.Basic
+public import MarkovProcess.Time.CountableDenseTime
+public import Mathlib.Topology.MetricSpace.HausdorffDistance
 
 /-! # Detecting closed sets from countably many path coordinates -/
+
+@[expose] public section
 
 open MeasureTheory Set
 
@@ -20,9 +24,9 @@ namespace ContinuousPath
 variable {alpha : Type*} [PseudoMetricSpace alpha]
 
 /-- The positive thresholds used to detect zero distance to a closed set. -/
-private def detectionThreshold (n : ℕ) : ℝ := 1 / (n + 1 : ℝ)
+def detectionThreshold (n : ℕ) : ℝ := 1 / (n + 1 : ℝ)
 
-private theorem detectionThreshold_pos (n : ℕ) : 0 < detectionThreshold n := by
+theorem detectionThreshold_pos (n : ℕ) : 0 < detectionThreshold n := by
   exact one_div_pos.mpr (Nat.cast_add_one_pos n)
 
 /-- A countable test for whether a path on `[0, t]` meets `F`.  The endpoint `t` is included

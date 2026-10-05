@@ -3,8 +3,10 @@ Copyright (c) 2026 Scott Armstrong. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Scott Armstrong
 -/
-import MarkovProcess.Semigroup.Basic
-import MarkovProcess.Semigroup.StrongOperatorLimit
+module
+
+public import MarkovProcess.Semigroup.Basic
+public import MarkovProcess.Semigroup.StrongOperatorLimit
 
 /-!
 # Continuity of semigroup orbits from continuity at zero
@@ -14,6 +16,8 @@ propagates to continuity of every orbit at every nonnegative time.  Contractivit
 strong continuity to joint continuity in the time and the vector, in the form
 `continuous_operator_apply`.
 -/
+
+@[expose] public section
 
 open Filter Topology
 

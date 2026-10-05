@@ -3,8 +3,10 @@ Copyright (c) 2026 Scott Armstrong. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Scott Armstrong
 -/
-import MarkovProcess.FiniteTime.Kernel
-import MarkovProcess.Parameterized.OrderedGrid
+module
+
+public import MarkovProcess.FiniteTime.Kernel
+public import MarkovProcess.Parameterized.OrderedGrid
 
 /-!
 # Parameterized finite-time kernels
@@ -19,6 +21,8 @@ nonparameterized finite-time kernel of the fixed-parameter semigroup. No path-sp
 stochastic-process existence claim is made here.
 -/
 
+@[expose] public section
+
 open MeasureTheory ProbabilityTheory
 open scoped ProbabilityTheory
 
@@ -28,7 +32,7 @@ namespace ParameterizedSubMarkovKernelSemigroup
 
 variable {Theta alpha : Type*} [MeasurableSpace Theta] [MeasurableSpace alpha]
 
-private theorem measurable_finCons_snd {n : ℕ} :
+theorem measurable_finCons_snd {n : ℕ} :
     Measurable (fun z : (Theta × alpha) × (Fin n → alpha) ↦
       @Fin.cons n (fun _ : Fin (n + 1) ↦ alpha) z.1.2 z.2) := by
   rw [measurable_pi_iff]

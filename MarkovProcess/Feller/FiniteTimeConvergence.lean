@@ -3,11 +3,13 @@ Copyright (c) 2026 Scott Armstrong. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Scott Armstrong
 -/
-import MarkovProcess.Feller.BackwardC0Convergence
-import MarkovProcess.FiniteTime.CoordinateProductActiveReduction
-import MarkovProcess.FiniteTime.FiniteProductCoordinateNormalForm
-import MarkovProcess.FiniteTime.KernelRestriction
-import Mathlib.MeasureTheory.Integral.CompactlySupported
+module
+
+public import MarkovProcess.Feller.BackwardC0Convergence
+public import MarkovProcess.FiniteTime.CoordinateProductActiveReduction
+public import MarkovProcess.FiniteTime.FiniteProductCoordinateNormalForm
+public import MarkovProcess.FiniteTime.KernelRestriction
+public import Mathlib.MeasureTheory.Integral.CompactlySupported
 
 /-!
 # Convergence of finite-time laws along a family of Feller semigroups
@@ -32,6 +34,8 @@ The observation times are fixed throughout; nothing is asserted for test functio
 bounded and continuous, which needs the tightness of the limiting law and is therefore not
 uniform in the starting point.
 -/
+
+@[expose] public section
 
 open Filter MeasureTheory ProbabilityTheory Topology
 open scoped NNReal ZeroAtInfty BigOperators CompactlySupported

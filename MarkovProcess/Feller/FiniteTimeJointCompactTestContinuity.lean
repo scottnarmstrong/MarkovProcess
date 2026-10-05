@@ -3,7 +3,9 @@ Copyright (c) 2026 Scott Armstrong. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Scott Armstrong
 -/
-import MarkovProcess.Feller.FiniteTimeCompactTestContinuity
+module
+
+public import MarkovProcess.Feller.FiniteTimeCompactTestContinuity
 
 /-!
 # Joint continuity of finite-time compact-test integrals
@@ -15,6 +17,8 @@ in that case the integral is constant, and no constant-one `C₀` function is in
 This is finite-dimensional analytic infrastructure; no statement about path space is proved
 here.  The continuous-path process is built in `Trajectory/`.
 -/
+
+@[expose] public section
 
 open Filter MeasureTheory ProbabilityTheory Topology
 open scoped NNReal ZeroAtInfty BigOperators CompactlySupported

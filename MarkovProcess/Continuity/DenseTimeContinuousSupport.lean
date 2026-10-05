@@ -3,7 +3,9 @@ Copyright (c) 2026 Scott Armstrong. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Scott Armstrong
 -/
-import MarkovProcess.Continuity.DenseTimeContinuousLaw
+module
+
+public import MarkovProcess.Continuity.DenseTimeContinuousLaw
 
 /-!
 # Continuous support from a continuous modification
@@ -17,6 +19,8 @@ The continuous modification itself is not constructed here: it is the Kolmogorov
 argument of `Continuity/GlobalDyadicFloorModification.lean`, applied to dense-time trajectory
 kernels in `Continuity/KolmogorovDenseTimeContinuousSupport.lean`.
 -/
+
+@[expose] public section
 
 open MeasureTheory ProbabilityTheory Set
 

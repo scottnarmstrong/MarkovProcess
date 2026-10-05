@@ -3,8 +3,10 @@ Copyright (c) 2026 Scott Armstrong. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Scott Armstrong
 -/
-import MarkovProcess.DenseTime.TrajectoryMarginals
-import MarkovProcess.Parameterized.DenseTimeTrajectory
+module
+
+public import MarkovProcess.DenseTime.TrajectoryMarginals
+public import MarkovProcess.Parameterized.DenseTimeTrajectory
 
 /-!
 # One-time marginals of parameterized dense-time trajectories
@@ -12,6 +14,8 @@ import MarkovProcess.Parameterized.DenseTimeTrajectory
 This file identifies every coordinate marginal of the jointly measurable parameterized
 trajectory kernel.  No standard-Borel assumption is imposed on the parameter space.
 -/
+
+@[expose] public section
 
 open MeasureTheory ProbabilityTheory
 

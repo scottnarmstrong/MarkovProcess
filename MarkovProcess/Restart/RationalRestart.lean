@@ -3,12 +3,14 @@ Copyright (c) 2026 Scott Armstrong. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Scott Armstrong
 -/
-import MarkovProcess.Restart.RationalRestrictedRestart
-import MarkovProcess.Restart.FinitePastRestart
-import MarkovProcess.Restart.MixedPastFuture
-import Mathlib.Probability.Kernel.Composition.KernelLemmas
-import MarkovProcess.Kernel.CompProdReindex
-import MarkovProcess.Path.MixedFiniteMarginals
+module
+
+public import MarkovProcess.Restart.RationalRestrictedRestart
+public import MarkovProcess.Restart.FinitePastRestart
+public import MarkovProcess.Restart.MixedPastFuture
+public import Mathlib.Probability.Kernel.Composition.KernelLemmas
+public import MarkovProcess.Kernel.CompProdReindex
+public import MarkovProcess.Path.MixedFiniteMarginals
 
 /-!
 # The rational-time restart kernel and its joint law
@@ -19,6 +21,8 @@ This file merges the following former modules, one section each:
 * `RationalRestartFiniteMarginals`: Finite marginals of the rational restart kernel
 * `RationalJointLaw`: Rational-time joint restart law
 -/
+
+@[expose] public section
 
 namespace MarkovProcess
 

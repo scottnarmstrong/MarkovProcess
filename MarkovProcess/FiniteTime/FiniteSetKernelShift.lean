@@ -3,9 +3,11 @@ Copyright (c) 2026 Scott Armstrong. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Scott Armstrong
 -/
-import MarkovProcess.FiniteTime.DenseTimeFiniteShift
-import MarkovProcess.FiniteTime.KernelShift
-import MarkovProcess.FiniteTime.ProjectiveFamily
+module
+
+public import MarkovProcess.FiniteTime.DenseTimeFiniteShift
+public import MarkovProcess.FiniteTime.KernelShift
+public import MarkovProcess.FiniteTime.ProjectiveFamily
 
 /-!
 # Translation of finite-set kernels
@@ -15,6 +17,8 @@ translated set back to the original coordinates, and proves the corresponding tr
 for conservative transition-kernel semigroups.  It is finite-dimensional kernel infrastructure;
 it does not assert a path-space Markov property.
 -/
+
+@[expose] public section
 
 open MeasureTheory ProbabilityTheory
 

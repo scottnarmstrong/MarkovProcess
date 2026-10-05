@@ -3,7 +3,9 @@ Copyright (c) 2026 Scott Armstrong. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Scott Armstrong
 -/
-import MarkovProcess.Semigroup.Generator
+module
+
+public import MarkovProcess.Semigroup.Generator
 
 /-!
 # The generator is closed
@@ -23,6 +25,8 @@ Main results: `orbitIntegral_sub`, `norm_orbitIntegral_le`, `tendsto_orbitIntegr
 Nothing is asserted about the domain beyond closedness of the graph; density is proved in
 `Semigroup/Generator.lean`.
 -/
+
+@[expose] public section
 
 open Filter Topology
 open scoped NNReal

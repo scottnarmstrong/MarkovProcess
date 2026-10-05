@@ -3,9 +3,11 @@ Copyright (c) 2026 Scott Armstrong. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Scott Armstrong
 -/
-import MarkovProcess.Time.DenseTimeHistory
-import MarkovProcess.DenseTime.PrefixKernel
-import Mathlib.Probability.Kernel.Disintegration.StandardBorel
+module
+
+public import MarkovProcess.Time.DenseTimeHistory
+public import MarkovProcess.DenseTime.PrefixKernel
+public import Mathlib.Probability.Kernel.Disintegration.StandardBorel
 
 /-!
 # Conditional kernels for finite dense-time histories
@@ -13,6 +15,8 @@ import Mathlib.Probability.Kernel.Disintegration.StandardBorel
 This file augments finite prefix laws by their starting point and disintegrates the joint law of
 a prefix and its next observation. It makes no infinite-process or path-regularity claim.
 -/
+
+@[expose] public section
 
 open MeasureTheory ProbabilityTheory
 

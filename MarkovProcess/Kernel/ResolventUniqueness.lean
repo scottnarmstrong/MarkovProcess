@@ -3,7 +3,9 @@ Copyright (c) 2026 Scott Armstrong. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Scott Armstrong
 -/
-import MarkovProcess.Kernel.Operator
+module
+
+public import MarkovProcess.Kernel.Operator
 
 /-!
 # Uniqueness for resolvents on bounded measurable functions
@@ -18,6 +20,8 @@ Main results: `perturbed_unique`, `resolventFamily_eq_of_eventually`, and
 
 The operators are plain maps on functions; no Banach-space carrier or continuity is asserted.
 -/
+
+@[expose] public section
 
 open Filter
 

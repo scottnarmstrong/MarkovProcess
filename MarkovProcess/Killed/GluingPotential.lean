@@ -3,9 +3,11 @@ Copyright (c) 2026 Scott Armstrong. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Scott Armstrong
 -/
-import MarkovProcess.Killed.Resolvent
-import MarkovProcess.Kernel.Resolvent
-import MarkovProcess.Path.Exhaustion
+module
+
+public import MarkovProcess.Killed.Resolvent
+public import MarkovProcess.Kernel.Resolvent
+public import MarkovProcess.Path.Exhaustion
 
 /-!
 # Potential measures
@@ -32,6 +34,8 @@ homogeneous on measurable observables (`SubMarkovKernelSemigroup.kernelResolvent
 
 No resolvent identity and no topology on the state space are used here.
 -/
+
+@[expose] public section
 
 open Filter MeasureTheory ProbabilityTheory Set
 open scoped ENNReal NNReal

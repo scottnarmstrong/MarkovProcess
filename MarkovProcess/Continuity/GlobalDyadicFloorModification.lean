@@ -3,8 +3,10 @@ Copyright (c) 2026 Scott Armstrong. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Scott Armstrong
 -/
-import MarkovProcess.Continuity.ShiftedUnitModification
-import Mathlib.Topology.LocallyFinite
+module
+
+public import MarkovProcess.Continuity.ShiftedUnitModification
+public import Mathlib.Topology.LocallyFinite
 
 /-!
 # A global continuous modification assembled from canonical unit paths
@@ -19,6 +21,8 @@ then gives a total path which is continuous for every sample.
 No measurability of the path-valued map, path-space law, Markov property, or Hunt-process claim is
 asserted here.
 -/
+
+@[expose] public section
 
 open Filter MeasureTheory ProbabilityTheory Topology
 open scoped ENNReal NNReal

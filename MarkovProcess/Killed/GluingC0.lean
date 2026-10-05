@@ -3,10 +3,12 @@ Copyright (c) 2026 Scott Armstrong. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Scott Armstrong
 -/
-import MarkovProcess.Kernel.OnePointConservative
-import MarkovProcess.Killed.GluingMeasure
-import MarkovProcess.Killed.GluingRealResolvent
-import MarkovProcess.Killed.GluingTransfer
+module
+
+public import MarkovProcess.Kernel.OnePointConservative
+public import MarkovProcess.Killed.GluingMeasure
+public import MarkovProcess.Killed.GluingRealResolvent
+public import MarkovProcess.Killed.GluingTransfer
 
 /-!
 # The supremum resolvent as a positive `C₀`-contractive resolvent
@@ -30,6 +32,8 @@ the compactified process started at any point almost surely never reaches the ad
 (`ae_exitTime_eq_top_minimalC0Resolvent`).  No kernel into the continuous paths of the state
 space is produced from that statement.
 -/
+
+@[expose] public section
 
 open Filter MeasureTheory ProbabilityTheory Set Topology
 open scoped ENNReal NNReal ZeroAtInfty

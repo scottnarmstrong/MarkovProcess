@@ -3,8 +3,10 @@ Copyright (c) 2026 Scott Armstrong. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Scott Armstrong
 -/
-import MarkovProcess.Time.CountableDenseTime
-import MarkovProcess.FiniteTime.ProjectiveFamily
+module
+
+public import MarkovProcess.Time.CountableDenseTime
+public import MarkovProcess.FiniteTime.ProjectiveFamily
 
 /-!
 # Kernels on finite prefixes of a countable time enumeration
@@ -13,6 +15,8 @@ This file constructs the finite-dimensional kernel on the first `n` points of an
 enumeration, with coordinates retained in enumeration order. The enumeration need not respect
 the order of physical time.
 -/
+
+@[expose] public section
 
 open MeasureTheory ProbabilityTheory
 
@@ -34,7 +38,7 @@ private theorem denseTimePhysicalPrefix_mono (e : ℕ ≃ D) (ι : D ↪ NNReal)
   obtain ⟨d, hd, rfl⟩ := ht
   exact ⟨d, CountableEnumeration.prefix_mono e hmn hd, rfl⟩
 
-private theorem denseTime_mem_physicalPrefix (e : ℕ ≃ D) (ι : D ↪ NNReal)
+theorem denseTime_mem_physicalPrefix (e : ℕ ≃ D) (ι : D ↪ NNReal)
     (n : ℕ) (i : Fin n) : ι (e i) ∈ denseTimePhysicalPrefix e ι n := by
   rw [denseTimePhysicalPrefix, Finset.mem_map]
   exact ⟨e i, by

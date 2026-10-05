@@ -3,8 +3,10 @@ Copyright (c) 2026 Scott Armstrong. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Scott Armstrong
 -/
-import MarkovProcess.DenseTime.CemeterySemigroup
-import MarkovProcess.Parameterized.Semigroup
+module
+
+public import MarkovProcess.DenseTime.CemeterySemigroup
+public import MarkovProcess.Parameterized.Semigroup
 
 /-!
 # Parameterized cemetery-extension semigroups
@@ -12,6 +14,8 @@ import MarkovProcess.Parameterized.Semigroup
 This file extends a jointly measurable family of sub-Markov semigroups by one absorbing
 cemetery state.  The construction is jointly measurable in the parameter, time, and state.
 -/
+
+@[expose] public section
 
 open MeasureTheory ProbabilityTheory
 open scoped ENNReal

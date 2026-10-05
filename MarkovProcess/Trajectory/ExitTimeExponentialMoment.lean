@@ -3,7 +3,9 @@ Copyright (c) 2026 Scott Armstrong. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Scott Armstrong
 -/
-import MarkovProcess.Killed.Kernel
+module
+
+public import MarkovProcess.Killed.Kernel
 
 /-!
 # A positive exponential moment for the exit time
@@ -40,6 +42,8 @@ exponential moment into every polynomial moment
 Every statement is an inequality of `ℝ≥0∞`-valued integrals; no integrability side condition and
 no real-valued restatement appears.
 -/
+
+@[expose] public section
 
 open MeasureTheory ProbabilityTheory Set
 open scoped ENNReal NNReal

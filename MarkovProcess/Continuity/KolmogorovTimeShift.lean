@@ -3,7 +3,9 @@ Copyright (c) 2026 Scott Armstrong. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Scott Armstrong
 -/
-import MarkovProcess.Continuity.DyadicFloor
+module
+
+public import MarkovProcess.Continuity.DyadicFloor
 
 /-!
 # Nonnegative-rational time shifts
@@ -17,6 +19,8 @@ on the interval starting at the shift.
 No global path is glued here, and no measurability of the canonical limit or modification-law
 assertion is made.
 -/
+
+@[expose] public section
 
 open Filter MeasureTheory ProbabilityTheory Topology
 open scoped ENNReal NNReal

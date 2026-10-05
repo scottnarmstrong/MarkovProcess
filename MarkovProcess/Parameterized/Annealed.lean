@@ -3,7 +3,9 @@ Copyright (c) 2026 Scott Armstrong. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Scott Armstrong
 -/
-import MarkovProcess.Parameterized.ContinuousProcessProperties
+module
+
+public import MarkovProcess.Parameterized.ContinuousProcessProperties
 
 /-!
 # The annealed law of a parameterized continuous-path process
@@ -25,6 +27,8 @@ distributions and starting law are the averages of the quenched ones
 The annealed process is in general not Markov in the probabilistic sense (the averaged law does
 not have the Markov property); nothing of that kind is claimed.
 -/
+
+@[expose] public section
 
 open MeasureTheory ProbabilityTheory Filter
 open scoped ENNReal NNReal

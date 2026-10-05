@@ -3,12 +3,14 @@ Copyright (c) 2026 Scott Armstrong. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Scott Armstrong
 -/
-import Mathlib.Data.NNRat.Defs
-import Mathlib.Basic.NNReal.Defs
-import Mathlib.Data.Rat.Cast.Order
-import Mathlib.Data.Rat.Encodable
-import Mathlib.Basic.Denumerable
-import Mathlib.MeasureTheory.MeasurableSpace.Embedding
+module
+
+public import Mathlib.Data.NNRat.Defs
+public import Mathlib.Basic.NNReal.Defs
+public import Mathlib.Data.Rat.Cast.Order
+public import Mathlib.Data.Rat.Encodable
+public import Mathlib.Basic.Denumerable
+public import Mathlib.MeasureTheory.MeasurableSpace.Embedding
 
 /-!
 # Countable dense time indices
@@ -18,6 +20,8 @@ a countably infinite type. The fixed enumeration of nonnegative rational times b
 not increasing. No probability law, projective limit, stochastic process, continuity, or path
 regularity is constructed here.
 -/
+
+@[expose] public section
 
 namespace MarkovProcess
 
@@ -129,10 +133,10 @@ theorem exists_cast_btwn {a b : NNReal} (hab : a < b) :
   · rw [hcoe, hcast]
     exact hqb
 
-private instance : Infinite DenseTime :=
+instance : Infinite DenseTime :=
   Infinite.of_injective (fun n : ℕ ↦ (n : DenseTime)) Nat.cast_injective
 
-private instance : Countable DenseTime where
+instance : Countable DenseTime where
   exists_injective_nat' :=
     ⟨fun q ↦ Encodable.encode (q : ℚ), fun _ _ h ↦
       NNRat.ext (Encodable.encode_injective h)⟩

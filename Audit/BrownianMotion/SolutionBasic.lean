@@ -1,4 +1,6 @@
-import Mathlib
+module
+
+public import Mathlib
 
 /-!
 # Brownian motion — comparator solution vocabulary
@@ -33,6 +35,8 @@ theorem), still Mathlib-only, so that `Solution.lean` can import the library and
 vocabulary together and prove the challenge statement under its own name.
 -/
 
+@[expose] public section
+
 open MeasureTheory ProbabilityTheory Filter Topology
 open scoped ENNReal NNReal ProbabilityTheory
 
@@ -52,8 +56,10 @@ theorem measurable_gaussianReal_left (t : NNReal) :
     rw [← hmap, Measure.map_apply (measurable_add_const x) hs]
     congr 1
     ext y
-    simp only [Set.mem_preimage, Set.mem_ofPred_eq, add_comm]
-  simp_rw [h]
+    show y + x ∈ s ↔ x + y ∈ s
+    rw [add_comm]
+  rw [show (fun x : ℝ ↦ gaussianReal x t s) =
+      fun x ↦ gaussianReal 0 t (Prod.mk x ⁻¹' {p : ℝ × ℝ | p.1 + p.2 ∈ s}) from funext h]
   exact measurable_measure_prodMk_left
     ((measurable_fst.add measurable_snd) hs)
 

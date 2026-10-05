@@ -3,8 +3,10 @@ Copyright (c) 2026 Scott Armstrong. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Scott Armstrong
 -/
-import MarkovProcess.Trajectory.FiniteMarginals
-import MarkovProcess.Restart.MixedPastFuture
+module
+
+public import MarkovProcess.Trajectory.FiniteMarginals
+public import MarkovProcess.Restart.MixedPastFuture
 
 /-!
 # Finite mixed past/future marginals of continuous trajectories
@@ -18,6 +20,8 @@ same absolute time.
 This is a finite-dimensional law identity.  The conditional factorization of that law through
 the state at `S` is in `Restart/RationalRestart.lean`.
 -/
+
+@[expose] public section
 
 open MeasureTheory ProbabilityTheory
 open scoped NNReal

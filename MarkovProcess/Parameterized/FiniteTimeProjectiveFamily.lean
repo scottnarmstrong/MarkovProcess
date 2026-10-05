@@ -3,8 +3,10 @@ Copyright (c) 2026 Scott Armstrong. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Scott Armstrong
 -/
-import MarkovProcess.FiniteTime.ProjectiveFamily
-import MarkovProcess.Parameterized.FiniteTimeKernel
+module
+
+public import MarkovProcess.FiniteTime.ProjectiveFamily
+public import MarkovProcess.Parameterized.FiniteTimeKernel
 
 /-!
 # Parameterized finite-set finite-time kernels
@@ -14,6 +16,8 @@ agreement with the ordinary finite-set kernel at every fixed parameter and start
 derives projectivity under fiberwise conservativity. It does not construct a projective-limit
 measure or a stochastic process.
 -/
+
+@[expose] public section
 
 open MeasureTheory ProbabilityTheory
 

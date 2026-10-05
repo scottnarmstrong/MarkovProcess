@@ -3,8 +3,10 @@ Copyright (c) 2026 Scott Armstrong. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Scott Armstrong
 -/
-import MarkovProcess.Path.Shift
-import MarkovProcess.Continuity.DenseTimeContinuousExtension
+module
+
+public import MarkovProcess.Path.Shift
+public import MarkovProcess.Continuity.DenseTimeContinuousExtension
 
 /-!
 # Shifts of dense-time paths
@@ -13,6 +15,8 @@ This file defines addition by a nonnegative rational time on the fixed dense car
 induced shift of dense-time paths.  Restriction of a continuous path commutes with this shift.
 No probability law or Markov property is asserted.
 -/
+
+@[expose] public section
 
 namespace MarkovProcess
 

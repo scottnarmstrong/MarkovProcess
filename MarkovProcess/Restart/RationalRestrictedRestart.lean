@@ -3,9 +3,11 @@ Copyright (c) 2026 Scott Armstrong. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Scott Armstrong
 -/
-import MarkovProcess.Path.DenseFiltration
-import MarkovProcess.Path.Shift
-import MarkovProcess.Restart.RestrictedRestartOfJoint
+module
+
+public import MarkovProcess.Path.DenseFiltration
+public import MarkovProcess.Path.Shift
+public import MarkovProcess.Restart.RestrictedRestartOfJoint
 
 /-!
 # Restricted restart at rational times
@@ -15,6 +17,8 @@ event-restricted restart identity on the canonical continuous-path filtration.  
 factorization remains an explicit input; proving it from the finite-dimensional Markov laws is the
 next process-construction step.
 -/
+
+@[expose] public section
 
 open MeasureTheory ProbabilityTheory
 

@@ -3,7 +3,9 @@ Copyright (c) 2026 Scott Armstrong. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Scott Armstrong
 -/
-import MarkovProcess.Killed.GluingMinimal
+module
+
+public import MarkovProcess.Killed.GluingMinimal
 
 /-!
 # Linearity of the transported local resolvents and of their supremum
@@ -25,6 +27,8 @@ suprema once the family is monotone in the index (`minimalResolvent_comm`).
 
 Nothing here uses the part-process identity; monotonicity in the index is a bare hypothesis.
 -/
+
+@[expose] public section
 
 open Filter MeasureTheory ProbabilityTheory Set Topology
 open scoped ENNReal NNReal ZeroAtInfty

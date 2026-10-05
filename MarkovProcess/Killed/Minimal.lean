@@ -3,9 +3,11 @@ Copyright (c) 2026 Scott Armstrong. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Scott Armstrong
 -/
-import MarkovProcess.Killed.Kernel
-import MarkovProcess.Path.Exhaustion
-import MarkovProcess.Trajectory.Dynkin
+module
+
+public import MarkovProcess.Killed.Kernel
+public import MarkovProcess.Path.Exhaustion
+public import MarkovProcess.Trajectory.Dynkin
 
 /-!
 # The semigroup as the limit of its killed parts
@@ -24,6 +26,8 @@ killed events increase to the whole event `{ω t ∈ B}`.
 The killed kernels are monotone in the open set (`killedKernel_mono`); no other structure is
 used.
 -/
+
+@[expose] public section
 
 open MeasureTheory ProbabilityTheory Filter
 open scoped ENNReal NNReal

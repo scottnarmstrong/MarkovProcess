@@ -3,7 +3,9 @@ Copyright (c) 2026 Scott Armstrong. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Scott Armstrong
 -/
-import MarkovProcess.Trajectory.AllTimeFiniteMarginals
+module
+
+public import MarkovProcess.Trajectory.AllTimeFiniteMarginals
 
 /-!
 # Ordered form of finite dense approximations
@@ -15,6 +17,8 @@ increasing physical times. The final coordinate reindexing is the fixed map
 The construction also covers `I = ∅`. In that case the ordered time family and both path
 coordinate types are empty.
 -/
+
+@[expose] public section
 
 open MeasureTheory ProbabilityTheory Topology Filter
 open scoped NNReal

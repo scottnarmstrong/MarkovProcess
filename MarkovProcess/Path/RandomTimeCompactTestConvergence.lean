@@ -3,9 +3,11 @@ Copyright (c) 2026 Scott Armstrong. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Scott Armstrong
 -/
-import MarkovProcess.Path.ShiftCompactTestConvergence
-import MarkovProcess.Kernel.PositiveC0OperatorMeasure
-import MarkovProcess.Path.RandomShiftMeasurability
+module
+
+public import MarkovProcess.Path.ShiftCompactTestConvergence
+public import MarkovProcess.Kernel.PositiveC0OperatorMeasure
+public import MarkovProcess.Path.RandomShiftMeasurability
 
 /-!
 # Dominated convergence for tests along random times
@@ -15,6 +17,8 @@ times converging pointwise to a limiting random time.  The measure is any finite
 continuous-path space; no Markov or kernel assumption is used.  The deterministic-sequence
 versions are in `ContinuousPathShiftCompactTestConvergence.lean`.
 -/
+
+@[expose] public section
 
 open Filter MeasureTheory Topology
 open scoped NNReal ZeroAtInfty CompactlySupported

@@ -3,7 +3,9 @@ Copyright (c) 2026 Scott Armstrong. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Scott Armstrong
 -/
-import MarkovProcess.Killed.GluingLinearity
+module
+
+public import MarkovProcess.Killed.GluingLinearity
 
 /-!
 # The supremum resolvent on bounded real observables
@@ -24,6 +26,8 @@ resolvent equation (`minimalResolventReal_resolventEquation`), and commutes at t
 Additivity, and with it the resolvent equation, is available exactly when the transported
 resolvents are monotone in the index; that monotonicity is a bare hypothesis here.
 -/
+
+@[expose] public section
 
 open Filter MeasureTheory ProbabilityTheory Set Topology
 open scoped ENNReal NNReal ZeroAtInfty

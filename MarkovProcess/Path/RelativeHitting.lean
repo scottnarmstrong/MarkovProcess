@@ -3,8 +3,10 @@ Copyright (c) 2026 Scott Armstrong. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Scott Armstrong
 -/
-import MarkovProcess.Path.ClosedSetDetection
-import MarkovProcess.Trajectory.StoppingLtTop
+module
+
+public import MarkovProcess.Path.ClosedSetDetection
+public import MarkovProcess.Trajectory.StoppingLtTop
 
 /-!
 # Closed-set detection after a stopping time
@@ -19,6 +21,8 @@ Public declarations:
 * `ContinuousPath.hitsSetBetween`;
 * `ContinuousPath.measurableSet_hitsSetBetween`.
 -/
+
+@[expose] public section
 
 open MeasureTheory Set
 open scoped ENNReal NNReal

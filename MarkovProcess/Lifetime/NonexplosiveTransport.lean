@@ -3,7 +3,9 @@ Copyright (c) 2026 Scott Armstrong. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Scott Armstrong
 -/
-import MarkovProcess.Lifetime.Law
+module
+
+public import MarkovProcess.Lifetime.Law
 
 /-!
 # Transporting nonexplosive lifetime laws to continuous paths
@@ -12,6 +14,8 @@ This file constructs the measurable inverse of the infinite-lifetime embedding. 
 lifetime paths whose lifetime is almost surely infinite therefore gives a canonical kernel on
 ordinary continuous paths, independent of the off-support default.
 -/
+
+@[expose] public section
 
 open MeasureTheory ProbabilityTheory Set
 open scoped ENNReal

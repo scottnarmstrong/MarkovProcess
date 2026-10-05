@@ -3,8 +3,10 @@ Copyright (c) 2026 Scott Armstrong. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Scott Armstrong
 -/
-import MarkovProcess.Killed.Semigroup
-import MarkovProcess.Parameterized.ContinuousProcessProperties
+module
+
+public import MarkovProcess.Killed.Semigroup
+public import MarkovProcess.Parameterized.ContinuousProcessProperties
 
 /-!
 # The killed parameterized family
@@ -21,6 +23,8 @@ parameterized continuous-path process through the fibre identity.
 
 The killed process on lifetime paths (with a cemetery state) is not constructed here.
 -/
+
+@[expose] public section
 
 open MeasureTheory ProbabilityTheory
 open scoped ENNReal NNReal

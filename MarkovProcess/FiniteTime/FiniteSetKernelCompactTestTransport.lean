@@ -3,9 +3,11 @@ Copyright (c) 2026 Scott Armstrong. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Scott Armstrong
 -/
-import MarkovProcess.FiniteTime.FiniteProductCoordinateNormalForm
-import MarkovProcess.FiniteTime.ProjectiveFamily
-import Mathlib.MeasureTheory.Integral.CompactlySupported
+module
+
+public import MarkovProcess.FiniteTime.FiniteProductCoordinateNormalForm
+public import MarkovProcess.FiniteTime.ProjectiveFamily
+public import Mathlib.MeasureTheory.Integral.CompactlySupported
 
 /-!
 # Compact-test transport for finite-set kernels
@@ -19,6 +21,8 @@ polynomial approximations. This avoids adding an `OpensMeasurableSpace` assumpti
 product. These declarations are finite-dimensional infrastructure; no statement about path space
 is proved here.
 -/
+
+@[expose] public section
 
 open MeasureTheory ProbabilityTheory
 open scoped NNReal CompactlySupported

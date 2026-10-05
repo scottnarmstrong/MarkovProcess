@@ -3,7 +3,9 @@ Copyright (c) 2026 Scott Armstrong. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Scott Armstrong
 -/
-import MarkovProcess.Semigroup.InvariantSet
+module
+
+public import MarkovProcess.Semigroup.InvariantSet
 
 /-!
 # Poisson invariance of bounded Yosida exponentials
@@ -11,6 +13,8 @@ import MarkovProcess.Semigroup.InvariantSet
 This file proves the uniformization argument: a normalized resolvent preserving
 a closed convex set containing zero has Yosida exponentials preserving that set.
 -/
+
+@[expose] public section
 
 open Filter Set Topology
 open NormedSpace
@@ -20,6 +24,9 @@ noncomputable section
 namespace MarkovProcess.Semigroup
 
 variable {E : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E]
+
+private noncomputable instance cacheNormedAlgebraRatCLM : NormedAlgebra ℚ (E →L[ℝ] E) :=
+  NormedAlgebra.restrictScalars ℚ ℝ (E →L[ℝ] E)
 
 /-- The exponential of a scalar multiple of the identity is scalar
 multiplication by the real exponential. -/

@@ -3,9 +3,11 @@ Copyright (c) 2026 Scott Armstrong. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Scott Armstrong
 -/
-import Mathlib.Analysis.SpecialFunctions.ImproperIntegrals
-import Mathlib.MeasureTheory.Integral.ExpDecay
-import MarkovProcess.Kernel.Operator
+module
+
+public import Mathlib.Analysis.SpecialFunctions.ImproperIntegrals
+public import Mathlib.MeasureTheory.Integral.ExpDecay
+public import MarkovProcess.Kernel.Operator
 
 /-!
 # Resolvents of kernel semigroups
@@ -18,6 +20,8 @@ Main definitions: `SubMarkovKernelSemigroup.kernelResolvent` and
 
 No conservativity, topology, or finiteness of the resolvent is asserted.
 -/
+
+@[expose] public section
 
 open Filter MeasureTheory ProbabilityTheory Set
 open scoped ENNReal NNReal

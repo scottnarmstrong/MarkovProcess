@@ -3,8 +3,10 @@ Copyright (c) 2026 Scott Armstrong. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Scott Armstrong
 -/
-import MarkovProcess.Kernel.KernelSemigroup
-import Mathlib.Analysis.SpecialFunctions.Pow.NNReal
+module
+
+public import MarkovProcess.Kernel.KernelSemigroup
+public import Mathlib.Analysis.SpecialFunctions.Pow.NNReal
 
 /-!
 # Intrinsic Kolmogorov moment bounds for a transition semigroup
@@ -18,6 +20,8 @@ The predicate is purely a moment bound on the transition kernels.  It makes no p
 continuity, or stochastic-process claim; the transport of this bound to the canonical
 dense-time coordinate process is proved elsewhere.
 -/
+
+@[expose] public section
 
 open MeasureTheory
 open scoped ENNReal NNReal

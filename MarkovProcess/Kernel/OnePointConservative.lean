@@ -3,9 +3,11 @@ Copyright (c) 2026 Scott Armstrong. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Scott Armstrong
 -/
-import MarkovProcess.Kernel.ConservativeResolvent
-import MarkovProcess.Kernel.OnePointKilled
-import MarkovProcess.Killed.GluingLocal
+module
+
+public import MarkovProcess.Kernel.ConservativeResolvent
+public import MarkovProcess.Kernel.OnePointKilled
+public import MarkovProcess.Killed.GluingLocal
 
 /-!
 # A conservative resolvent keeps the compactified process in the live space
@@ -22,6 +24,8 @@ compactified process.
 The regularity data of the compactification are an explicit hypothesis, as everywhere the
 continuous-path process is formed.
 -/
+
+@[expose] public section
 
 open Filter MeasureTheory ProbabilityTheory Set Topology
 open scoped ENNReal NNReal ZeroAtInfty

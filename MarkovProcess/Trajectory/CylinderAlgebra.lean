@@ -3,8 +3,10 @@ Copyright (c) 2026 Scott Armstrong. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Scott Armstrong
 -/
-import MarkovProcess.FiniteTime.FiniteProductStoneWeierstrass
-import MarkovProcess.Main
+module
+
+public import MarkovProcess.FiniteTime.FiniteProductStoneWeierstrass
+public import MarkovProcess.Main
 
 /-!
 # Cylinder test functions on continuous-path space
@@ -33,6 +35,8 @@ Main results:
 
 Nothing here mentions a probability law, and no continuity in a starting point is asserted.
 -/
+
+@[expose] public section
 
 open scoped BoundedContinuousFunction NNReal ZeroAtInfty
 

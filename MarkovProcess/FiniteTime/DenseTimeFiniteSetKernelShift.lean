@@ -3,8 +3,10 @@ Copyright (c) 2026 Scott Armstrong. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Scott Armstrong
 -/
-import MarkovProcess.DenseTime.PhysicalReindex
-import MarkovProcess.FiniteTime.FiniteSetKernelShift
+module
+
+public import MarkovProcess.DenseTime.PhysicalReindex
+public import MarkovProcess.FiniteTime.FiniteSetKernelShift
 
 /-!
 # Translation of finite dense-time kernels
@@ -12,6 +14,8 @@ import MarkovProcess.FiniteTime.FiniteSetKernelShift
 This file transports the finite-set kernel translation law from physical nonnegative-real times
 to finite sets of dense times, using the canonical coordinate reindexings.
 -/
+
+@[expose] public section
 
 open MeasureTheory ProbabilityTheory
 

@@ -3,10 +3,12 @@ Copyright (c) 2026 Scott Armstrong. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Scott Armstrong
 -/
-import MarkovProcess.DenseTime.TrajectoryMarginals
-import MarkovProcess.Kernel.KolmogorovMoments
-import Mathlib.Probability.Kernel.Composition.Lemmas
-import Mathlib.Probability.Process.Kolmogorov
+module
+
+public import MarkovProcess.DenseTime.TrajectoryMarginals
+public import MarkovProcess.Kernel.KolmogorovMoments
+public import Mathlib.Probability.Kernel.Composition.Lemmas
+public import Mathlib.Probability.Process.Kolmogorov
 
 /-!
 # Two-point marginals of the dense-time trajectory, and the intrinsic Kolmogorov bridge
@@ -24,6 +26,8 @@ Kolmogorov process with a positive Hölder exponent below `(q - 1) / p`.
 No continuity, modification, Markov-property, or path-regularity statement is proved here; only
 the two-point law and the moment estimate it transports.
 -/
+
+@[expose] public section
 
 open MeasureTheory ProbabilityTheory
 open scoped ENNReal NNReal

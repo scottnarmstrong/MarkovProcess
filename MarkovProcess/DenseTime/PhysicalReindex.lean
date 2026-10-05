@@ -3,7 +3,9 @@ Copyright (c) 2026 Scott Armstrong. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Scott Armstrong
 -/
-import MarkovProcess.Trajectory.FiniteMarginals
+module
+
+public import MarkovProcess.Trajectory.FiniteMarginals
 
 /-!
 # Reindexing finite rational coordinates by physical time
@@ -12,6 +14,8 @@ A finite set of dense rational times is canonically equivalent to its image in `
 file records the induced measurable path reindexing and its compatibility with continuous-path
 evaluation.  No probability-law or Markov claim is made.
 -/
+
+@[expose] public section
 
 namespace MarkovProcess
 

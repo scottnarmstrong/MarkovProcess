@@ -3,8 +3,10 @@ Copyright (c) 2026 Scott Armstrong. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Scott Armstrong
 -/
-import MarkovProcess.Main
-import MarkovProcess.Path.ExitTimeShift
+module
+
+public import MarkovProcess.Main
+public import MarkovProcess.Path.ExitTimeShift
 
 /-!
 # The process killed at the exit time of an open set: transition kernels
@@ -30,6 +32,8 @@ On the carrier `alpha` the family is not a `SubMarkovKernelSemigroup`, because a
 the identity only on `U` (it is `0` off `U`); the semigroup structure on the carrier `U` is a
 separate packaging.  No Feller property of the killed family is claimed.
 -/
+
+@[expose] public section
 
 open MeasureTheory ProbabilityTheory
 open scoped ENNReal NNReal

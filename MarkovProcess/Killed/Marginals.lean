@@ -3,9 +3,11 @@ Copyright (c) 2026 Scott Armstrong. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Scott Armstrong
 -/
-import MarkovProcess.DenseTime.CemeterySemigroup
-import MarkovProcess.FiniteTime.KernelEquivariance
-import MarkovProcess.Killed.Process
+module
+
+public import MarkovProcess.DenseTime.CemeterySemigroup
+public import MarkovProcess.FiniteTime.KernelEquivariance
+public import MarkovProcess.Killed.Process
 
 /-!
 # Finite-dimensional distributions of the killed process
@@ -34,6 +36,8 @@ coordinate is the cemetery state, matching the absorbing behaviour of the cemete
 No Feller property, strong continuity, or regularity of the killed semigroup is claimed, and no
 statement here covers a random time.
 -/
+
+@[expose] public section
 
 open MeasureTheory ProbabilityTheory
 open scoped ENNReal NNReal

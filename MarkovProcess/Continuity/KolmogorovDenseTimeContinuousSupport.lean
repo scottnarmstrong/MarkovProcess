@@ -3,9 +3,11 @@ Copyright (c) 2026 Scott Armstrong. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Scott Armstrong
 -/
-import MarkovProcess.Path.Polish
-import MarkovProcess.Continuity.GlobalDyadicFloorModification
-import MarkovProcess.Continuity.DenseTimeContinuousSupport
+module
+
+public import MarkovProcess.Path.Polish
+public import MarkovProcess.Continuity.GlobalDyadicFloorModification
+public import MarkovProcess.Continuity.DenseTimeContinuousSupport
 
 /-!
 # Kolmogorov support for dense-time trajectory kernels
@@ -17,6 +19,8 @@ dense-time law is supported on restrictions of continuous paths.
 No measurability of the totalized modification as a path-valued map, PDE increment estimate,
 Markov property of the resulting paths, or Hunt-process assertion is made here.
 -/
+
+@[expose] public section
 
 open MeasureTheory ProbabilityTheory
 open scoped NNReal

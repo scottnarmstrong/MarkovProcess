@@ -3,18 +3,20 @@ Copyright (c) 2026 Scott Armstrong. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Scott Armstrong
 -/
-import MarkovProcess.Kernel.FiniteRestrictionIdentification
-import MarkovProcess.Path.KernelIdentification
-import MarkovProcess.Path.Polish
-import MarkovProcess.Trajectory.DenseRestrictionMarginals
-import MarkovProcess.Trajectory.FellerConditional
-import MarkovProcess.Trajectory.FellerCountableStoppingRestart
-import MarkovProcess.Trajectory.FellerFiniteMarginals
-import MarkovProcess.Trajectory.FellerRestrictedRestart
-import MarkovProcess.Trajectory.FellerShift
-import MarkovProcess.Trajectory.FellerStoppingConditional
-import MarkovProcess.Trajectory.FellerStoppingRestart
-import MarkovProcess.DenseTime.TwoPointMarginals
+module
+
+public import MarkovProcess.Kernel.FiniteRestrictionIdentification
+public import MarkovProcess.Path.KernelIdentification
+public import MarkovProcess.Path.Polish
+public import MarkovProcess.Trajectory.DenseRestrictionMarginals
+public import MarkovProcess.Trajectory.FellerConditional
+public import MarkovProcess.Trajectory.FellerCountableStoppingRestart
+public import MarkovProcess.Trajectory.FellerFiniteMarginals
+public import MarkovProcess.Trajectory.FellerRestrictedRestart
+public import MarkovProcess.Trajectory.FellerShift
+public import MarkovProcess.Trajectory.FellerStoppingConditional
+public import MarkovProcess.Trajectory.FellerStoppingRestart
+public import MarkovProcess.DenseTime.TwoPointMarginals
 
 /-!
 # The continuous-path Markov process of a Feller semigroup
@@ -33,6 +35,8 @@ statements carry neither Feller continuity nor local compactness.
 Nothing here asserts a Hunt-process property, and no statement covers a stopping time that can be
 infinite.
 -/
+
+@[expose] public section
 
 open MeasureTheory ProbabilityTheory
 open scoped NNReal

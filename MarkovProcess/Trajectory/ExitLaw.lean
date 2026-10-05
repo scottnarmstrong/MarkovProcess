@@ -3,8 +3,10 @@ Copyright (c) 2026 Scott Armstrong. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Scott Armstrong
 -/
-import MarkovProcess.Trajectory.HarmonicRepresentation
-import MarkovProcess.Trajectory.StoppingLtTop
+module
+
+public import MarkovProcess.Trajectory.HarmonicRepresentation
+public import MarkovProcess.Trajectory.StoppingLtTop
 
 /-!
 # Stopped laws and exit distributions
@@ -26,6 +28,8 @@ The harmonic representation of `Trajectory/HarmonicRepresentation.lean` reads, i
 `∫ f d(exitLawTrunc U hU K x) = f x` whenever `L f = 0` on `U`
 (`integral_exitLawTrunc_eq_of_generator_eq_zero`).
 -/
+
+@[expose] public section
 
 open MeasureTheory ProbabilityTheory Filter
 open scoped ENNReal NNReal ZeroAtInfty

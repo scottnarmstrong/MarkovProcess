@@ -3,11 +3,15 @@ Copyright (c) 2026 Scott Armstrong. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Scott Armstrong
 -/
-import MarkovProcess.Parameterized.DenseTimeConditionalKernel
-import MarkovProcess.DenseTime.Trajectory
-import Mathlib.Probability.Kernel.IonescuTulcea.Traj
+module
+
+public import MarkovProcess.Parameterized.DenseTimeConditionalKernel
+public import MarkovProcess.DenseTime.Trajectory
+public import Mathlib.Probability.Kernel.IonescuTulcea.Traj
 
 /-! # Parameterized trajectories on countable dense time -/
+
+@[expose] public section
 
 open MeasureTheory ProbabilityTheory
 
@@ -21,11 +25,11 @@ universe uTheta uAlpha
 variable {Theta : Type uTheta} {D : Type*} {alpha : Type uAlpha}
   [MeasurableSpace Theta] [MeasurableSpace alpha] [StandardBorelSpace alpha] [Nonempty alpha]
 
-private def trajectoryCoordinate : ℕ → Type (max uTheta uAlpha)
+def trajectoryCoordinate : ℕ → Type (max uTheta uAlpha)
   | 0 => ULift.{max uTheta uAlpha} (Theta × alpha)
   | _ + 1 => ULift.{max uTheta uAlpha} alpha
 
-private instance instMeasurableSpaceTrajectoryCoordinate (n : ℕ) : MeasurableSpace
+instance instMeasurableSpaceTrajectoryCoordinate (n : ℕ) : MeasurableSpace
     (trajectoryCoordinate (Theta := Theta) (alpha := alpha) n) :=
   match n with
   | 0 => (inferInstance : MeasurableSpace (ULift.{max uTheta uAlpha} (Theta × alpha)))
@@ -35,24 +39,24 @@ omit [StandardBorelSpace alpha] [Nonempty alpha] in
 /-- Bridging lemma: `ULift.down` out of the `(n + 1)`-st trajectory coordinate is measurable
 w.r.t. the project's registered `MeasurableSpace (trajectoryCoordinate (n + 1))` instance, not
 just the generic `ULift.instMeasurableSpace` instance that `measurable_down` is stated for. -/
-private theorem measurable_down_trajectoryCoordinate (n : ℕ) :
+theorem measurable_down_trajectoryCoordinate (n : ℕ) :
     Measurable (ULift.down : trajectoryCoordinate (Theta := Theta) (alpha := alpha) (n + 1) → alpha) := by
   simpa only [trajectoryCoordinate] using! measurable_down
 
-private def historyInitial (n : ℕ)
+def historyInitial (n : ℕ)
     (path : (i : ↑(Finset.Iic n)) →
       trajectoryCoordinate (Theta := Theta) (alpha := alpha) i) :
     ULift.{max uTheta uAlpha} (Theta × alpha) :=
   path ⟨0, Finset.mem_Iic.mpr (Nat.zero_le n)⟩
 
-private def historyObservation (n : ℕ)
+def historyObservation (n : ℕ)
     (path : (i : ↑(Finset.Iic n)) →
       trajectoryCoordinate (Theta := Theta) (alpha := alpha) i) (i : Fin n) :
     ULift.{max uTheta uAlpha} alpha :=
   path ⟨i + 1, Finset.mem_Iic.mpr i.isLt⟩
 
 /-- An augmented history is exactly the immutable data and its observed prefix. -/
-private def historyEquiv (n : ℕ) :
+def historyEquiv (n : ℕ) :
     ((i : ↑(Finset.Iic n)) → trajectoryCoordinate (Theta := Theta) (alpha := alpha) i) ≃ᵐ
       ((Theta × alpha) × (Fin n → alpha)) where
   toFun path :=
@@ -109,7 +113,7 @@ private theorem historyEquiv_snd_apply (n : ℕ) (path) (i : Fin n) :
 
 attribute [irreducible] historyEquiv
 
-private def parameterizedTrajStep
+def parameterizedTrajStep
     (P : ParameterizedSubMarkovKernelSemigroup Theta alpha)
     (hP : ∀ theta, (P.toSubMarkovKernelSemigroup theta).IsConservative)
     (e : ℕ ≃ D) (iota : D ↪ NNReal) (n : ℕ) :
@@ -119,7 +123,7 @@ private def parameterizedTrajStep
       (γ := trajectoryCoordinate (Theta := Theta) (alpha := alpha) (n + 1)) ULift.up).comap
     (historyEquiv n) (historyEquiv n).measurable
 
-private instance isMarkovKernel_parameterizedTrajStep
+instance isMarkovKernel_parameterizedTrajStep
     (P : ParameterizedSubMarkovKernelSemigroup Theta alpha)
     (hP : ∀ theta, (P.toSubMarkovKernelSemigroup theta).IsConservative)
     (e : ℕ ≃ D) (iota : D ↪ NNReal) (n : ℕ) :
@@ -132,7 +136,7 @@ private instance isMarkovKernel_parameterizedTrajStep
       (by simpa only [trajectoryCoordinate] using! measurable_up)
   exact Kernel.IsMarkovKernel.comap _ (historyEquiv n).measurable
 
-private def initialHistory (q : Theta × alpha) :
+def initialHistory (q : Theta × alpha) :
     (i : ↑(Finset.Iic 0)) → trajectoryCoordinate (Theta := Theta) (alpha := alpha) i :=
   fun i ↦ by
     rcases i with ⟨_ | k, hi⟩
@@ -141,7 +145,7 @@ private def initialHistory (q : Theta × alpha) :
       omega
 
 omit [StandardBorelSpace alpha] [Nonempty alpha] in
-private theorem measurable_initialHistory :
+theorem measurable_initialHistory :
     Measurable (initialHistory (Theta := Theta) (alpha := alpha)) := by
   rw [measurable_pi_iff]
   rintro ⟨_ | k, hi⟩
@@ -151,12 +155,12 @@ private theorem measurable_initialHistory :
   · simp only [Finset.mem_Iic] at hi
     omega
 
-private def eraseAugmentation (e : ℕ ≃ D)
+def eraseAugmentation (e : ℕ ≃ D)
     (path : (n : ℕ) → trajectoryCoordinate (Theta := Theta) (alpha := alpha) n) : D → alpha :=
   fun d ↦ (path (e.symm d + 1)).down
 
 omit [StandardBorelSpace alpha] [Nonempty alpha] in
-private theorem measurable_eraseAugmentation (e : ℕ ≃ D) :
+theorem measurable_eraseAugmentation (e : ℕ ≃ D) :
     Measurable (eraseAugmentation (Theta := Theta) (alpha := alpha) e) := by
   rw [measurable_pi_iff]
   intro d
@@ -164,7 +168,7 @@ private theorem measurable_eraseAugmentation (e : ℕ ≃ D) :
     (measurable_pi_apply
       (X := trajectoryCoordinate (Theta := Theta) (alpha := alpha)) (e.symm d + 1))
 
-private def rawTrajAppend (n : ℕ) :
+def rawTrajAppend (n : ℕ) :
     (((i : ↑(Finset.Iic n)) → trajectoryCoordinate (Theta := Theta) (alpha := alpha) i) ×
       trajectoryCoordinate (Theta := Theta) (alpha := alpha) (n + 1)) →
       ((i : ↑(Finset.Iic (n + 1))) →
@@ -192,13 +196,13 @@ private theorem rawTrajAppend_apply_last (n : ℕ) (z) :
       (MeasurableEquiv.piSingleton n z.2) = z.2
   exact MeasurableEquiv.symm_apply_apply _ _
 
-private def appendObservation (n : ℕ) :
+def appendObservation (n : ℕ) :
     (((Theta × alpha) × (Fin n → alpha)) ×
       ULift.{max uTheta uAlpha} alpha) → (Theta × alpha) × (Fin (n + 1) → alpha) :=
   fun z ↦ (z.1.1, (DenseTimeHistory.splitLast n).symm (z.1.2, z.2.down))
 
 omit [StandardBorelSpace alpha] [Nonempty alpha] in
-private theorem measurable_appendObservation (n : ℕ) :
+theorem measurable_appendObservation (n : ℕ) :
     Measurable (appendObservation (Theta := Theta) (alpha := alpha) n) := by
   apply Measurable.prodMk
   · exact measurable_fst.comp measurable_fst
@@ -313,7 +317,7 @@ private theorem compProd_map_ulift_down {X A : Type*}
   ext y
   simp only [Set.mem_preimage, Prod.map_apply, id_eq]
 
-private def initialHistoryKernel : Kernel (Theta × alpha)
+def initialHistoryKernel : Kernel (Theta × alpha)
     ((i : ↑(Finset.Iic 0)) → trajectoryCoordinate (Theta := Theta) (alpha := alpha) i) :=
   Kernel.deterministic initialHistory measurable_initialHistory
 

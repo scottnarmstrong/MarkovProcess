@@ -3,8 +3,10 @@ Copyright (c) 2026 Scott Armstrong. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Scott Armstrong
 -/
-import MarkovProcess.Semigroup.CompactStrongConvergence
-import MarkovProcess.Semigroup.ResolventComparison
+module
+
+public import MarkovProcess.Semigroup.CompactStrongConvergence
+public import MarkovProcess.Semigroup.ResolventComparison
 
 /-!
 # The Trotter--Kato theorem
@@ -40,6 +42,8 @@ semigroups on a sequence of different spaces (Trotter--Kurtz) is not stated.  No
 about convergence in the operator norm, nor about families that are merely uniformly bounded
 rather than contractive.
 -/
+
+@[expose] public section
 
 open Filter MeasureTheory Topology
 open scoped NNReal

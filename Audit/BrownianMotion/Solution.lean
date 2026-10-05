@@ -1,6 +1,8 @@
-import MarkovProcess.Examples.BrownianMotion
-import MarkovProcess.Examples.HeatGenerator
-import Audit.BrownianMotion.SolutionBasic
+module
+
+public import MarkovProcess.Examples.BrownianMotion
+public import MarkovProcess.Examples.HeatGenerator
+public import Audit.BrownianMotion.SolutionBasic
 
 /-!
 # Brownian motion — comparator solution
@@ -14,6 +16,8 @@ The three conjuncts are then `existsUnique_continuousProcess_heatSemigroup`,
 `eq_brownianMotion_of_map_finsetEvaluation` with `isBrownianReal_brownianMotion`, and
 `tendstoUniformly_gaussianAverage_sub_div`, transported along those bridges.
 -/
+
+@[expose] public section
 
 open MeasureTheory ProbabilityTheory Filter Topology
 open scoped ENNReal NNReal ProbabilityTheory

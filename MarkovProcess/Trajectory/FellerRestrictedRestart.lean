@@ -3,14 +3,15 @@ Copyright (c) 2026 Scott Armstrong. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Scott Armstrong
 -/
-import MarkovProcess.Trajectory.DenseRestrictionMarginals
-import MarkovProcess.Trajectory.RationalConditional
-import MarkovProcess.Time.DenseTimeApproximationFromAbove
-import MarkovProcess.Path.ShiftCompactTestConvergence
-import MarkovProcess.Feller.DensePhysicalFiniteSetContinuity
-import MarkovProcess.FiniteTime.MeasureFiniteRestrictionIdentification
-import MarkovProcess.Path.MeasureIdentification
+module
 
+public import MarkovProcess.Trajectory.DenseRestrictionMarginals
+public import MarkovProcess.Trajectory.RationalConditional
+public import MarkovProcess.Time.DenseTimeApproximationFromAbove
+public import MarkovProcess.Path.ShiftCompactTestConvergence
+public import MarkovProcess.Feller.DensePhysicalFiniteSetContinuity
+public import MarkovProcess.FiniteTime.MeasureFiniteRestrictionIdentification
+public import MarkovProcess.Path.MeasureIdentification
 
 /-!
 # Event-restricted deterministic restart for the Feller trajectory
@@ -23,6 +24,8 @@ tests, and then uses measure identification on dense restrictions.
 The time here is deterministic. The strong Markov property at a finite stopping time is in
 `Trajectory/FellerStoppingRestart.lean`.
 -/
+
+@[expose] public section
 
 open Filter MeasureTheory ProbabilityTheory Topology
 open scoped NNReal CompactlySupported ZeroAtInfty

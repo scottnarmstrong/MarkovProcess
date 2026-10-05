@@ -3,11 +3,13 @@ Copyright (c) 2026 Scott Armstrong. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Scott Armstrong
 -/
-import MarkovProcess.Feller.Semigroup
-import MarkovProcess.Kernel.PositiveC0Resolvent
-import MarkovProcess.Kernel.Resolvent
-import MarkovProcess.Semigroup.Resolvent
-import MarkovProcess.Semigroup.ResolventGeneration
+module
+
+public import MarkovProcess.Feller.Semigroup
+public import MarkovProcess.Kernel.PositiveC0Resolvent
+public import MarkovProcess.Kernel.Resolvent
+public import MarkovProcess.Semigroup.Resolvent
+public import MarkovProcess.Semigroup.ResolventGeneration
 
 /-!
 # The resolvent of a Feller kernel semigroup
@@ -37,6 +39,8 @@ Main results: `IsFellerKernelSemigroup.resolvent_apply_apply`,
 The bridge to `SubMarkovKernelSemigroup.kernelResolvent` is pointwise on nonnegative observables;
 no kernel-valued resolvent is constructed.
 -/
+
+@[expose] public section
 
 open Filter MeasureTheory ProbabilityTheory Set
 open scoped NNReal ZeroAtInfty

@@ -3,10 +3,12 @@ Copyright (c) 2026 Scott Armstrong. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Scott Armstrong
 -/
-import MarkovProcess.Trajectory.CylinderAlgebra
-import MarkovProcess.Trajectory.PathTightness
-import MarkovProcess.Trajectory.StartingPointContinuity
-import Mathlib.MeasureTheory.Measure.ProbabilityMeasure
+module
+
+public import MarkovProcess.Trajectory.CylinderAlgebra
+public import MarkovProcess.Trajectory.PathTightness
+public import MarkovProcess.Trajectory.StartingPointContinuity
+public import Mathlib.MeasureTheory.Measure.ProbabilityMeasure
 
 /-!
 # Weak continuity of the path law in the starting point
@@ -37,6 +39,8 @@ Main results:
 Nothing here asserts relative compactness of a family of laws, and no convergence of a sequence
 of semigroups is treated.
 -/
+
+@[expose] public section
 
 open Filter MeasureTheory ProbabilityTheory Topology
 open scoped BoundedContinuousFunction ENNReal NNReal
