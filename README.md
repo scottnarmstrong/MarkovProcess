@@ -20,7 +20,7 @@ times and exit laws, Dynkin's formula and optional stopping, and the Feynman-Kac
 bounded potential. It contains no PDE and no model-specific assumption, and its only dependency
 is Mathlib.
 
-- **249 Lean modules plus the root module `MarkovProcess.lean`, about 45,700 lines** (`MODULES.md`
+- **250 Lean modules plus the root module `MarkovProcess.lean`, about 47,200 lines** (`MODULES.md`
   lists every module with a one-line description).
 - **No `sorry`** anywhere in the library. (The Mathlib-only comparator challenge in `Audit/`
   contains its single intentional statement-level `sorry`, filled by the solution file.)

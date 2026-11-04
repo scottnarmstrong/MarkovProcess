@@ -33,6 +33,7 @@ public import MarkovProcess.Examples.BrownianMotion
 public import MarkovProcess.Examples.Drift
 public import MarkovProcess.Examples.HeatGenerator
 public import MarkovProcess.Examples.HeatSemigroup
+public import MarkovProcess.Examples.HeatSemigroupEuclidean
 public import MarkovProcess.Examples.HeatOnePoint
 public import MarkovProcess.Examples.Identity
 public import MarkovProcess.Feller.BackwardC0Convergence
