@@ -58,7 +58,7 @@ sense of independent Gaussian increments (`Examples.BrownianMotion`); the corres
 identification in finite dimensions is not done here.
 -/
 
-public section
+@[expose] public section
 
 open Filter MeasureTheory ProbabilityTheory Topology Complex
 open scoped ENNReal NNReal ZeroAtInfty RealInnerProductSpace
@@ -97,6 +97,15 @@ theorem heatMeasure_eq_map_const_add (x : E) (t : ℝ≥0) :
   congr 1
   funext z
   simp
+
+/-- Recentring the Gaussian law at its mean gives the centred Gaussian law. -/
+theorem heatMeasure_map_sub_const (x : E) (t : ℝ≥0) :
+    (heatMeasure x t).map (fun u ↦ u - x) = heatMeasure 0 t := by
+  rw [heatMeasure_eq_map_const_add x t, Measure.map_map (by fun_prop) (by fun_prop)]
+  have hid : (fun u : E ↦ u - x) ∘ (fun u : E ↦ x + u) = id := by
+    funext u
+    simp
+  rw [hid, Measure.map_id]
 
 end Definition
 

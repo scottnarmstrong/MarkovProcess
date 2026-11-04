@@ -30,6 +30,7 @@ public import MarkovProcess.DenseTime.Trajectory
 public import MarkovProcess.DenseTime.TrajectoryMarginals
 public import MarkovProcess.DenseTime.TwoPointMarginals
 public import MarkovProcess.Examples.BrownianMotion
+public import MarkovProcess.Examples.BrownianMotionEuclidean
 public import MarkovProcess.Examples.Drift
 public import MarkovProcess.Examples.HeatGenerator
 public import MarkovProcess.Examples.HeatSemigroup
