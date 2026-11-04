@@ -52,6 +52,7 @@ Regenerate with `python3 scripts/gen_modules.py > MODULES.md`.
 - `Examples.HeatGenerator`: Gaussian averages and half the Laplacian on the line. Half the second derivative — half the Laplacian in one dimension — is the infinitesimal generator of the Gaussian averages of a twice continuously differentiable function whose value and second derivative vanish at infinity.
 - `Examples.HeatOnePoint`: The compactified heat process. The heat resolvent represents the heat semigroup again (`kernelSemigroup_heatResolvent`), so its one-point extension moves a live starting point by the Gaussian law and never reaches the added point.
 - `Examples.HeatSemigroup`: The one-dimensional heat semigroup and its continuous-path process. The transition semigroup on the real line whose kernel at time `t` is the Gaussian law with mean the starting point and variance `t`.
+- `Examples.HeatSemigroupEuclidean`: The heat semigroup on a finite-dimensional inner product space. `MarkovProcess.Examples.HeatSemigroup` builds the heat semigroup on the real line, whose transition measure at time `t` from `x` is the Gaussian law of mean `x` and variance `t`.
 - `Examples.Identity`: The identity semigroup and its continuous-path process. The transition semigroup that never moves: `idSemigroup t = Kernel.id` at every time.
 
 ## Feller
